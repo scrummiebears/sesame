@@ -11,7 +11,7 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher, Teams, TeamMembers
+from app.profile.models import Researcher, TeamMembers
 from app.profile.models import User
 
 
@@ -105,8 +105,5 @@ def team_form():
         db.session.add(teamMem)
         db.session.commit()
         flash("Your team member has been added!")
-    members = TeamMembers.query.all()
-    #teams = Teams.query.all()
-    #for team in teams:
-        #if team[1] == researcher's primary attribute
-    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members) #
+    members = current_user.TeamMembers
+    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members) 
