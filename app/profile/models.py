@@ -17,6 +17,11 @@ class Researcher(db.Model):
     phone = db.Column(db.String, nullable=True)
     phone_ext = db.Column(db.String, nullable=True)
     orcid = db.Column(db.String, nullable=True)
+    
+    #researcher = db.relationship("Researcher", backref="grant_number") ##Relationship between grant and researcher.
+    primary_attribute = db.Column(db.String(12), nullable=True) #db.ForeignKey("grants.number") ##
+    
+    team = db.relationship("TeamMembers", backref="researcher_id", lazy=True)
 
 class Education(db.Model):
 
@@ -33,33 +38,20 @@ class Education(db.Model):
 class TeamMembers(db.Model):
 
     __tablename__ = 'team_members'
-
+    
+    member_id = db.Column(db.Integer, primary_key=True) #ID in team, not out of all members 
     start_date= db.Column(db.DateTime,nullable=False)  ##When inserting, datetime.date i think, not .datetime
     end_date = db.Column(db.DateTime,nullable=False)   ##
     name = db.Column(db.String(20),nullable=False)
     position = db.Column(db.String(80),nullable=False)
-    grant_number = db.Column(db.Integer,nullable=False)
-    id = db.Column(db.Integer, primary_key=True) #Primary Key needed
+    primary_attribute = db.Column(db.String(12),nullable=False)
+    reseacher_id = db.Column(db.Integer, db.ForeignKey('teams.researcher'), nullable = True) #Change to false when grant table is made.
+    
 
-    def __init__(self, start_date, end_date, name, position, grant_number):
+    def __init__(self, start_date, end_date, name, position, primary_attribute):
         self.start_date = start_date
         self.end_date = end_date
         self.name = name
         self.position = position
-        self.grant_number = grant_number
-
-class Teams(db.Model):
-
-    __tablename__ = 'teams'
-
-    researcher = db.Column(db.String(20),nullable=False)
-    grant_number = db.Column(db.Integer,nullable=False)
-    team = db.Column(db.TeamMembers, nullable=False)
-    id = db.Column(db.Integer, primary_key=True) #Primary Key needed
-
-    def __init__(self, researcher, grant_number, team):
-        self.reseacher = researcher
-        self.team = team
-        self.grant_number = grant_number
-
+        self.primary_attribute = primary_attribute
 
