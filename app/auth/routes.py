@@ -11,8 +11,8 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher
-from app.profile.models import User, Team
+from app.profile.models import Researcher, Teams, TeamMembers
+from app.profile.models import User
 
 
 @login_manager.user_loader
@@ -97,15 +97,16 @@ def call_for_proposals():
 
     return render_template("auth/proposals.html", title="Call For Proposals", form=form)
 
-
-
 @auth.route("/teams")
 def team_form():
     form = TeamForm()
     if form.validate_on_submit():
-        team = Team(form.start_date.data,form.end_date.data,form.name.data,form.position.data,form.grant_number.data)
-        db.session.add(team)
+        teamMem = TeamMembers(form.start_date.data,form.end_date.data,form.name.data,form.position.data,form.grant_number.data)
+        db.session.add(teamMem)
         db.session.commit()
         flash("Your team member has been added!")
-    members = Team.query.all() #Need to query for the researchers team, not all members     
-    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
+    members = TeamMembers.query.all()
+    #teams = Teams.query.all()
+    #for team in teams:
+        #if team[1] == researcher's primary attribute
+    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members) #
