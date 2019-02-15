@@ -11,7 +11,7 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher, Teams, TeamMembers
+from app.profile.models import Researcher, Teams, TeamMembers, Admin
 from app.profile.models import User
 
 
@@ -97,6 +97,37 @@ def call_for_proposals():
 
     return render_template("auth/proposals.html", title="Call For Proposals", form=form)
 
+@auth.route("/CreateNewAdmin")
+@login_required
+def CreateNewAdmin():
+    if current_user.role == "ADMIN":
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if not user:
+
+                password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
+                user = User(form.email.data, password, "ADMIN")
+                db.session.add(user)
+                db.session.commit()
+
+                user = User.query.filter_by(email=form.email.data).first()
+                admin = Admin(user_id=user.id, first_name=form.first_name.data, last_name=form.last_name.data,
+                                        job_title=form.job_title.data, prefix=form.prefix.data, suffix=form.suffix.data,
+                                        phone=form.phone.data, phone_ext=form.phone_ext.data, orcid=form.orcid.data)
+                db.session.add(admin)
+                # education = Education(user_id=user.id, degree=None, field_of_study=None, institution=None,
+                #                         location=None,degree_award_year=None)
+                # db.session.add(education)
+                db.session.commit()
+
+                flash("Admin account has been created. You can now login")
+                return redirect(url_for("auth.login"))
+            else:
+                flash("An account already exists with this email address. Please login.")
+        return render_template("auth/register.html", form=form)
+
+    
 @auth.route("/teams")
 def team_form():
     form = TeamForm()
