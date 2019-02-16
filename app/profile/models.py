@@ -29,7 +29,7 @@ class Education(db.Model):
     institution = db.Column(db.String, nullable=True)
     location = db.Column(db.String, nullable=True)
     degree_award_year = db.Column(db.String, nullable=True)
-    
+
 class TeamMembers(db.Model):
 
     __tablename__ = 'team_members'
@@ -48,18 +48,16 @@ class TeamMembers(db.Model):
         self.position = position
         self.grant_number = grant_number
 
-class Teams(db.Model):
-
-    __tablename__ = 'teams'
-
-    researcher = db.Column(db.String(20),nullable=False)
-    grant_number = db.Column(db.Integer,nullable=False)
-    team = db.Column(db.TeamMembers, nullable=False)
-    id = db.Column(db.Integer, primary_key=True) #Primary Key needed
-
-    def __init__(self, researcher, grant_number, team):
-        self.reseacher = researcher
-        self.team = team
-        self.grant_number = grant_number
-
-
+# class Teams(db.Model):
+#
+#     __tablename__ = 'teams'
+#
+#     researcher = db.Column(db.String(20),nullable=False)
+#     grant_number = db.Column(db.Integer,nullable=False)
+#     team = db.Column(db.Model.TeamMembers, nullable=False)
+#     id = db.Column(db.Integer, primary_key=True) #Primary Key needed
+#
+#     def __init__(self, researcher, grant_number, team):
+#         self.reseacher = researcher
+#         self.team = team
+#         self.grant_number = grant_number

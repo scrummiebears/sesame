@@ -1,6 +1,7 @@
 # Import Flask
-from flask import Flask, render_template, flash, redirect, url_for
-
+from flask import Flask, render_template, flash, redirect, url_for, make_response
+from werkzeug import secure_filename
+import os
 # Import the extensions used here
 from app import db, login_manager, mail
 import app.call_system.forms
@@ -16,22 +17,26 @@ from app.auth.models import User
 
 # Import the forms
 from app.call_system.forms import CallForm
-
 import datetime
+import config
+
 @call_system.route("/make_call", methods=["GET", "POST"])
 @login_required
 def make_call():
+    if current_user.role != "ADMIN":
+        return redirect(url_for("auth.login"))
+
     form = CallForm()
     if form.is_submitted():
         if form.validate():
             # render a new page which confirms the call??
             # two step process like asking a question on stack overflow
-            
+
             # check they are admin
             # Obtain all info, make a new Call object,
             # Render a new page that is a confirmation of input
             # or simply insert the call into the database
-            # 
+            #
             # Publishing stuff may also be trigered? its a backgrond job?
             call = Call(published_by=current_user.id, information=form.information.data,
                         target_group=form.target_group.data, proposal_template=form.proposal_template.data,
@@ -40,16 +45,24 @@ def make_call():
             db.session.commit()
 
             emails = db.session.query(User.email)
+
             for email, in emails:
                 msg = Message("Call for Proposal", recipients=[email])
-                msg.body = "testing"
-                msg.html = "<b>testing</b>"
+                msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + form.deadline.data.strftime('%m/%d/%Y')
+
+                pdf = form.file.data
+                filename = secure_filename(pdf.filename)
+
+                pdf.save(os.path.join(
+                    config.UPLOAD_FOLDER, filename))
+
+                msg.attach(filename, 'application/pdf', pdf.read())
                 mail.send(msg)
 
             flash("Call for funding has been published")
-            return render_template("call_system/make_call.html", form=form) 
+            return render_template("call_system/call_info_view_page.html", form=form)
+
         else:
-            #flash(str(form.errors))
             flash("Unable to publish call - Please enter details in all fields")
             return render_template("call_system/make_call.html", form=form)
     else:

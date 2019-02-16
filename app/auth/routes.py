@@ -11,8 +11,7 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher, Teams, TeamMembers
-from app.profile.models import User
+from app.profile.models import *
 
 
 @login_manager.user_loader
@@ -83,19 +82,6 @@ def logout():
 def query():
     users = User.query.all()
     return str(len(users))
-
-@auth.route("/call-for-proposals", methods=['GET', 'POST'])
-def call_for_proposals():
-    form = CallForProposalsForm()
-    if form.validate_on_submit():
-        emails = db.session.query(User.email)
-        for email, in emails:
-            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-            msg.body = "testing"
-            msg.html = "<b>testing</b>"
-            mail.send(msg)
-
-    return render_template("auth/proposals.html", title="Call For Proposals", form=form)
 
 @auth.route("/teams")
 def team_form():
