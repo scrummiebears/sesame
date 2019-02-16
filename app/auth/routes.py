@@ -59,7 +59,8 @@ def register():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return "you are logged in"#redirect(url_for(''))
+        # return "you are logged in"
+        redirect(url_for('auth.home'))
     form = LoginForm()
     if form.validate_on_submit():
         #Checks email instead of username
@@ -68,7 +69,7 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.home'))
         else:
             flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)

@@ -21,9 +21,25 @@
                     <div class="container">
                         <a href="#" class="brand-logo">Sesame</a>
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
-                            {% for item in navs %}
-			<li><a href="/{{item.lower().strip()}}">{{item}}</a></li>
-		{%endfor%}
+                            {% if current_user.role == "ADMIN" %}
+                                {% for item in nav.admin %}
+                        			<li class="{{ 'active' if item.is_active else '' }}">
+                                        <a href="{{ item.url }}">{{item.label}}</a>
+                                    </li>
+                        		{% endfor %}
+                            {% elif current_user.is_authenticated %}
+                                {% for item in nav.user %}
+                        			<li class="{{ 'active' if item.is_active else '' }}">
+                                        <a href="{{ item.url }}">{{item.label}}</a>
+                                    </li>
+                        		{% endfor %}
+                            {% else %}
+                                {% for item in nav.top %}
+                                    <li class="{{ 'active' if item.is_active else '' }}">
+                                        <a href="{{ item.url }}">{{item.label}}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </div>
                     <a href="#" data-target="mobile-links" class="sidenav-trigger">
@@ -34,9 +50,25 @@
 
             <!-- Mobile sidenav -->
             <ul class="sidenav" id="mobile-links">
-                {% for item in navs %}
-			<li><a href="/{{item.lower().strip()}}">{{item}}</a></li>
-		{%endfor%}
+                {% if current_user.role == "ADMIN" %}
+                    {% for item in nav.admin %}
+                        <li class="{{ 'active' if item.is_active else '' }}">
+                            <a href="{{ item.url }}">{{item.label}}</a>
+                        </li>
+                    {% endfor %}
+                {% elif current_user.is_authenticated %}
+                    {% for item in nav.user %}
+                        <li class="{{ 'active' if item.is_active else '' }}">
+                            <a href="{{ item.url }}">{{item.label}}</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% for item in nav.top %}
+                        <li class="{{ 'active' if item.is_active else '' }}">
+                            <a href="{{ item.url }}">{{item.label}}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         <div class="container-fluid">
 

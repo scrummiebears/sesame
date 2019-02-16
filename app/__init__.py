@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_navigation import Navigation
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -20,6 +21,28 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    nav = Navigation(app)
+
+    # Navbar visible to all
+    nav.Bar('top', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Register', 'auth.register'),
+        nav.Item('Login', 'auth.login')
+    ])
+
+    # Navbar for logged in users (researchers)
+    nav.Bar('user', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Profile', 'auth.home'),
+        nav.Item('Logout', 'auth.logout')
+    ])
+
+    # Navbar for logged in admins
+    nav.Bar('admin', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Make CFP', 'call_system.make_call'),
+        nav.Item('Logout', 'auth.logout')
+    ])
 
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
