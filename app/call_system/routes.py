@@ -77,3 +77,11 @@ def query():
 def user():
     u = current_user
     return str(current_user)
+
+from datetime import datetime
+@call_system.route("/all_cfp")
+def view_all_calls():
+    calls = Call.query.order_by(Call.deadline.desc()).all();
+    if len(calls) == 0:
+        flash("No calls to display")
+    return render_template("call_system/view_all_calls.html", calls=calls)
