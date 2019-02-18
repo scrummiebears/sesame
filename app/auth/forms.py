@@ -28,5 +28,4 @@ class TeamForm(FlaskForm):
     position = StringField('Position',
                        validators=[InputRequired(),Length(max=80)])
     grant_number = IntegerField('Primary Attribute',validators=[InputRequired()])#Primary attribution(grant number)
-    submit = SubmitField('Enter')
 
