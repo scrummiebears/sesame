@@ -29,6 +29,7 @@ def create_app():
     # Navbar visible to all
     nav.Bar('top', [
         nav.Item('Home', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
         nav.Item('Register', 'auth.register'),
         nav.Item('Login', 'auth.login')
     ])
@@ -37,12 +38,14 @@ def create_app():
     nav.Bar('user', [
         nav.Item('Home', 'auth.home'),
         nav.Item('Profile', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
         nav.Item('Logout', 'auth.logout')
     ])
 
     # Navbar for logged in admins
     nav.Bar('admin', [
         nav.Item('Home', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
         nav.Item('Make CFP', 'call_system.make_call'),
         nav.Item('Logout', 'auth.logout')
     ])

@@ -111,12 +111,20 @@ def apply(call_id):
         if form.validate_on_submit():
             filename = programme_docs.save(request.files["programme_documents"])
             url = programme_docs.url(filename)
-            proposal = Proposal(title=form.title.data, duration=form.duration.data, nrp=form.nrp.data, 
-                                legal_remit=form.legal_remit.data, ethical_issues=form.ethical_issues.data, 
+            proposal = Proposal(title=form.title.data, duration=form.duration.data, nrp=form.nrp.data,
+                                legal_remit=form.legal_remit.data, ethical_issues=form.ethical_issues.data,
                                 location=form.location.data, co_applicants=form.co_applicants.data,
-                                collaborators=form.collaborators.data, scientific_abstract=form.scientific_abstract.data, 
-                                lay_abstract=form.lay_abstract.data, programme_docs_filename=filename, 
+                                collaborators=form.collaborators.data, scientific_abstract=form.scientific_abstract.data,
+                                lay_abstract=form.lay_abstract.data, programme_docs_filename=filename,
                                 programme_docs_url=url)
             db.session.add(proposal)
             db.session.commit()
     return render_template("call_system/apply.html", form=form)
+
+from datetime import datetime
+@call_system.route("/all_cfp")
+def view_all_calls():
+    calls = Call.query.order_by(Call.deadline.desc()).all();
+    if len(calls) == 0:
+        flash("No calls to display")
+    return render_template("call_system/view_all_calls.html", calls=calls)
