@@ -1,5 +1,5 @@
 # Import Flask
-from flask import Flask, render_template, flash, redirect, url_for, make_response
+from flask import Flask, render_template, flash, redirect, url_for, make_response, request
 from werkzeug import secure_filename
 import os
 # Import the extensions used here
@@ -7,6 +7,7 @@ from app import db, login_manager, mail
 import app.call_system.forms
 from flask_login import current_user, login_required
 from flask_mail import Message
+from app import programme_docs
 
 # Import call_system blueprint
 from app.call_system import call_system
@@ -16,7 +17,7 @@ from app.call_system.models import Call
 from app.auth.models import User
 
 # Import the forms
-from app.call_system.forms import CallForm
+from app.call_system.forms import CallForm, ProposalForm
 import datetime
 import config
 
@@ -77,3 +78,45 @@ def query():
 def user():
     u = current_user
     return str(current_user)
+
+# @call_system.route("/upload", methods=["GET", "POST"])
+# def upload():
+#     # Cannot pass in 'request.form' to AddRecipeForm constructor, as this will cause 'request.files' to not be
+#     # sent to the form.  This will cause AddRecipeForm to not see the file data.
+#     # Flask-WTF handles passing form data to the form, so not parameters need to be included.
+#     from app.call_system.forms import TextForm
+#     form = TextForm()
+#     if request.method == 'POST':
+#         if form.validate_on_submit():
+#             filename = texts.save(request.files['text'])
+#             url = texts.url(filename)
+#             text = File(title=form.title.data, filename=filename, url=url)
+#             db.session.add(text)
+#             db.session.commit()
+#             flash('added, success')
+#         else:
+#             flash_errors(form)
+#             flash('ERROR! Recipe was not added.', 'error')
+#     return render_template('call_system/text_upload.html', form=form)
+
+@call_system.route("/apply/<call_id>")
+def apply(call_id):
+    """The form for grant application
+
+    The <call_id> is the call you are applying to.
+    All fields are required. Bootstrap wont show the options field for some reason.
+    """
+    form = ProposalForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            filename = programme_docs.save(request.files["programme_documents"])
+            url = programme_docs.url(filename)
+            proposal = Proposal(title=form.title.data, duration=form.duration.data, nrp=form.nrp.data, 
+                                legal_remit=form.legal_remit.data, ethical_issues=form.ethical_issues.data, 
+                                location=form.location.data, co_applicants=form.co_applicants.data,
+                                collaborators=form.collaborators.data, scientific_abstract=form.scientific_abstract.data, 
+                                lay_abstract=form.lay_abstract.data, programme_docs_filename=filename, 
+                                programme_docs_url=url)
+            db.session.add(proposal)
+            db.session.commit()
+    return render_template("call_system/apply.html", form=form)
