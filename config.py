@@ -39,3 +39,8 @@ MAIL_USERNAME = "sesamenotifications@gmail.com"
 MAIL_PASSWORD = "123sesamestreet^}-!"
 
 MAIL_DEFAULT_SENDER = "sesamenotifications@gmail.com"
+
+
+#flask upload
+UPLOADS_DEFAULT_DEST = "uploads"
+UPLOADS_DEFAULT_URL = "uploads"

@@ -6,11 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_uploads import UploadSet, ALL, configure_uploads
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 mail = Mail()
+
+programme_docs = UploadSet("programmeDocs", ALL)
 
 def create_app():
     app = Flask(__name__)
@@ -30,5 +33,12 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
+    configure_uploads(app, programme_docs)
+
+    from app import commands
+    app.cli.add_command(commands.flushDb)
+    app.cli.add_command(commands.populateDb)
+    
 
     return app
