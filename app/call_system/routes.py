@@ -106,7 +106,8 @@ def apply(call_id):
     The <call_id> is the call you are applying to.
     All fields are required. Bootstrap wont show the options field for some reason.
     """
-    form = ProposalForm()
+    fields = [{"name": "name"}]
+    form = ProposalForm(fields)
     if request.method == "POST":
         if form.validate_on_submit():
             filename = programme_docs.save(request.files["programme_documents"])

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, SelectField, RadioField, IntegerField, TextAreaField
+from wtforms import BooleanField, StringField, SelectField, RadioField, IntegerField, TextAreaField, FormField, FieldList
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import InputRequired
 from wtforms.fields.html5 import DateTimeLocalField
@@ -21,13 +21,19 @@ class CallForm(FlaskForm):
         FileRequired(),
         FileAllowed(['pdf'], 'PDFs only!')])
 
+class CollaboratorForm(FlaskForm):
+    
+    name = StringField()
+    organization = StringField()
+    email = StringField()
+    
 class ProposalForm(FlaskForm):
     """The form for a proposal in response to a call
     
     All fields are required
     """
     
-    title = StringField("Title")
+    title = StringField("Title", validators=[InputRequired()])
     duration = IntegerField("Duration")
     nrp_choices = [("A", "Priority Area A - Future Networks & Communications"),
                    ("B", "Priority Area B - Data analytics, Management, Security & Privacy"),
@@ -45,15 +51,15 @@ class ProposalForm(FlaskForm):
                    ("N", "Priority Area N - Innovation in Services and Business Processes"), 
                    ("O", "Software"),
                    ("P", "Other")]
-    nrp = SelectField("National Research Priority", choices=nrp_choices)
-    legal_remit = TextAreaField("Legal Remit")
-    ethical_issues = TextAreaField("Ethical Issues")
+    nrp = SelectField("National Research Priority", choices=nrp_choices, validators=[InputRequired()])
+    legal_remit = TextAreaField("Legal Remit", validators=[InputRequired()])
+    ethical_issues = TextAreaField("Ethical Issues", validators=[InputRequired()])
     
-    location = StringField("Country")
+    location = StringField("Country", validators=[InputRequired()])
     co_applicants = TextAreaField("Co-Applicants")
-    collaborators = TextAreaField("Collaborators")
-    scientific_abstact = TextAreaField("Scientific Abstract")
-    lay_abstract = TextAreaField("Lay Abstract")
-    programme_documents = FileField("Programme Documents")
+    collaborators = FieldList(FormField(CollaboratorForm))
+    scientific_abstact = TextAreaField("Scientific Abstract", validators=[InputRequired()])
+    lay_abstract = TextAreaField("Lay Abstract", validators=[InputRequired()])
+    programme_documents = FileField("Programme Documents", validators=[InputRequired()])
 
-    agree = BooleanField("I agree")    
+    agree = BooleanField("I agree", validators=[InputRequired()])

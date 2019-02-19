@@ -3,10 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 from app import db
 from app.auth.models import User
 
+class Admin(db.Model):
+    
+    __tablename__ = "admins"
+
+    user = db.relationship("User", backref=db.backref("admin", uselist=False))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+
 class Researcher(db.Model):
 
     __tablename__ = "researchers"
 
+    user = db.relationship("User", backref=db.backref("researcher", uselist=False))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     first_name = db.Column(db.String, nullable = False)
     last_name = db.Column(db.String, nullable=False)

@@ -1,10 +1,15 @@
-<style>
-    form * {display: block; margin: 10px;}
-</style>
+<html><head>
+    <style>
+        * {
+            display: block;
+            margin: 1em;
+        }
+    </style>
+</head>
 
 {% macro render_field(field, placeholder="") %}
-    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
-    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+{% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+{{ field(class=css_class, placeholder=placeholder, **kwargs) }}
 {% endmacro %}
 
 {% block body %}
@@ -28,6 +33,13 @@
                     {{ render_field(form.location, placeholder="location" ) }}
                     {{ render_field(form.co_applicants, placeholder="co_applicants" ) }}
                     {{ render_field(form.collaborators, placeholder="collaborators" ) }}
+
+                    {% for collaborator_entry_form in form.collaborators %}
+                    {{ address_entry_form.hidden_tag() }}
+                    {# Flask-WTF needs `hidden_tag()` so CSRF works for each form #}
+                    {{ forms.render_field(collaborator_entry_form.name) }}
+                    {% endfor %}
+
                     {{ render_field(form.scientific_abstact, placeholder="scientific_abstract") }}
                     {{ render_field(form.lay_abstract, placeholder="lay_abstract") }}
                     {{ render_field(form.programme_documents, placeholder="programme_documents") }}
@@ -40,3 +52,4 @@
     </div>
 </div>
 {% endblock %}
+</html>
