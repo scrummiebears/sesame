@@ -11,8 +11,9 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher, Teams, TeamMembers, Admin
-from app.profile.models import User
+
+from app.profile.models import *
+
 
 
 @login_manager.user_loader
@@ -60,7 +61,8 @@ def register():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return "you are logged in"#redirect(url_for(''))
+        # return "you are logged in"
+        redirect(url_for('auth.home'))
     form = LoginForm()
     if form.validate_on_submit():
         #Checks email instead of username
@@ -69,7 +71,7 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.home'))
         else:
             flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
@@ -83,6 +85,7 @@ def logout():
 def query():
     users = User.query.all()
     return str(len(users))
+
 
 @auth.route("/call-for-proposals", methods=['GET', 'POST'])
 def call_for_proposals():
@@ -127,17 +130,20 @@ def CreateNewAdmin():
                 flash("An account already exists with this email address. Please login.")
         return render_template("auth/register.html", form=form)
 
-    
-@auth.route("/teams")
+@auth.route("/teams", methods=['GET','POST'])
+
 def team_form():
-    form = TeamForm()
-    if form.validate_on_submit():
-        teamMem = TeamMembers(form.start_date.data,form.end_date.data,form.name.data,form.position.data,form.grant_number.data)
-        db.session.add(teamMem)
-        db.session.commit()
-        flash("Your team member has been added!")
-    members = TeamMembers.query.all()
-    #teams = Teams.query.all()
-    #for team in teams:
-        #if team[1] == researcher's primary attribute
-    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members) #
+    if current_user.is_authenticated:
+        form = TeamForm()
+        researcher_id = current_user.id
+        if form.validate_on_submit():
+            teamMem = TeamMembers(start_date = form.start_date.data, end_date = form.end_date.data, name = form.name.data,position = form.position.data, primary_attribute = form.grant_number.data,researcher_id = researcher_id)
+            db.session.add(teamMem)
+            db.session.commit()
+            flash("Your team member has been added!") 
+        members = TeamMembers.query.filter_by(researcher_id = researcher_id).all()
+        for member in members:
+            print(member.name)
+        return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
+    else:
+        return redirect(url_for("auth.login"))
