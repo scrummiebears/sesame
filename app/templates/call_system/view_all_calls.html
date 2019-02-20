@@ -9,7 +9,7 @@
     <div class="row">
         {% for call in calls %}
             <div class="col-sm-6 ">
-                <div class="col-md-12 card large white darken-1 hoverable">
+                <div class="col-md-12 card medium white darken-1 hoverable">
                     <div class="card-content">
                         <span class="card-title teal-text center-align">Call For Proposal Title</span>
                         <hr>
@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="card-action">
-                        <a href="#" class="teal-text">Read more</a>
+                        <a href="{{url_for('call_system.view_call', call_id=call.id)}}" class="teal-text">Read more</a>
                         {% if current_user.is_authenticated %}
                         <button class="btn waves-effect waves-light white teal-text" type="submit" name="action">Apply Now</button>
                         {% endif %}

@@ -121,10 +121,15 @@ def apply(call_id):
             db.session.commit()
     return render_template("call_system/apply.html", form=form)
 
-from datetime import datetime
 @call_system.route("/all_cfp")
 def view_all_calls():
-    calls = Call.query.order_by(Call.deadline.desc()).all();
+    calls = Call.query.order_by(Call.deadline.desc()).all()
     if len(calls) == 0:
         flash("No calls to display")
     return render_template("call_system/view_all_calls.html", calls=calls)
+
+@call_system.route("/view_call/<int:call_id>")
+def view_call(call_id):
+    call = Call.query.filter_by(id=call_id).first()
+    # flash("Reading more about call #" + str(call_id))
+    return render_template("call_system/view_call.html", call=call)
