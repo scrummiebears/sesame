@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% macro render_form(form) %}
+{% for field in form %}
+    {% if field.name != "csrf_token" %}
+        {{ field.label}}
+        {{ render_field(field) }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% block body %}
+
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+
+<div class="col-sm-6 col-sm-offset-3 col-lg-10 col-lg-offset-1">
+    <div class="card white darken-1">
+        <div class="card-content">
+            <span class="card-title center-align">Call for Proposals</span>
+            <form id="proposal-form" method="POST"  accept-charset="UTF-8" role="form">
+                {{ form.csrf_token }}
+                {{ render_form(form) }}
+                <a class="waves-effect waves-light btn" onclick="document.getElementById('proposal-form').submit();">Send</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
