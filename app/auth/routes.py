@@ -4,7 +4,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 # Import the extensions used here
 from app import db, bcrypt, login_manager, mail
 from app.auth.forms import LoginForm, RegistrationForm, TeamForm
-from flask_login import UserMixin, current_user, login_user, logout_user
+from flask_login import UserMixin, current_user, login_user, logout_user, login_required
 from flask_mail import Message
 
 # Import auth blueprint
