@@ -11,7 +11,9 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
+
 from app.profile.models import *
+
 
 
 @login_manager.user_loader
@@ -59,7 +61,8 @@ def register():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return "you are logged in"#redirect(url_for(''))
+        # return "you are logged in"
+        redirect(url_for('auth.home'))
     form = LoginForm()
     if form.validate_on_submit():
         #Checks email instead of username
@@ -68,7 +71,7 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.home'))
         else:
             flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
@@ -83,16 +86,64 @@ def query():
     users = User.query.all()
     return str(len(users))
 
-@auth.route("/teams")
-def team_form():
-    form = TeamForm()
+
+@auth.route("/call-for-proposals", methods=['GET', 'POST'])
+def call_for_proposals():
+    form = CallForProposalsForm()
     if form.validate_on_submit():
-        teamMem = TeamMembers(form.start_date.data,form.end_date.data,form.name.data,form.position.data,form.grant_number.data)
-        db.session.add(teamMem)
-        db.session.commit()
-        flash("Your team member has been added!")
-    members = TeamMembers.query.all()
-    #teams = Teams.query.all()
-    #for team in teams:
-        #if team[1] == researcher's primary attribute
-    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members) #
+        emails = db.session.query(User.email)
+        for email, in emails:
+            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
+            msg.body = "testing"
+            msg.html = "<b>testing</b>"
+            mail.send(msg)
+
+    return render_template("auth/proposals.html", title="Call For Proposals", form=form)
+
+@auth.route("/CreateNewAdmin")
+@login_required
+def CreateNewAdmin():
+    if current_user.role == "ADMIN":
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if not user:
+
+                password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
+                user = User(form.email.data, password, "ADMIN")
+                db.session.add(user)
+                db.session.commit()
+
+                user = User.query.filter_by(email=form.email.data).first()
+                admin = Admin(user_id=user.id, first_name=form.first_name.data, last_name=form.last_name.data,
+                                        job_title=form.job_title.data, prefix=form.prefix.data, suffix=form.suffix.data,
+                                        phone=form.phone.data, phone_ext=form.phone_ext.data, orcid=form.orcid.data)
+                db.session.add(admin)
+                # education = Education(user_id=user.id, degree=None, field_of_study=None, institution=None,
+                #                         location=None,degree_award_year=None)
+                # db.session.add(education)
+                db.session.commit()
+
+                flash("Admin account has been created. You can now login")
+                return redirect(url_for("auth.login"))
+            else:
+                flash("An account already exists with this email address. Please login.")
+        return render_template("auth/register.html", form=form)
+
+@auth.route("/teams", methods=['GET','POST'])
+
+def team_form():
+    if current_user.is_authenticated:
+        form = TeamForm()
+        researcher_id = current_user.id
+        if form.validate_on_submit():
+            teamMem = TeamMembers(start_date = form.start_date.data, end_date = form.end_date.data, name = form.name.data,position = form.position.data, primary_attribute = form.grant_number.data,researcher_id = researcher_id)
+            db.session.add(teamMem)
+            db.session.commit()
+            flash("Your team member has been added!") 
+        members = TeamMembers.query.filter_by(researcher_id = researcher_id).all()
+        for member in members:
+            print(member.name)
+        return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
+    else:
+        return redirect(url_for("auth.login"))

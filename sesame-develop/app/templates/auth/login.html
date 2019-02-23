@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
+    <div class="card white darken-1">
+        <div class="card-content">
+            <span class="card-title center-align">Login</span>
+                {% if error %}
+                    <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %}
+            <form id="login-form" method="POST" accept-charset="UTF-8" role="form">
+                {{ form.csrf_token }}
+                {{ render_field(form.email, placeholder="Email") }}
+                {{ render_field(form.password, placeholder="Password") }}
+                <a class="waves-effect waves-light btn" onclick="document.getElementById('login-form').submit();">Login</a>
+            </form>
+            <a href="register">Don't have an account? Register here.</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
