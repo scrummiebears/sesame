@@ -31,8 +31,8 @@ def create_app():
     from app.call_system import call_system
     app.register_blueprint(call_system, url_prefix="/calls/")
 
-    #with app.app_context():
-    #    db.create_all()
+    with app.app_context():
+       db.create_all()
 
     configure_uploads(app, programme_docs)
 

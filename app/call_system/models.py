@@ -25,7 +25,7 @@ class Call(db.Model):
 
 class Proposal(db.Model):
     """The table containing all proposals
-     id             = Column(Integer,Sequence('book_seq'),primary_key=True) 
+
     The table is designed according to the specification in Briefing 3
     It is assumed that co-applicants will have a Researcher account on the system
     """
@@ -46,8 +46,9 @@ class Proposal(db.Model):
     ethical_issues = db.Column(db.String) # Statement concerning ethical issues
 
     location = db.Column(db.String) # Applicants country at time of the submission
-    co_applicants = db.relationship("Researcher", backref="co_applicant_on") # A list of co-applicant, if applicable
+    co_applicants = db.Column(db.String) # A list of co-applicant, if applicable
     # A list of collaborators, if applicable # collaborators is defined as a relationship in the collaborators table
+    collaborators = db.Column(db.String)
     scientific_abstract = db.Column(db.String) # Scienctific abstract, max 200 words
     lay_abstract = db.Column(db.String) # Lay abstact, max 100 words
 
@@ -58,19 +59,19 @@ class Proposal(db.Model):
     programme_docs_filename = db.Column(db.String)
     programme_docs_url = db.Column(db.String)
 
-class Collaborator(db.Model):
-    """Table for all collaborators
+# class Collaborator(db.Model):
+#     """Table for all collaborators
     
-    This table has a "many to one" relationship with the proposal table (ie many collaborators
-    relate to one proposal). See https://www.codementor.io/sheena/understanding-sqlalchemy-cheat-sheet-du107lawl 
-    for info on how this works.
-    """
-    __tablename__ = "collaborators"
+#     This table has a "many to one" relationship with the proposal table (ie many collaborators
+#     relate to one proposal). See https://www.codementor.io/sheena/understanding-sqlalchemy-cheat-sheet-du107lawl 
+#     for info on how this works.
+#     """
+#     __tablename__ = "collaborators"
 
-    id = db.Column(db.Integer, primary_key=True)
-    proposal = db.relationship("Proposal", backref="collaborators")
-    proposal_id = db.Column(db.Integer, db.ForeignKey("proposals.id"))
+#     id = db.Column(db.Integer, primary_key=True)
+#     proposal = db.relationship("Proposal", backref="collaborators")
+#     proposal_id = db.Column(db.Integer, db.ForeignKey("proposals.id"))
 
-    name = db.Column(db.String)
-    organization = db.Column(db.String)
-    email = db.Column(db.String)
+#     name = db.Column(db.String)
+#     organization = db.Column(db.String)
+#     email = db.Column(db.String)
