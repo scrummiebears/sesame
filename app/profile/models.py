@@ -19,20 +19,7 @@ class Researcher(db.Model):
 
     user = db.relationship("User", backref=db.backref("researcher", uselist=False))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-    first_name = db.Column(db.String, nullable = False)
-    last_name = db.Column(db.String, nullable=False)
-    job_title = db.Column(db.String, nullable=False)
-    prefix = db.Column(db.String, nullable=False)
 
-    suffix = db.Column(db.String, nullable=True)
-    phone = db.Column(db.String, nullable=True)
-    phone_ext = db.Column(db.String, nullable=True)
-    orcid = db.Column(db.String, nullable=True)
-    
-class Admin(db.Model):
-    __tablename__ = "admin"
-
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     first_name = db.Column(db.String, nullable = False)
     last_name = db.Column(db.String, nullable=False)
     job_title = db.Column(db.String, nullable=False)
@@ -64,9 +51,9 @@ class Employment(db.Model):
     researcher = db.relationship("Researcher", backref="education")
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"),
                                                        primary_key=True)
-    institution = XX
-    location = XX
-    years = AA
+    institution = db.Column(db.String)
+    location = db.Column(db.String)
+    years = db.Column(db.Integer)
     
 class Membership(db.Model):
     """The same as professional societies"""
@@ -75,8 +62,8 @@ class Membership(db.Model):
 
     start_date  = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    society_name = XX
-    membership_type = XX
+    society_name = db.Column(db.String)
+    membership_type = db.Column(db.String)
     status = db.Column(db.Boolean)
 
 class Award(db.Model):
@@ -125,18 +112,18 @@ class Publication(db.Model):
     
     year = db.Column(db.Integer)
 
-    original_article = XX
-    review_article = XX
-    conference_paper = XX
-    book = XX
-    technical_report = XX
+    original_article = db.Column(db.String)
+    review_article = db.Column(db.String)
+    conference_paper = db.Column(db.String)
+    book = db.Column(db.String)
+    technical_report = db.Column(db.String)
 
-    title = XX
-    journal_name = XX
+    title = db.Column(db.String)
+    journal_name = db.Column(db.String)
 
     is_published = db.Column(db.Boolean)
     in_press = db.Column(db.Boolean)
-    DOI = XX
+    DOI = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeigmKey("calls.id"))
 
 class Presentation(db.Model):
@@ -144,13 +131,13 @@ class Presentation(db.Model):
     __tablename__ = "presentations"
 
     year = db.Column(db.Integer)
-    title = XX
+    title = db.Column(db.String)
 
-    conference = XX
-    invited_seminar = XX
-    keynote = XX
-    organizing_body = XX
-    location = XX
+    conference = db.Column(db.String)
+    invited_seminar = db.Column(db.String)
+    keynote = db.Column(db.String)
+    organizing_body = db.Column(db.String)
+    location = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
 class AcademicCollaboration(db.Model):
@@ -159,12 +146,12 @@ class AcademicCollaboration(db.Model):
 
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    institution = XX
-    institution_dept = XX
-    location = XX
-    collaborator_name = XX
-    primary_goal = XX
-    interaction_frequency = XX
+    institution = db.Column(db.String)
+    institution_dept = db.Column(db.String)
+    location = db.Column(db.String)
+    collaborator_name = db.Column(db.String)
+    primary_goal = db.Column(db.String)
+    interaction_frequency = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
 class NonAcademicCollaboration(db.Model):
@@ -173,12 +160,12 @@ class NonAcademicCollaboration(db.Model):
 
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    institution = XX
-    institution_dept = XX
-    location = XX
-    collaborator_name = XX
-    primary_goal = XX
-    interaction_frequency = XX
+    institution = db.Column(db.String)
+    institution_dept = db.Column(db.String)
+    location = db.Column(db.String)
+    collaborator_name = db.Column(db.String)
+    primary_goal = db.Column(db.String)
+    interaction_frequency = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
 class Conference(db.Model):
@@ -187,10 +174,10 @@ class Conference(db.Model):
 
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    title = XX
-    event_type = XX
-    role = XX
-    location = XX
+    title = db.Column(db.String)
+    event_type = db.Column(db.String)
+    role = db.Column(db.String)
+    location = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
 class CommunicationOverview(db.Model):
@@ -216,9 +203,9 @@ class EducationAndPublicEngagement(db.Model):
     project_name = db.Column(db.String)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    activity_type = XX
-    project_topic = XX
-    target_graphical_area = XX
+    activity_type = db.Column(db.String)
+    project_topic = db.Column(db.String)
+    target_graphical_area = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
 
