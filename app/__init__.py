@@ -58,13 +58,12 @@ def create_app():
     app.register_blueprint(call_system, url_prefix="/calls/")
 
     with app.app_context():
-        db.create_all()
+       db.create_all()
 
     configure_uploads(app, programme_docs)
 
     from app import commands
-    app.cli.add_command(commands.flushDb)
-    app.cli.add_command(commands.populateDb)
+    app.cli.add_command(commands.db_cli)
     
 
     return app
