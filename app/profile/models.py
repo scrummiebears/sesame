@@ -54,10 +54,7 @@ class Employment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     researcher = db.relationship("Researcher", backref="employment")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
-    
-    researcher = db.relationship("Researcher", backref="education")
-    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"),
-                                                       primary_key=True)
+
     institution = db.Column(db.String)
     location = db.Column(db.String)
     years = db.Column(db.Integer)
