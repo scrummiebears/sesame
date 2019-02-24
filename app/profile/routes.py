@@ -22,7 +22,18 @@ def editEducation():
 
 @profile.route("edit/employment", methods=["GET", "POST"])
 def editEmployment():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = EmploymentForm()
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        employment = Employment(researcher_id=researcher.user_id, institution=form.institution.data,
+                                location=form.location.data, years=form.years.data)
+        db.session.add(employment)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editEmployment"))
     return render_template("profile/edit.html", form=form)
 
 @profile.route("edit/membership", methods=["GET", "POST"])

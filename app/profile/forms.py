@@ -19,7 +19,7 @@ class EmploymentForm(FlaskForm):
 
     institution = StringField("Institution/Company", description={"placeholder":"Institution/Company"})
     location = StringField("Location", description={"placeholder":"Location"})
-    years = IntegerField("Years", widget=NumberInput(), description={"placeholder":"Years"})
+    years = IntegerField("Years", description={"placeholder":"Years"})
 
 class MembershipForm(FlaskForm):
 
