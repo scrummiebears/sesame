@@ -228,7 +228,7 @@ class CommunicationOverview(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer)
-    num_of_publication_lectures = db.Column(db.Integer)
+    num_of_public_lectures = db.Column(db.Integer)
     num_of_visits = db.Column(db.Integer)
     num_of_media_interactions = db.Column(db.Integer)
 
