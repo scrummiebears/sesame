@@ -1,10 +1,13 @@
 from .forms import *
 from . import profile
 from flask import render_template, request, flash, redirect, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 @profile.route("edit/education", methods=["GET", "POST"])
+@login_required
 def editEducation():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = EducationForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
