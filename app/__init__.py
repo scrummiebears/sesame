@@ -64,6 +64,7 @@ def create_app():
 
     from app import commands
     app.cli.add_command(commands.db_cli)
+    app.cli.add_command(commands.user_cli)
     
 
     return app

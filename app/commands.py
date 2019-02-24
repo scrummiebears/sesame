@@ -1,7 +1,10 @@
 import click
 from flask.cli import with_appcontext, AppGroup
-from app import db
+from app import db, bcrypt
 from sqlalchemy import text
+from app.auth.models import *
+from app.profile.models import *
+
 db_cli = AppGroup("db")
 
 @db_cli.command("drop", help="Drop all tables")
@@ -85,3 +88,16 @@ def exec(file):
     for line in f:
         db.engine.execute(text(line))
     f.close()
+
+
+user_cli = AppGroup("user")
+@user_cli.command("init")
+def user_init():
+    password = bcrypt.generate_password_hash("1234").decode("utf-8")
+    user = User("root", password, "RESEARCHER")
+    db.session.add(user)
+    db.session.commit()
+
+    r = Researcher(user_id=1, first_name="root", last_name="", job_title="", prefix="")
+    db.session.add(r)
+    db.session.commit()
