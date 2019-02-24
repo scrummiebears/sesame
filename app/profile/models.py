@@ -1,7 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db
 from app.auth.models import User
+
+from datetime import date
 
 class Admin(db.Model):
     
@@ -35,9 +38,10 @@ class Education(db.Model):
 
     __tablename__ = "educations"
     
+    id = db.Column(db.Integer, primary_key=True)
     researcher = db.relationship("Researcher", backref="education")
-    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"),
-                                                       primary_key=True)
+    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
+
     degree = db.Column(db.String, nullable=True)
     field_of_study = db.Column(db.String, nullable=True)
     institution = db.Column(db.String, nullable=True)
@@ -47,6 +51,9 @@ class Education(db.Model):
 class Employment(db.Model):
 
     __tablename__ = "employments"
+    id = db.Column(db.Integer, primary_key=True)
+    researcher = db.relationship("Researcher", backref="employment")     
+    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
     
     researcher = db.relationship("Researcher", backref="education")
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"),
@@ -59,16 +66,28 @@ class Membership(db.Model):
     """The same as professional societies"""
 
     __tablename__ = "memberships"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    researcher = db.relationship("Researcher", backref="memberships")
+    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
-    start_date  = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date  = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     society_name = db.Column(db.String)
     membership_type = db.Column(db.String)
-    status = db.Column(db.Boolean)
+
+    @hybrid_property
+    def status(self):
+        today = date.today()
+        return (today > start_date) and (today < end_date)
 
 class Award(db.Model):
 
     __tablename__ = "awards"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    researcher = db.relationship("Researcher", backref="XO")     
+    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
     awarding_body = db.Column(db.String)
@@ -79,18 +98,24 @@ class FundingDiversification(db.Model):
 
     __tablename__ = "funding_diversification"
 
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    id = db.Column(db.Integer, primary_key=True)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     amount = db.Column(db.Integer)
     funding_body = db.Column(db.String)
     funding_programme = db.Column(db.String)
-    status = db.Column(db.Boolean)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+
+    @hybrid_property
+    def status(self):
+        today = date.today()
+        return (today > start_date) and (today < end_date)
 
 class TeamMember(db.Model):
 
     __tablename__ = "team_member"
 
+    id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.DateTime)
     departure_date = db.Column(db.DateTime)
     name = db.Column(db.String)
@@ -101,15 +126,28 @@ class Impact(db.Model):
 
     __tablename__ = "impacts"
 
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     category = db.Column(db.String)
-    primary_benneficiary = db.Column(db.String)
+    primary_beneficiary = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+
+
+class Innovation(db.Model):
+
+    __tablename__ = "inovations_and_commercialisation"
+
+    id = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    innovation_type = db.Column(db.String)
+    title = db.Column(db.String)
+    primary_attribution = db.Column(db.Integer, db.ForeginKey("calls.id"))
 
 class Publication(db.Model):
 
     __tablename__ = "publications"
     
+    id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer)
 
     original_article = db.Column(db.String)
@@ -124,12 +162,13 @@ class Publication(db.Model):
     is_published = db.Column(db.Boolean)
     in_press = db.Column(db.Boolean)
     DOI = db.Column(db.String)
-    primary_attribution = db.Column(db.Integer, db.ForeigmKey("calls.id"))
+    primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
 class Presentation(db.Model):
 
     __tablename__ = "presentations"
 
+    id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer)
     title = db.Column(db.String)
 
@@ -142,8 +181,9 @@ class Presentation(db.Model):
 
 class AcademicCollaboration(db.Model):
 
-    __tablename__ - "academic_collaborations"
+    __tablename__ = "academic_collaborations"
 
+    id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     institution = db.Column(db.String)
@@ -158,6 +198,7 @@ class NonAcademicCollaboration(db.Model):
 
     __tablename__ = "non_academic_collaborations"
 
+    id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     institution = db.Column(db.String)
@@ -172,6 +213,7 @@ class Conference(db.Model):
 
     __tablename__ = "conferences"
 
+    id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     title = db.Column(db.String)
@@ -184,6 +226,7 @@ class CommunicationOverview(db.Model):
     
     __tablename__ = "communication_overview"
 
+    id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer)
     num_of_publication_lectures = db.Column(db.Integer)
     num_of_visits = db.Column(db.Integer)
@@ -193,6 +236,7 @@ class SFIFundingRatio(db.Model):
 
     __tablename__ = "sfi_funding_ratios"
 
+    id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer)
     percentage_of_annual_spend = db.Column(db.Integer)
 
@@ -200,6 +244,7 @@ class EducationAndPublicEngagement(db.Model):
 
     __tablename__ = "education_and_public_engagement"
 
+    id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
