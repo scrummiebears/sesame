@@ -124,7 +124,7 @@ class ConferenceForm(FlaskForm):
     event_type = StringField("Event Type", description={"placeholder": "Event type"})
     role = StringField("Role", description={"placeholder": "Role"})
     location = StringField("Location", description={"placeholder": "Location"})
-    primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+    primary_attribution = IntegerField("Primary Attribution", description={"placeholder": "Primary attribution"})
 
 class CommunicationOverviewForm(FlaskForm):
 
