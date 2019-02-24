@@ -53,7 +53,7 @@ def create_app():
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
     from app.profile import profile
-    app.register_blueprint(profile)
+    app.register_blueprint(profile, url_prefix="/profile/")
     from app.call_system import call_system
     app.register_blueprint(call_system, url_prefix="/calls/")
 

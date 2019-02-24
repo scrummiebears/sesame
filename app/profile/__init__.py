@@ -4,3 +4,4 @@ profile = Blueprint("profile", __name__)
 
 import app.profile.models
 import app.profile.forms
+from . import routes
