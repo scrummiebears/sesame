@@ -1,5 +1,6 @@
 from .forms import *
 from . import profile
+from .models import *
 from flask import render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 
