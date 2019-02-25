@@ -3,6 +3,7 @@ from . import profile
 from .models import *
 from flask import render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
+from datetime import datetime, date
 
 @profile.route("edit/education", methods=["GET", "POST"])
 @login_required
@@ -187,23 +188,78 @@ def editPresentation():
 
 @profile.route("edit/academic_collaboration", methods=["GET", "POST"])
 def editAcademicCollaboration():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = AcademicCollaborationForm()
-    return render_template("profile/edit.html", form=form, title="Academic Collaboration")
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.end_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+        academic_collaboration = AcademicCollaboration(start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
+                                                              primary_goal=form.primary_goal.data, interaction_frequency=form.interaction_frequency.data, primary_attribution=form.primary_attribution.data)
+        db.session.add(academic_collaboration)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editAcademicCollaboration"))
+    return render_template("profile/edit.html", form=form)
 
 @profile.route("edit/non_academic_collaboration", methods=["GET", "POST"])
 def editNonAcademicCollaboration():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = NonAcademicCollaborationForm()
-    return render_template("profile/edit.html", form=form, title="Non Academic Collaboration")
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.end_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+        non_academic_collaboration = NonAcademicCollaboration(start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
+                                                              primary_goal=form.primary_goal.data, interaction_frequency=form.interaction_frequency.data, primary_attribution=form.primary_attribution.data)
+        db.session.add(non_academic_collaboration)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editNonAcademicCollaboration"))
+    return render_template("profile/edit.html", form=form)
 
 @profile.route("edit/conference", methods=["GET", "POST"])
 def editConference():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = ConferenceForm()
-    return render_template("profile/edit.html", form=form, title="Conference")
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.end_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+        conference = Conference(start_date=start_date, end_date=end_date, title=form.title.data, event_type=form.event_type.data,
+                                role=form.role.data, location=form.location.data, primary_attribution=form.primary_attribution.data)
+        db.session.add(conference)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editConference"))
+    return render_template("profile/edit.html", form=form)
 
 @profile.route("edit/communication_overview")
 def editCommunicationOverview():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = CommunicationOverviewForm()
-    return render_template("profile/edit.html", form=form, title="Communication Overview")
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        comm_overview = CommunicationOverview(year=form.year.data, num_of_public_lectures=form.num_of_public_lectures.data, num_of_visits=form)
+        db.session.add(conference)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editConference"))
+    return render_template("profile/edit.html", form=form)
 
 @profile.route("edit/sfi_funding_ratio", methods=["GET", "POST"])
 def editSFIFundingRatio():
