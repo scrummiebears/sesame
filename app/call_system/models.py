@@ -52,5 +52,6 @@ class Proposal(db.Model):
     # file
     programme_docs_filename = db.Column(db.String)
     programme_docs_url = db.Column(db.String)
+    approved = db.Column(db.String)
 
 #class collaborators
