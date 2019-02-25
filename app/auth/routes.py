@@ -147,3 +147,10 @@ def team_form():
         return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
     else:
         return redirect(url_for("auth.login"))
+
+
+@auth.route("/profile",methods=['GET'])
+@login_required
+def profile(): 
+    user = Researcher.query.filter_by(user_id=current_user.id).first()
+    return render_template('auth/account.html', title ="Profile",user=user)

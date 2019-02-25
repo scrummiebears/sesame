@@ -1,12 +1,13 @@
-{% extends "layout.html" %}
+<style>
+    form * {display: block; margin: 10px;}
+</style>
+
+{% macro render_field(field, placeholder="") %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+{% endmacro %}
+
 {% block body %}
-
-<section>
-<h1>Applying for call #{{ call.id }}</h1>
-<p>{{ call.information }}</p>
-<hr>
-</section>
-
 <div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
     <div class="card white darken-1">
         <div class="card-content">
@@ -16,39 +17,26 @@
                 {% endif %}
 
                 <form method="POST" id="proposal-form" role="form" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                    {{ render_field(form.title, placeholder="title") }}
+                    {{ render_field(form.duration, placeholder="duration" ) }}
+                    {{ form.nrp.label }}
+                    {{ form.nrp() }}
 
-                    {{ form.hidden_tag() }}
-                    {% for field in form if field.widget.input_type != 'hidden'  %} 
-
-                        {{ field.label }}{{ field }}
-
-                    {% endfor %}    
-
+                    {{ render_field(form.legal_remit, placeholder="legal_remit" ) }}
+                    {{ render_field(form.ethical_issues, placeholder="ethical_issues" ) }}
+                    {{ render_field(form.location, placeholder="location" ) }}
+                    {{ render_field(form.co_applicants, placeholder="co_applicants" ) }}
+                    {{ render_field(form.collaborators, placeholder="collaborators" ) }}
+                    {{ render_field(form.scientific_abstact, placeholder="scientific_abstract") }}
+                    {{ render_field(form.lay_abstract, placeholder="lay_abstract") }}
+                    {{ render_field(form.programme_documents, placeholder="programme_documents") }}
+                    {{ form.agree.label }}
+                    {{ render_field(form.agree, placeholder="agree") }}
                     <a class="waves-effect waves-light btn"
                         onclick="document.getElementById('proposal-form').submit();">Apply</a>
                 </form>
-
-                {% if form.errors %}
-                    <ul>
-                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-                        {% for error in field_errors %}
-                            <li>{{ form[field_name].label}}{{error}}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    </ul>
-                {% endif %}
         </div>
     </div>
 </div>
-
-{% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-            {% endwith %}
-
 {% endblock %}
