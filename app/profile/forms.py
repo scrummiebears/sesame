@@ -39,9 +39,10 @@ class FundingDiversificationForm(FlaskForm):
 
     start_date = StringField("Start Date", widget=DateInput(), description={"placeholder":"Start date"})
     end_date = StringField("End Date", widget=DateInput(), description={"placeholder":"End date"})
-    amount = IntegerField("Amount", widget=NumberInput, description={"placeholder": "Amount"})
+    amount = IntegerField("Amount", widget=NumberInput(), description={"placeholder": "Amount"})
     funding_body = StringField("Funding Body", description={"placeholder": "Funding body"})
     funding_programme = StringField("Funding Programme", description={"placeholder": "Funding programme"})
+    primary_attribution = IntegerField("Primary Attribution", description={"placeholder": "Primary attribution"})
 
 class TeamMemberForm(FlaskForm):
 
@@ -61,7 +62,7 @@ class ImpactForm(FlaskForm):
 class InnovationForm(FlaskForm):
     
     year = IntegerField("Year", description={"placeholder": "Year"})
-    innovation_type = StringField("InnovationType", description={"placeholder": "Innovation type"})
+    innovation_type = StringField("Innovation Type", description={"placeholder": "Innovation type"})
     title = StringField("Title", description={"placeholder": "Title"})
     primary_attribution = IntegerField("Primary Attribution", description={"placeholder": "Primary attribution"})
 
@@ -78,12 +79,12 @@ class PublicationForm(FlaskForm):
     title = StringField("Title", description={"placeholder": "Title"})
     journal_name = StringField("Journal Name", description={"placeholder": "Journal name"})
 
-    is_published = BooleanField("Is Published")
-    in_press = BooleanField("In Press")
     DOI = StringField()
     primary_attribution = IntegerField("Primary Attribution", description={"placeholder": "Primary attribution"})
+    is_published = BooleanField("Is Published")
+    in_press = BooleanField("In Press")
 
-class Presentation(FlaskForm):
+class PresentationForm(FlaskForm):
 
     year = IntegerField("Year", description={"placeholder": "Year"})
     title = StringField("Title", description={"placeholder": "Title"})

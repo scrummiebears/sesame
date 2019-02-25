@@ -10,9 +10,12 @@
                     <p class=error><strong>Error:</strong> {{ error }}
                 {% endif %}
             <form id="login-form" method="POST" accept-charset="UTF-8" role="form">
-                {{ form.csrf_token }}
-                {{ render_field(form.email, placeholder="Email") }}
-                {{ render_field(form.password, placeholder="Password") }}
+                {{ form.hidden_tag() }}
+                {% for field in form if field.widget.input_type != 'hidden'  %}
+                    <div class="input-field">
+                    {{ field.label }}{{ field }}
+                    </div>
+                {% endfor %}
                 <a class="waves-effect waves-light btn" onclick="document.getElementById('login-form').submit();">Login</a>
             </form>
             <a href="register">Don't have an account? Register here.</a>

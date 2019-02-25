@@ -16,13 +16,12 @@
                 {% endif %}
 
                 <form method="POST" id="proposal-form" role="form" enctype="multipart/form-data">
-
                     {{ form.hidden_tag() }}
-                    {% for field in form if field.widget.input_type != 'hidden'  %} 
-
-                        {{ field.label }}{{ field }}
-
-                    {% endfor %}    
+                    {% for field in form if field.widget.input_type != 'hidden'  %}
+                        <div class="input-field">
+                            {{ field.label }}{{ field }}
+                        </div>
+                    {% endfor %}
 
                     <a class="waves-effect waves-light btn"
                         onclick="document.getElementById('proposal-form').submit();">Apply</a>
