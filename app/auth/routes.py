@@ -4,7 +4,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 # Import the extensions used here
 from app import db, bcrypt, login_manager, mail
 from app.auth.forms import LoginForm, RegistrationForm, TeamForm
-from flask_login import UserMixin, current_user, login_user, logout_user
+from flask_login import UserMixin, current_user, login_user, logout_user, login_required
 from flask_mail import Message
 
 # Import auth blueprint
@@ -147,3 +147,43 @@ def team_form():
         return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
     else:
         return redirect(url_for("auth.login"))
+
+
+@auth.route("/profile",methods=['GET'])
+@login_required
+def profile(): 
+    user = Researcher.query.filter_by(user_id=current_user.id).first()
+    user_education = Education.query.filter_by(researcher_id=current_user.id).first()
+    user_employment = Employment.query.filter_by(researcher_id=current_user.id).first()
+    user_membership = Membership.query.filter_by(researcher_id=current_user.id).first()
+    user_award = Award.query.filter_by(researcher_id=current_user.id).first()
+    user_funding = FundingDiversification.query.filter_by(researcher_id=current_user.id).first()
+    user_team = TeamMember.query.filter_by(researcher_id=current_user.id).first()
+    user_impact = Impact.query.filter_by(researcher_id=current_user.id).first()
+    user_innovation = Innovation.query.filter_by(researcher_id=current_user.id).first()
+    user_publication = Publication.query.filter_by(researcher_id=current_user.id).first()
+    user_presentation = Presentation.query.filter_by(researcher_id=current_user.id).first()
+    user_academicCollabaration = AcademicCollabaration.query.filter_by(researcher_id=current_user.id).first()
+    user_nonAcademicCollabaration = NonAcademicCollabaration.query.filter_by(researcher_id=current_user.id).first()
+    user_confrence = Confrence.query.filter_by(researcher_id=current_user.id).first()
+    user_communicationOverview = CommunicationOverview.query.filter_by(researcher_id=current_user.id).first()
+    user_sfiFunding = SFIFundingRatio.query.filter_by(researcher_id=current_user.id).first()
+    user_educationAndPublicEngagement = EducaionAndPublicEngagement.query.filter_by(researcher_id=current_user.id).first()
+    return render_template('auth/account.html', title ="Profile",user=user,user_education=user_education,user_employment=user_employment,user_membership=user_membership,user_award=user_award,user_funding=user_funding,user_team=user_team,user_impact=user_impact,user_innovation=user_innovation,user_publication=user_publication,user_presentation=user_presentation,user_academicCollabaration=user_academicCollabaration,user_nonAcademicCollabaration=user_nonAcademicCollabaration,user_confrence=user_confrence,user_communicationOverview=user_communicationOverview,user_sfiFundingq=user_sfiFunding,user_educationAndPublicEngagement=user_educationAndPublicEngagement)
+
+
+#@auth.route("/stats",methods=['GET'])
+#@login_required
+#def 
+
+
+
+
+@auth.route("/createAdmin",methods=["GET","POST"])
+def createAdmin():
+    password = bcrypt.generate_password_hash("password").decode("utf-8")
+    user = User("admin",password, "ADMIN")
+    db.session.add(user)
+    db.session.commit()
+    flash("Admin made")
+    return redirect(url_for("auth.login"))
