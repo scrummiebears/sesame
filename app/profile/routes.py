@@ -46,8 +46,13 @@ def editMembership():
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
 
-        membership = Membership(researcher_id=researcher.user_id, start_date=form.start_date.data,
-                                end_date=form.end_date.data, society_name=form.society_name.data,
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.end_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+
+        membership = Membership(researcher_id=researcher.user_id, start_date=start_date,
+                                end_date=end_date, society_name=form.society_name.data,
                                 membership_type=form.membership_type.data)
         db.session.add(membership)
         db.session.commit()
@@ -80,9 +85,14 @@ def editFundingDiversification():
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
 
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.end_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+
         funding_diversification = FundingDiversification(researcher_id=researcher.user_id,
-                                                         start_date=form.start_date.data,
-                                                         end_date=form.end_date.data,
+                                                         start_date=start_date,
+                                                         end_date=end_date,
                                                          amount=form.amount.data,
                                                          funding_body=form.funding_body.data,
                                                          funding_programme=form.funding_programme.data,
@@ -101,8 +111,13 @@ def editTeamMember():
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
 
-        team_member = TeamMember(researcher_id=researcher.user_id, start_date=form.start_date.data,
-                                 departure_date=form.departure_date.data, name=form.name.data,
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.departure_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+
+        team_member = TeamMember(researcher_id=researcher.user_id, start_date=start_date,
+                                 departure_date=end_date, name=form.name.data,
                                  position=form.position.data, primary_attribution=form.primary_attribution.data)
         db.session.add(team_member)
         db.session.commit()
@@ -198,7 +213,7 @@ def editAcademicCollaboration():
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-        academic_collaboration = AcademicCollaboration(start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
+        academic_collaboration = AcademicCollaboration(researcher_id=researcher.id, start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
                                                               primary_goal=form.primary_goal.data, interaction_frequency=form.interaction_frequency.data, primary_attribution=form.primary_attribution.data)
         db.session.add(academic_collaboration)
         db.session.commit()
@@ -218,7 +233,7 @@ def editNonAcademicCollaboration():
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-        non_academic_collaboration = NonAcademicCollaboration(start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
+        non_academic_collaboration = NonAcademicCollaboration(researcher_id=researcher.id, start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
                                                               primary_goal=form.primary_goal.data, interaction_frequency=form.interaction_frequency.data, primary_attribution=form.primary_attribution.data)
         db.session.add(non_academic_collaboration)
         db.session.commit()
@@ -238,7 +253,7 @@ def editConference():
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-        conference = Conference(start_date=start_date, end_date=end_date, title=form.title.data, event_type=form.event_type.data,
+        conference = Conference(researcher_id=researcher.id, start_date=start_date, end_date=end_date, title=form.title.data, event_type=form.event_type.data,
                                 role=form.role.data, location=form.location.data, primary_attribution=form.primary_attribution.data)
         db.session.add(conference)
         db.session.commit()
@@ -254,19 +269,45 @@ def editCommunicationOverview():
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
         
-        comm_overview = CommunicationOverview(year=form.year.data, num_of_public_lectures=form.num_of_public_lectures.data, num_of_visits=form)
+        comm_overview = CommunicationOverview(researcher_id=researcher.id, year=form.year.data, num_of_public_lectures=form.num_of_public_lectures.data, num_of_visits=form)
         db.session.add(conference)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editConference"))
+        return redirect(url_for("profile.editCommuicationOverview"))
     return render_template("profile/edit.html", form=form)
 
 @profile.route("edit/sfi_funding_ratio", methods=["GET", "POST"])
 def editSFIFundingRatio():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = SFIFundingRatioForm()
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        fr = SFIFundingRatio(researcher_id=researcher.id, year=form.year.data, percentage_of_annual_spend=form.percentage_of_annual_spend.data) 
+        db.session.add(fr)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editSFIFundingRatio"))
     return render_template("profile/edit.html", form=form, title="SFI Funding Ratio")
 
 @profile.route("edit/educaiton_and_public_engagement", methods=["GET", "POST"])
 def editEducationAndPublicEngagement():
+    if current_user.role != "RESEARCHER":
+        abort(403)
     form = EducationAndPublicEngagementForm()
+    if request.method == "POST" and form.validate():
+        researcher = current_user.researcher
+        
+        start_date_input = form.start_date.data.split("-")
+        start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+        end_date_input = form.end_date.data
+        end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+
+        epe = EducationAndPublicEngagement(researcher_id=researcher.id, project_name=form.project_name.data, start_date=start_date, end_date=end_date, activity_type=form.activity_type.data,
+                                           project_topic=form.project_topic.data, target_graphical_area=form.target_graphical_area.data, primary_attribution=form.primary_attribution.data)
+        db.session.add(epe)
+        db.session.commit()
+        flash("Your profile has been updated")
+        return redirect(url_for("profile.editEducaitonAndPublicEngagement"))
     return render_template("profile/edit.html", form=form, title="Education and Public Engagement")
