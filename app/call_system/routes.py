@@ -99,7 +99,7 @@ def user():
 #             flash('ERROR! Recipe was not added.', 'error')
 #     return render_template('call_system/text_upload.html', form=form)
 
-@call_system.route("/apply/<call_id>")
+@call_system.route("<call_id>/apply/")
 def apply(call_id):
     """The form for grant application
 
@@ -128,7 +128,7 @@ def view_all_calls():
         flash("No calls to display")
     return render_template("call_system/view_all_calls.html", calls=calls)
 
-@call_system.route("/view_call/<int:call_id>")
+@call_system.route("/<int:call_id>/view")
 def view_call(call_id):
     call = Call.query.filter_by(id=call_id).first()
     # flash("Reading more about call #" + str(call_id))
