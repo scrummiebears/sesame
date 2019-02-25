@@ -53,7 +53,7 @@ def create_app():
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
     from app.profile import profile
-    app.register_blueprint(profile)
+    app.register_blueprint(profile, url_prefix="/profile/")
     from app.call_system import call_system
     app.register_blueprint(call_system, url_prefix="/calls/")
 
@@ -63,8 +63,8 @@ def create_app():
     configure_uploads(app, programme_docs)
 
     from app import commands
-    app.cli.add_command(commands.flushDb)
-    app.cli.add_command(commands.populateDb)
+    app.cli.add_command(commands.db_cli)
+    app.cli.add_command(commands.user_cli)
     
 
     return app

@@ -1,0 +1,24 @@
+
+
+<form method="POST" id="" role="form">
+
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != 'hidden'  %} 
+
+        {{ field.label }}{{ field }}
+
+    {% endfor %}    
+    <input type="submit">
+    <a class="waves-effect waves-light btn"
+        onclick="document.getElementById('').submit();">Apply</a>
+</form>
+
+{% if form.errors %}
+    <ul>
+    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+        {% for error in field_errors %}
+            <li>{{ form[field_name].label}}{{error}}</li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+{% endif %}
