@@ -10,8 +10,8 @@
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}">
-
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
     </head>
 
     <body>
@@ -20,9 +20,25 @@
                     <div class="container">
                         <a href="#" class="brand-logo">Sesame</a>
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
-                            {% for item in navs %}
-			<li><a href="/{{item.lower().strip()}}">{{item}}</a></li>
-		{%endfor%}
+                            {% if current_user.role == "ADMIN" %}
+                                {% for item in nav.admin %}
+                        			<li class="{{ 'active' if item.is_active else '' }}">
+                                        <a href="{{ item.url }}">{{item.label}}</a>
+                                    </li>
+                        		{% endfor %}
+                            {% elif current_user.is_authenticated %}
+                                {% for item in nav.user %}
+                        			<li class="{{ 'active' if item.is_active else '' }}">
+                                        <a href="{{ item.url }}">{{item.label}}</a>
+                                    </li>
+                        		{% endfor %}
+                            {% else %}
+                                {% for item in nav.top %}
+                                    <li class="{{ 'active' if item.is_active else '' }}">
+                                        <a href="{{ item.url }}">{{item.label}}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </div>
                     <a href="#" data-target="mobile-links" class="sidenav-trigger">
@@ -30,12 +46,28 @@
                     </a>
                 </div>
             </nav>
-    
+
             <!-- Mobile sidenav -->
             <ul class="sidenav" id="mobile-links">
-                {% for item in navs %}
-			<li><a href="/{{item.lower().strip()}}">{{item}}</a></li>
-		{%endfor%}
+                {% if current_user.role == "ADMIN" %}
+                    {% for item in nav.admin %}
+                        <li class="{{ 'active' if item.is_active else '' }}">
+                            <a href="{{ item.url }}">{{item.label}}</a>
+                        </li>
+                    {% endfor %}
+                {% elif current_user.is_authenticated %}
+                    {% for item in nav.user %}
+                        <li class="{{ 'active' if item.is_active else '' }}">
+                            <a href="{{ item.url }}">{{item.label}}</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% for item in nav.top %}
+                        <li class="{{ 'active' if item.is_active else '' }}">
+                            <a href="{{ item.url }}">{{item.label}}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         <div class="container-fluid">
 
