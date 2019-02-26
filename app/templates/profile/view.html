@@ -38,6 +38,7 @@
           <div class="card-content ">
               <table class="striped">
                   {% for field in instance %}
+                  {% if field != "ID" %}
                   <tr>
                       <td>
                           {{ field }}:
@@ -46,6 +47,7 @@
                           {{ instance[field] }}
                       </td>
                   </tr>
+                  {% endif %}
                   {% endfor %}
               </table>
               <a href={{ url_for("profile.edit" , section=section, id=instance.ID ) }}>Make Change</a>
