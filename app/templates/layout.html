@@ -17,29 +17,47 @@
     <body>
         <nav>
                 <div class="nav-wrapper teal">
-                    <div class="container">
-                        <a href="#" class="brand-logo">Sesame</a>
-                        <ul id="nav-mobile" class="right hide-on-med-and-down">
+                     <div class="container">
                             {% if current_user.role == "ADMIN" %}
+                              <a href="#" class="brand-logo">Sesame - SFI Admin Portal</a>
+                              <ul id="nav-mobile" class="right hide-on-med-and-down">
                                 {% for item in nav.admin %}
-                        			<li class="{{ 'active' if item.is_active else '' }}">
-                                        <a href="{{ item.url }}">{{item.label}}</a>
-                                    </li>
+                        			  <li class="{{ 'active' if item.is_active else '' }}">
+                                  <a href="{{ item.url }}">{{item.label}}</a>
+                                </li>
                         		{% endfor %}
-                            {% elif current_user.is_authenticated %}
+                              </ul>
+
+                            {% elif current_user.role == "RESEARCHER" %}
+                              <a href="#" class="brand-logo">Sesame - Researcher Portal</a>
+                              <ul id="nav-mobile" class="right hide-on-med-and-down">
                                 {% for item in nav.user %}
-                        			<li class="{{ 'active' if item.is_active else '' }}">
-                                        <a href="{{ item.url }}">{{item.label}}</a>
-                                    </li>
+                        			  <li class="{{ 'active' if item.is_active else '' }}">
+                                  <a href="{{ item.url }}">{{item.label}}</a>
+                                </li>
                         		{% endfor %}
-                            {% else %}
-                                {% for item in nav.top %}
-                                    <li class="{{ 'active' if item.is_active else '' }}">
+                              </ul>
+
+                            {% elif current_user.role == "REVIEWER" %}
+                                <a href="#" class="brand-logo">Sesame - Reviewer Portal</a>
+                                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                                {% for item in nav.reviewer %}
+                                  <li class="{{ 'active' if item.is_active else '' }}">
                                         <a href="{{ item.url }}">{{item.label}}</a>
-                                    </li>
+                                  </li>
                                 {% endfor %}
+                                </ul>
+
+                            {% else %}
+                              <a href="#" class="brand-logo">Sesame</a>
+                              <ul id="nav-mobile" class="right hide-on-med-and-down">
+                                  {% for item in nav.top %}
+                                      <li class="{{ 'active' if item.is_active else '' }}">
+                                          <a href="{{ item.url }}">{{item.label}}</a>
+                                      </li>
+                                  {% endfor %}
+                              </ul>
                             {% endif %}
-                        </ul>
                     </div>
                     <a href="#" data-target="mobile-links" class="sidenav-trigger">
                         <i class="material-icons">menu</i>
