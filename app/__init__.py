@@ -50,6 +50,14 @@ def create_app():
         nav.Item('Logout', 'auth.logout')
     ])
 
+    # Navbar for logged in reviewers
+    nav.Bar('reviewer', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
+        #nav.Item('Proposal Submissions', 'call_system.view_proposal_submissions'),
+        nav.Item('Logout', 'auth.logout')
+    ])
+
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
     from app.profile import profile
@@ -65,6 +73,7 @@ def create_app():
     from app import commands
     app.cli.add_command(commands.db_cli)
     app.cli.add_command(commands.user_cli)
-    
+
+
 
     return app
