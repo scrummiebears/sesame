@@ -1,7 +1,7 @@
 from .forms import *
 from . import profile
 from .models import *
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import current_user, login_required
 from datetime import datetime, date
 from sqlalchemy import inspect
@@ -335,7 +335,8 @@ def viewSection(section):
             if c[0] not in ["researcher", "researcher_id"]:
                 data[-1][labels[c[0]]] = getattr(obj, c[0])  # data[the last dict in data][labels dict[column][name of column]] = the value of column in the section instance
     
-    return render_template("profile/view.html", section=section, data=data)
+    models = {"education": "Education", "employment": "Employment", "membership": "Membership", "award": "Award", "funding_diversification": "FundingDiversification", "team_member": "TeamMember", "impact": "Impact", "innovation": "Innovation", "publication": "Publication", "presentation": "Presentation", "academic_collaboration": "AcademicCollaboration", "non_academic_collaboration": "NonAcademicCollaboration", "conference": "Conference", "communicaiton_overview": "CommunicationOverview", "sfi_funding_ratio": "SFIFundingRatio", "education_and_public_engagement": "EducationAndPublicEngagement"}
+    return render_template("profile/view.html", section=section, data=data, models=models)
 
 @profile.route("edit/<section>/<id>", methods=["GET","POST"])
 def edit(section, id):
