@@ -6,9 +6,9 @@ from flask_login import current_user, login_required
 from datetime import datetime, date
 from sqlalchemy import inspect
 
-@profile.route("edit/education", methods=["GET", "POST"])
+@profile.route("add/education", methods=["GET", "POST"])
 @login_required
-def editEducation():
+def addEducation():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = EducationForm()
@@ -20,11 +20,11 @@ def editEducation():
         db.session.add(education)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editEducation"))
-    return render_template("profile/edit.html", form=form, title="Education")
+        return redirect(url_for("profile.addEducation"))
+    return render_template("profile/add.html", form=form, title="Education")
 
-@profile.route("edit/employment", methods=["GET", "POST"])
-def editEmployment():
+@profile.route("add/employment", methods=["GET", "POST"])
+def addEmployment():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = EmploymentForm()
@@ -36,11 +36,11 @@ def editEmployment():
         db.session.add(employment)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editEmployment"))
-    return render_template("profile/edit.html", form=form, title="Employment")
+        return redirect(url_for("profile.addEmployment"))
+    return render_template("profile/add.html", form=form, title="Employment")
 
-@profile.route("edit/membership", methods=["GET", "POST"])
-def editMembership():
+@profile.route("add/membership", methods=["GET", "POST"])
+def addMembership():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = MembershipForm()
@@ -58,11 +58,11 @@ def editMembership():
         db.session.add(membership)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editMembership"))
-    return render_template("profile/edit.html", form=form, title="Membership")
+        return redirect(url_for("profile.addMembership"))
+    return render_template("profile/add.html", form=form, title="Membership")
 
-@profile.route("edit/award", methods=["GET", "POST"])
-def editAward():
+@profile.route("add/award", methods=["GET", "POST"])
+def addAward():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = AwardForm()
@@ -75,11 +75,11 @@ def editAward():
         db.session.add(award)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editAward"))
-    return render_template("profile/edit.html", form=form, title="Award")
+        return redirect(url_for("profile.addAward"))
+    return render_template("profile/add.html", form=form, title="Award")
 
-@profile.route("edit/funding_diversification")
-def editFundingDiversification():
+@profile.route("add/funding_diversification")
+def addFundingDiversification():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = FundingDiversificationForm()
@@ -101,11 +101,11 @@ def editFundingDiversification():
         db.session.add(funding_diversification)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editFundingDiversification"))
-    return render_template("profile/edit.html", form=form, title="Funding Diversification")
+        return redirect(url_for("profile.addFundingDiversification"))
+    return render_template("profile/add.html", form=form, title="Funding Diversification")
 
-@profile.route("edit/team_member", methods=["GET", "POST"])
-def editTeamMember():
+@profile.route("add/team_member", methods=["GET", "POST"])
+def addTeamMember():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = TeamMemberForm()
@@ -123,11 +123,11 @@ def editTeamMember():
         db.session.add(team_member)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editTeamMember"))
-    return render_template("profile/edit.html", form=form, title="Team Members")
+        return redirect(url_for("profile.addTeamMember"))
+    return render_template("profile/add.html", form=form, title="Team Members")
 
-@profile.route("edit/impact", methods=["GET", "POST"])
-def editImpact():
+@profile.route("add/impact", methods=["GET", "POST"])
+def addImpact():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = ImpactForm()
@@ -140,11 +140,11 @@ def editImpact():
         db.session.add(impact)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editImpact"))
-    return render_template("profile/edit.html", form=form, title="Impact")
+        return redirect(url_for("profile.addImpact"))
+    return render_template("profile/add.html", form=form, title="Impact")
 
-@profile.route("edit/innovation", methods=["GET", "POST"])
-def editInnovation():
+@profile.route("add/innovation", methods=["GET", "POST"])
+def addInnovation():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = InnovationForm()
@@ -157,11 +157,11 @@ def editInnovation():
         db.session.add(innovation)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editInnovation"))
-    return render_template("profile/edit.html", form=form, title="Innovation")
+        return redirect(url_for("profile.addInnovation"))
+    return render_template("profile/add.html", form=form, title="Innovation")
 
-@profile.route("edit/publication", methods=["GET", "POST"])
-def editPublication():
+@profile.route("add/publication", methods=["GET", "POST"])
+def addPublication():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = PublicationForm()
@@ -178,11 +178,11 @@ def editPublication():
         db.session.add(publication)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editPublication"))
-    return render_template("profile/edit.html", form=form, title="Publication")
+        return redirect(url_for("profile.addPublication"))
+    return render_template("profile/add.html", form=form, title="Publication")
 
-@profile.route("edit/presentation", methods=["GET", "POST"])
-def editPresentation():
+@profile.route("add/presentation", methods=["GET", "POST"])
+def addPresentation():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = PresentationForm()
@@ -199,11 +199,11 @@ def editPresentation():
         db.session.add(presentation)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editPresentation"))
-    return render_template("profile/edit.html", form=form, title="Presentation")
+        return redirect(url_for("profile.addPresentation"))
+    return render_template("profile/add.html", form=form, title="Presentation")
 
-@profile.route("edit/academic_collaboration", methods=["GET", "POST"])
-def editAcademicCollaboration():
+@profile.route("add/academic_collaboration", methods=["GET", "POST"])
+def addAcademicCollaboration():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = AcademicCollaborationForm()
@@ -219,11 +219,11 @@ def editAcademicCollaboration():
         db.session.add(academic_collaboration)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editAcademicCollaboration"))
-    return render_template("profile/edit.html", form=form)
+        return redirect(url_for("profile.addAcademicCollaboration"))
+    return render_template("profile/add.html", form=form)
 
-@profile.route("edit/non_academic_collaboration", methods=["GET", "POST"])
-def editNonAcademicCollaboration():
+@profile.route("add/non_academic_collaboration", methods=["GET", "POST"])
+def addNonAcademicCollaboration():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = NonAcademicCollaborationForm()
@@ -239,11 +239,11 @@ def editNonAcademicCollaboration():
         db.session.add(non_academic_collaboration)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editNonAcademicCollaboration"))
-    return render_template("profile/edit.html", form=form)
+        return redirect(url_for("profile.addNonAcademicCollaboration"))
+    return render_template("profile/add.html", form=form)
 
-@profile.route("edit/conference", methods=["GET", "POST"])
-def editConference():
+@profile.route("add/conference", methods=["GET", "POST"])
+def addConference():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = ConferenceForm()
@@ -259,11 +259,11 @@ def editConference():
         db.session.add(conference)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editConference"))
-    return render_template("profile/edit.html", form=form)
+        return redirect(url_for("profile.addConference"))
+    return render_template("profile/add.html", form=form, title="Conference")
 
-@profile.route("edit/communication_overview")
-def editCommunicationOverview():
+@profile.route("add/communication_overview")
+def addCommunicationOverview():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = CommunicationOverviewForm()
@@ -274,11 +274,11 @@ def editCommunicationOverview():
         db.session.add(conference)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editCommuicationOverview"))
-    return render_template("profile/edit.html", form=form)
+        return redirect(url_for("profile.addCommuicationOverview"))
+    return render_template("profile/add.html", form=form, title="Communication Overview")
 
-@profile.route("edit/sfi_funding_ratio", methods=["GET", "POST"])
-def editSFIFundingRatio():
+@profile.route("add/sfi_funding_ratio", methods=["GET", "POST"])
+def addSFIFundingRatio():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = SFIFundingRatioForm()
@@ -289,11 +289,11 @@ def editSFIFundingRatio():
         db.session.add(fr)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editSFIFundingRatio"))
-    return render_template("profile/edit.html", form=form, title="SFI Funding Ratio")
+        return redirect(url_for("profile.addSFIFundingRatio"))
+    return render_template("profile/add.html", form=form, title="SFI Funding Ratio")
 
-@profile.route("edit/educaiton_and_public_engagement", methods=["GET", "POST"])
-def editEducationAndPublicEngagement():
+@profile.route("add/educaiton_and_public_engagement", methods=["GET", "POST"])
+def addEducationAndPublicEngagement():
     if current_user.role != "RESEARCHER":
         abort(403)
     form = EducationAndPublicEngagementForm()
@@ -310,17 +310,18 @@ def editEducationAndPublicEngagement():
         db.session.add(epe)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.editEducaitonAndPublicEngagement"))
-    return render_template("profile/edit.html", form=form, title="Education and Public Engagement")
+        return redirect(url_for("profile.addEducaitonAndPublicEngagement"))
+    return render_template("profile/add.html", form=form, title="Education and Public Engagement")
 
 
 @profile.route("view/<section>")
 def view(section):
-
-    sections = {"education": Education, "employment": Employment}
     
+    sections = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communicaiton_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagemnt": EducationAndPublicEngagement}
+    if section not in sections:
+        abort(404)
     labels = {'id': 'Id', 'researcher': 'Researcher', 'researcher_id': 'Researcher id', 'degree': 'Degree', 'field_of_study': 'Field of study', 'institution': 'Institution', 'location': 'Location', 'degree_award_year': 'Degree award year', 'years': 'Years', 'start_date': 'Start date', 'end_date': 'End date', 'society_name': 'Society name', 'membership_type': 'Membership type', 'year': 'Year', 'awarding_body': 'Awarding body', 'details': 'Details', 'team_member_name': 'Team member name', 'amount': 'Amount', 'funding_body': 'Funding body', 'funding_programme': 'Funding programme', 'primary_attribution': 'Primary attribution', 'departure_date': 'Departure date', 'name': 'Name', 'position': 'Position', 'title': 'Title', 'category': 'Category', 'primary_beneficiary': 'Primary beneficiary', 'innovation_type': 'Innovation type', 'original_article': 'Original article', 'review_article': 'Review article',
-        'conference_paper': 'Conference paper', 'book': 'Book', 'technical_report': 'Technical report', 'journal_name': 'Journal name', 'is_published': 'Is published', 'in_press': 'In press', 'DOI': 'Doi', 'conference': 'Conference', 'invited_seminar': 'Invited seminar', 'keynote': 'Keynote', 'organizing_body': 'Organizing body', 'institution_dept': 'Institution dept', 'collaborator_name': 'Collaborator name', 'primary_goal': 'Primary goal', 'interaction_frequency': 'Interaction frequency', 'event_type': 'Event type', 'role': 'Role', 'num_of_public_lectures': 'Num of public lectures', 'num_of_visits': 'Num of visits', 'num_of_media_interactions': 'Num of media interactions', 'percentage_of_annual_spend': 'Percentage of annual spend', 'project_name': 'Project name', 'activity_type': 'Activity type', 'project_topic': 'Project topic', 'target_graphical_area': 'Target graphical area'}
+        'conference_paper': 'Conference paper', 'book': 'Book', 'technical_report': 'Technical report', 'journal_name': 'Journal name', 'is_published': 'Is published', 'in_press': 'In press', 'DOI': 'DOI', 'conference': 'Conference', 'invited_seminar': 'Invited seminar', 'keynote': 'Keynote', 'organizing_body': 'Organizing body', 'institution_dept': 'Institution departmentt', 'collaborator_name': 'Collaborator name', 'primary_goal': 'Primary goal', 'interaction_frequency': 'Interaction frequency', 'event_type': 'Event type', 'role': 'Role', 'num_of_public_lectures': 'Number of public lectures', 'num_of_visits': 'Number of visits', 'num_of_media_interactions': 'Number of media interactions', 'percentage_of_annual_spend': 'Percentage of annual spend', 'project_name': 'Project name', 'activity_type': 'Activity type', 'project_topic': 'Project topic', 'target_graphical_area': 'Target graphical area'}
 
     researcher = current_user.researcher
     models = getattr(researcher, section)
@@ -328,11 +329,14 @@ def view(section):
     columns = mapper.attrs.items()
 
     data = []
-    for obj in models:
+    for obj in models:  
         data.append(dict())
         for c in columns:
             if c[0] not in ["researcher", "id", "researcher_id"]:
-                data[-1][labels[c[0]]] = getattr(obj, c[0])
+                data[-1][labels[c[0]]] = getattr(obj, c[0])  # data[the last dict in data][labels dict[column][name of column]] = the value of column in the section instance
     
     return render_template("profile/view.html", section=section, data=data)
+
+
+
 
