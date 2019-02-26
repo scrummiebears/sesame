@@ -332,7 +332,7 @@ def viewSection(section):
     for obj in models:  
         data.append(dict())
         for c in columns:
-            if c[0] not in ["researcher", "id", "researcher_id"]:
+            if c[0] not in ["researcher", "researcher_id"]:
                 data[-1][labels[c[0]]] = getattr(obj, c[0])  # data[the last dict in data][labels dict[column][name of column]] = the value of column in the section instance
     
     return render_template("profile/view.html", section=section, data=data)
