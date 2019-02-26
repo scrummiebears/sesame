@@ -10,6 +10,7 @@
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
     </head>
@@ -75,7 +76,7 @@
 
             {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul class=flashes>
+                <ul class=flashes onload="M.toast({html: 'You are logged in'})">
                 {% for message in messages %}
                     <li>{{ message }}</li>
                 {% endfor %}

@@ -16,7 +16,7 @@
                     {{ field.label }}{{ field }}
                     </div>
                 {% endfor %}
-                <a class="waves-effect waves-light btn" onclick="document.getElementById('login-form').submit();">Login</a>
+                <a class="waves-effect waves-light btn" onclick="document.getElementById('login-form').submit();M.toast({html: 'You are logged in'})">Login</a>
             </form>
             <a href="register">Don't have an account? Register here.</a>
         </div>

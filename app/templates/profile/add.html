@@ -9,7 +9,7 @@
                 {% if error %}
                     <p class=error><strong>Error:</strong> {{ error }}
                 {% endif %}
-            <form method="POST" id="" role="form">
+            <form method="POST" id="form" role="form">
 
                 {{ form.hidden_tag() }}
                 {% for field in form %}
@@ -27,7 +27,7 @@
                     {% endif %}
                 {% endfor %}
                 <a class="waves-effect waves-light btn"
-                    onclick="document.getElementById('').submit();">Submit</a>
+                    onclick="document.getElementById('form').submit();">Submit</a>
             </form>
 
             {% if form.errors %}

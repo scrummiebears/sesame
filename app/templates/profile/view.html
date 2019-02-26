@@ -1,8 +1,42 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="user-view">
+      <div class="background deep-purple darken-1">
+      </div>
+      <a href="#name"><span class="white-text name">{{ current_user.researcher.name }}</span></a>
+      <a href="#email"><span class="white-text email">{{ current_user.email }}</span></a>
+    </div></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">info</i>General Information</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">school</i>Education</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">work</i>Employment</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">person</i>Membership</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">card_giftcard</i>Awards</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">euro_symbol</i>Funding Diversification</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">people</i>Team Member</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">title</i>Impact</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">create</i>Innovation</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">book</i>Publications</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">content_paste</i>Presentations</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">donut_small</i>Academic Collaborations</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">donut_large</i>Non-Academic Collaborations</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">event</i>Conferences</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">event_seat</i>Communication</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">account_balance</i>SFI Funding Ratio</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons">public</i>Education & Public Engagement</a></li>
+  </ul>
+
+  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons medium">navigate_next</i></a>
+
 {% for instance in data %}
 
-    Section: {{ section }} <br>
+    <br>
     {% for field in instance %}
     {{ field }}: {{ instance[field] }} <br>
     {% endfor %}
 
 {% endfor %}
+
+{% endblock %}
