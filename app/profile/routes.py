@@ -315,7 +315,7 @@ def addEducationAndPublicEngagement():
 
 
 @profile.route("view/<section>")
-def view(section):
+def viewSection(section):
     
     sections = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communicaiton_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagemnt": EducationAndPublicEngagement}
     if section not in sections:
@@ -337,6 +337,45 @@ def view(section):
     
     return render_template("profile/view.html", section=section, data=data)
 
+@profile.route("edit/<section>/<id>", methods=["GET","POST"])
+def edit(section, id):
+    
+    models = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communicaiton_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagemnt": EducationAndPublicEngagement}
+    columns = getColumnList(models[section])
 
+    forms = {"education": EducationForm, "employment": EmploymentForm, "membership": MembershipForm, "award": AwardForm, "funding_diversification": FundingDiversificationForm, "team_member": TeamMemberForm, "impact": ImpactForm, "innovation": InnovationForm, "publication": PublicationForm, "presentation": PresentationForm, "academic_collaboration": AcademicCollaborationForm, "non_academic_collaboration": NonAcademicCollaborationForm, "conference": ConferenceForm, "communicaiton_overview": CommunicationOverviewForm, "sfi_funding_ratio": SFIFundingRatioForm, "education_and_public_engagemnt": EducationAndPublicEngagementForm}
+    form = forms[section].__call__()
 
+    instance = models[section].query.get(id)
+    form = populateForm(form, instance, columns)
 
+    if request.method == "POST" and form.validate():
+        updates = {}
+        for column in columns:
+            if column not in ["researcher", "researcher_id", "user_id", "id"]:
+                updates[column] = getattr(form, column).data
+        
+        db.session.query(models[section]).filter_by(id=id).update(updates)
+        db.session.commit()
+        return redirect(url_for(profile.edit))
+    return render_template("profile/edit.html", form=form)
+    
+
+    
+def getColumnList(model):
+    mapper = inspect(model)
+    columns = []
+    raw_columns = mapper.attrs.items()
+    for c in raw_columns:
+        columns.append(c[0])
+    
+    return columns
+
+def populateForm(form, instance, columns):
+    
+    for c in columns:
+        if c not in ["researcher", "researcher_id", "user_id", "id"]:
+            field = getattr(form, c)
+            field.data = getattr(instance, c)
+
+    return form

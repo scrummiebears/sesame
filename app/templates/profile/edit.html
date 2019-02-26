@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
+    <div class="card white darken-1">
+        <div class="card-content">
+            <span class="card-title center-align">{{ title }}</span>
+                {% if error %}
+                    <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %}
+            <form method="POST" id="" role="form">
+
+                {{ form.hidden_tag() }}
+                {% for field in form %}
+                    {% if field.widget.input_type != 'checkbox'  %}
+                        <div class="input-field">
+                        {{ field.label }}{{ field }}
+                        </div>
+                    {% else %}
+                        <p>
+                        <label>
+                        {{ field }}
+                            <span>{{ field.label.text }}</span>
+                        </label>
+                        </p>
+                    {% endif %}
+                {% endfor %}
+                <a class="waves-effect waves-light btn"
+                    onclick="document.getElementById('').submit();">Submit</a>
+            </form>
+
+            {% if form.errors %}
+                <ul>
+                {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                    {% for error in field_errors %}
+                        <li>{{ form[field_name].label}}{{error}}</li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
