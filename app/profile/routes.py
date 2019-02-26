@@ -4,6 +4,7 @@ from .models import *
 from flask import render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from datetime import datetime, date
+from sqlalchemy import inspect
 
 @profile.route("edit/education", methods=["GET", "POST"])
 @login_required
@@ -311,3 +312,27 @@ def editEducationAndPublicEngagement():
         flash("Your profile has been updated")
         return redirect(url_for("profile.editEducaitonAndPublicEngagement"))
     return render_template("profile/edit.html", form=form, title="Education and Public Engagement")
+
+
+@profile.route("view/<section>")
+def view(section):
+
+    sections = {"education": Education, "employment": Employment}
+    
+    labels = {'id': 'Id', 'researcher': 'Researcher', 'researcher_id': 'Researcher id', 'degree': 'Degree', 'field_of_study': 'Field of study', 'institution': 'Institution', 'location': 'Location', 'degree_award_year': 'Degree award year', 'years': 'Years', 'start_date': 'Start date', 'end_date': 'End date', 'society_name': 'Society name', 'membership_type': 'Membership type', 'year': 'Year', 'awarding_body': 'Awarding body', 'details': 'Details', 'team_member_name': 'Team member name', 'amount': 'Amount', 'funding_body': 'Funding body', 'funding_programme': 'Funding programme', 'primary_attribution': 'Primary attribution', 'departure_date': 'Departure date', 'name': 'Name', 'position': 'Position', 'title': 'Title', 'category': 'Category', 'primary_beneficiary': 'Primary beneficiary', 'innovation_type': 'Innovation type', 'original_article': 'Original article', 'review_article': 'Review article',
+        'conference_paper': 'Conference paper', 'book': 'Book', 'technical_report': 'Technical report', 'journal_name': 'Journal name', 'is_published': 'Is published', 'in_press': 'In press', 'DOI': 'Doi', 'conference': 'Conference', 'invited_seminar': 'Invited seminar', 'keynote': 'Keynote', 'organizing_body': 'Organizing body', 'institution_dept': 'Institution dept', 'collaborator_name': 'Collaborator name', 'primary_goal': 'Primary goal', 'interaction_frequency': 'Interaction frequency', 'event_type': 'Event type', 'role': 'Role', 'num_of_public_lectures': 'Num of public lectures', 'num_of_visits': 'Num of visits', 'num_of_media_interactions': 'Num of media interactions', 'percentage_of_annual_spend': 'Percentage of annual spend', 'project_name': 'Project name', 'activity_type': 'Activity type', 'project_topic': 'Project topic', 'target_graphical_area': 'Target graphical area'}
+
+    researcher = current_user.researcher
+    models = getattr(researcher, section)
+    mapper = inspect(sections[section])
+    columns = mapper.attrs.items()
+
+    data = []
+    for obj in models:
+        data.append(dict())
+        for c in columns:
+            if c[0] not in ["researcher", "id", "researcher_id"]:
+                data[-1][labels[c[0]]] = getattr(obj, c[0])
+    
+    return render_template("profile/view.html", section=section, data=data)
+

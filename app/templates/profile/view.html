@@ -1,0 +1,8 @@
+{% for instance in data %}
+
+    Section: {{ section }} <br>
+    {% for field in instance %}
+    {{ field }}: {{ instance[field] }} <br>
+    {% endfor %}
+
+{% endfor %}
