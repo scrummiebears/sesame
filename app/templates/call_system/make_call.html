@@ -11,13 +11,12 @@
                 {% endif %}
 
             <form method="POST" id="call-form" role="form" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-                {% for field in form if field.widget.input_type != 'hidden'  %}
-                <div class="input-field">
-                    {{ field.label }}{{ field }}
-                </div>
-                {% endfor %}) }}
-
+              {{ form.csrf_token }}
+              {{ render_field(form.information, placeholder="Information") }}
+              {{ render_field(form.target_group, placeholder="Target Group") }}
+              {{ render_field(form.proposal_template, placeholder="Proposal template") }}
+              {{ render_field(form.deadline, placeholder="Deadline") }}
+              {{ render_field(form.file, placeholder="PDF File") }}
               <a class="waves-effect waves-light btn" onclick="document.getElementById('call-form').submit();">Publish Call</a>
             </form>
         </div>

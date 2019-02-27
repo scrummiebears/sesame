@@ -181,21 +181,32 @@ def proposals():
     user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
     approved = []
     rejected = []
-    pending = []
+    pending_admin = []
+    pending_review = []
+    edit=[]
+
     approvedNum=0
     rejectedNum=0
-    pendingNum=0
+    pending_adminNum=0
+    pending_reviewNum=0
+    editNum=0
     for prop in user_proposals:
-        if prop.approved == "True":
+        if prop.approved == "APPROVED":
             approved.append(prop)
             approvedNum += 1
-        elif prop.approved == "False":
+        elif prop.approved == "REJECTED":
             rejected.append(prop)
             rejectedNum += 1
-        else:
-            pending.append(prop)
-            pendingNum += 1
-    return render_template('auth/stats.html',title="Statistics",approved=approved,rejected=rejected,pending=pending,approvedNum=approvedNum,rejectedNum=rejectedNum,pendingNum=pendingNum)
+        elif prop.approved == "EDIT":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "PENDING ADMIN":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "PENDING REVIEW":
+            rejected.append(prop)
+            rejectedNum += 1
+    return render_template('auth/stats.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum,pendingNum=pendingNum)
 
 
 

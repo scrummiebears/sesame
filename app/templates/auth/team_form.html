@@ -12,12 +12,8 @@
 {% block body %}
 	<div>
 		<form id="team-form" method="POST"  accept-charset="UTF-8" role="form">
-				{{ form.hidden_tag() }}
-                {% for field in form if field.widget.input_type != 'hidden'  %}
-                    <div class="input-field">
-                    {{ field.label }}{{ field }}
-                    </div>
-                {% endfor %}
+				{{ form.csrf_token }}
+                {{ render_form(form) }}				
 				<a class="waves-effect waves-light btn" onclick="document.getElementById('team-form').submit();">Register</a>
 				
 			
