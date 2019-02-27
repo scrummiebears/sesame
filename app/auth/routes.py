@@ -55,6 +55,24 @@ def register():
             db.session.commit()
 
             flash("Your account has been created. You can now login")
+            #send confirmation email
+            msg = Message("Sesame Confirmation of Registration", recipients=[form.email.data])
+            msg.body = """Dear <b>%s</b>,<br>
+            This email is a confirmation of your registration with SFI's <i>Sesame</i> portal.<br>
+                        Here is a summary of your registered details:<br>
+                        First Name: <b>%s</b><br>
+                        Last Name: <b>%s</b><br>
+                        Job Title: <b>%s</b><br>
+                        Phone: <b>%s</b><br>
+                        Phone Ext: <b>%s</b><br>
+                        ORCID: <b>%s</b><br>
+                        <br>
+                        Please login and provide your additional details.
+                        """ % (form.first_name.data, form.first_name.data, form.last_name.data,
+                        form.job_title.data, str(form.phone.data), str(form.phone_ext.data), str(form.orcid.data))
+            msg.html = msg.body
+            mail.send(msg)
+
             return redirect(url_for("auth.login"))
         else:
             flash("An account already exists with this email address. Please login.")
@@ -142,7 +160,7 @@ def team_form():
             teamMem = TeamMembers(start_date = form.start_date.data, end_date = form.end_date.data, name = form.name.data,position = form.position.data, primary_attribute = form.grant_number.data,researcher_id = researcher_id)
             db.session.add(teamMem)
             db.session.commit()
-            flash("Your team member has been added!") 
+            flash("Your team member has been added!")
         members = TeamMembers.query.filter_by(researcher_id = researcher_id).all()
         for member in members:
             print(member.name)
@@ -153,7 +171,7 @@ def team_form():
 
 @auth.route("/profile",methods=['GET'])
 @login_required
-def profile(): 
+def profile():
     user = Researcher.query.filter_by(user_id=current_user.id).first()
     user_education = Education.query.filter_by(researcher_id=current_user.id).first()
     user_employment = Employment.query.filter_by(researcher_id=current_user.id).first()
