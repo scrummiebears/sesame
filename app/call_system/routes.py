@@ -119,6 +119,32 @@ def apply(call_id):
                                 programme_docs_url=url)
             db.session.add(proposal)
             db.session.commit()
+
+            msg = Message("Sesame Confirmation of Funding Application Submission", recipients=[form.email.data])
+            msg.body = """Dear applicant,<br>
+            This email is a confirmation of your submission for the funding proposal entitled <i>%s</i><br>
+            Here is a summary of your submitted proposal:<br>
+            Title: <b>%s</b><br>
+            Duration: <b>%s</b><br>
+            NRP: <b>%s</b><br>
+            Legal Remit: <b>%s</b><br>
+            Ethical Issues: <b>%s</b><br>
+            Location: <b>%s</b><br>
+            Co-Applicants: <b>%s</b><br>
+            Collaborators: <b>%s</b><br>
+            Scientific Abstract: <b>%s</b><br>
+            Lay Abstract: <b>%s</b><br>
+            Included Filename: <b>%s</b><br>
+            <br>
+            Please regularly login and check the status of your proposal.<br>
+            You will be notified if the status of your submission changes.
+            """ % (str(form.title.data), str(form.title.data), str(form.duration.data), str(form.nrp.data),
+            str(form.legal_remit.data), str(form.ethical_issues.data), str(form.location.data),
+            str(form.co_applicants.data), str(form.collaborators.data), str(form.scientific_abstact.data),
+            str(form.lay_abstact.data), str(form.programme_docs_filename.data))
+
+            msg.html = msg.body
+            mail.send(msg)
     return render_template("call_system/apply.html", form=form)
 
 from datetime import datetime

@@ -29,6 +29,37 @@ def home():
         navs = ["Teams", "Query", "Log Out",]
     else:
         navs = ["Login", "Register"]
+    #creates an array of all proposals from this reasearcher
+    user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
+    approved = []
+    rejected = []
+    pending_admin = []
+    pending_review = []
+    edit=[]
+
+    approvedNum=0
+    rejectedNum=0
+    pending_adminNum=0
+    pending_reviewNum=0
+    editNum=0
+    for prop in user_proposals:
+        if prop.approved == "APPROVED":
+            approved.append(prop)
+            approvedNum += 1
+        elif prop.approved == "REJECTED":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "EDIT":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "PENDING ADMIN":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "PENDING REVIEW":
+            rejected.append(prop)
+            rejectedNum += 1
+    return render_template('auth/home.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum)
+
     return render_template("auth/home.html", navs=navs)
 
 
@@ -55,9 +86,28 @@ def register():
             db.session.commit()
 
             flash("Your account has been created. You can now login")
+            #send confirmation email
+            msg = Message("Sesame Confirmation of Registration", recipients=[form.email.data])
+            msg.body = """Dear <b>%s</b>,<br>
+            This email is a confirmation of your registration with SFI's <i>Sesame</i> portal.<br>
+                        Here is a summary of your registered details:<br>
+                        First Name: <b>%s</b><br>
+                        Last Name: <b>%s</b><br>
+                        Job Title: <b>%s</b><br>
+                        Phone: <b>%s</b><br>
+                        Phone Ext: <b>%s</b><br>
+                        ORCID: <b>%s</b><br>
+                        <br>
+                        Please login and provide your additional details.
+                        """ % (form.first_name.data, form.first_name.data, form.last_name.data,
+                        form.job_title.data, str(form.phone.data), str(form.phone_ext.data), str(form.orcid.data))
+            msg.html = msg.body
+            mail.send(msg)
+
             return redirect(url_for("auth.login"))
-        else:
-            flash("An account already exists with this email address. Please login.")
+    else:
+        flash("Registration unsuccesfull")
+        return render_template("auth/register.html", form=form)
     return render_template("auth/register.html", form=form)
 
 @auth.route("/login", methods=['GET', 'POST'])
@@ -142,7 +192,7 @@ def team_form():
             teamMem = TeamMembers(start_date = form.start_date.data, end_date = form.end_date.data, name = form.name.data,position = form.position.data, primary_attribute = form.grant_number.data,researcher_id = researcher_id)
             db.session.add(teamMem)
             db.session.commit()
-            flash("Your team member has been added!") 
+            flash("Your team member has been added!")
         members = TeamMembers.query.filter_by(researcher_id = researcher_id).all()
         for member in members:
             print(member.name)
@@ -153,7 +203,7 @@ def team_form():
 
 @auth.route("/profile",methods=['GET'])
 @login_required
-def profile(): 
+def profile():
     user = Researcher.query.filter_by(user_id=current_user.id).first()
     user_education = Education.query.filter_by(researcher_id=current_user.id).first()
     user_employment = Employment.query.filter_by(researcher_id=current_user.id).first()
@@ -173,40 +223,6 @@ def profile():
     user_educationAndPublicEngagement = EducaionAndPublicEngagement.query.filter_by(researcher_id=current_user.id).first()
     return render_template('auth/account.html', title ="Profile",user=user,user_education=user_education,user_employment=user_employment,user_membership=user_membership,user_award=user_award,user_funding=user_funding,user_team=user_team,user_impact=user_impact,user_innovation=user_innovation,user_publication=user_publication,user_presentation=user_presentation,user_academicCollabaration=user_academicCollabaration,user_nonAcademicCollabaration=user_nonAcademicCollabaration,user_confrence=user_confrence,user_communicationOverview=user_communicationOverview,user_sfiFundingq=user_sfiFunding,user_educationAndPublicEngagement=user_educationAndPublicEngagement)
 
-
-@auth.route("/stats",methods=['GET'])
-@login_required
-def proposals():
-    #creates an array of all proposals from this reasearcher
-    user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
-    approved = []
-    rejected = []
-    pending_admin = []
-    pending_review = []
-    edit=[]
-
-    approvedNum=0
-    rejectedNum=0
-    pending_adminNum=0
-    pending_reviewNum=0
-    editNum=0
-    for prop in user_proposals:
-        if prop.approved == "APPROVED":
-            approved.append(prop)
-            approvedNum += 1
-        elif prop.approved == "REJECTED":
-            rejected.append(prop)
-            rejectedNum += 1
-        elif prop.approved == "EDIT":
-            rejected.append(prop)
-            rejectedNum += 1
-        elif prop.approved == "PENDING ADMIN":
-            rejected.append(prop)
-            rejectedNum += 1
-        elif prop.approved == "PENDING REVIEW":
-            rejected.append(prop)
-            rejectedNum += 1
-    return render_template('auth/home.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum)
 
 
 

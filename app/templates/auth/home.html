@@ -1,55 +1,47 @@
+<!--
+	When participating in official or sanctioned tournaments, these are the rules you will have to follow in addition to the cardfight rules.
+-->
+
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="container center-align">
-    <h3>Dashboard</h3>
-    <div class="row">
-        <div class="col s12 m4 offset-m2">
-            <div class="card #eeeeee grey lighten-3">
-                <div class="card-content ">
-                    <span class="card-title blue-text">Profile</span>
-                    <p>View and edit your information</p>
-                </div>
-                <div class="card-action">
-                    <a href="{{ url_for("profile.view") }}" class="orange-text">View Profile</a>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m4">
-            <div class="card grey lighten-3">
-                <div class="card-content">
-                    <span class="card-title blue-text" onclick="M.toast({html: 'You are logged in'})">Calls For Proposals</span>
-                    <p>View all current calls</p>
-                </div>
-                <div class="card-action">
-                    <a href="/calls/all_cfp" class="orange-text">View Calls</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row center-align">
-        <div class="col s12 m4 offset-m2">
-            <div class="card #eeeeee grey lighten-3">
-                <div class="card-content ">
-                    <span class="card-title blue-text">PLACEHOLDER FOR NUM</span>
-                    <p>Applications Pending Action</p>
-                </div>
-                <div class="card-action">
-                    <a href="" class="orange-text">View Applications</a>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m4">
-            <div class="card grey lighten-3">
-                <div class="card-content">
-                    <span class="card-title blue-text">PLACEHOLDER FOR NUM</span>
-                    <p>Scientific Reports Pending Action</p>
-                </div>
-                <div class="card-action">
-                    <a href="#" class="orange-text">View Reports</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+	<h1>Home Page</h1>
+
+	<!--asthetics, kinda thought it would look nice if we referenced the page we where changing-->
+	<p>
+		Science Foundation Ireland provides grants for researchers from around the world 
+		who wish to relocate to Ireland and those already based in Ireland, 
+		for outstanding investigators, for conferences and symposia, and for collaboration with industry.
+	</p>
+
+
+	<h1 id="proposal_table">Proposal statues</h1>
+
+	<table>
+		<tr>
+		<th>Approved Applications</th>
+		<th>Pending Applicaitons</th>
+		</tr>
+		<!--just a quick check to see if I'm doing it right-->
+		<tr>
+		{% if approvedNum == 0 %}
+			<td>No items have been approved</td>
+		{% else %}
+		<!-- Approved messages to be displayed for you and your friends-->
+			{% for items in approved %}
+				<td>{{ items }}</td>
+			{% endfor %}
+		{% endif %}
+		{% if pending_reviewNum == 0 %}
+			<td>there is no items pending</td>
+		{% else %}
+		<!--Pending messages cause I think it'll look nice-->
+			{% for item in pending_review %}
+				<td>{{ pending_review }}</td>
+			{% endfor %}
+		{% endif %}
+		</tr>
+	</table>
+
 {% endblock %}
