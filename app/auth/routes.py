@@ -206,7 +206,7 @@ def proposals():
         elif prop.approved == "PENDING REVIEW":
             rejected.append(prop)
             rejectedNum += 1
-    return render_template('auth/stats.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum,pendingNum=pendingNum)
+    return render_template('auth/home.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum)
 
 
 
