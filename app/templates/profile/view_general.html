@@ -9,7 +9,7 @@
       <a href="#name"><span class="white-text name">{{ current_user.researcher.name }}</span></a>
       <a href="#email"><span class="white-text email">{{ current_user.email }}</span></a>
     </div></li>
-      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="general") }}"><i class="material-icons">info</i>General Information</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.view") }}"><i class="material-icons">info</i>General Information</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="education") }}"><i class="material-icons">school</i>Education</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="employment") }}"><i class="material-icons">work</i>Employment</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="membership") }}"><i class="material-icons">person</i>Membership</a></li>
@@ -68,6 +68,7 @@
                         Job Title
                     </td>
                     <td>
+
                         {{ researcher.job_title }}
                     </td>
                 </tr>
