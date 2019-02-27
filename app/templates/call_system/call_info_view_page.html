@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="col-sm-12 col-lg-12">
+    <div class="card large white darken-1">
+        <div class="card-content center-align">
+            <span class="card-title">Information for Submitted Proposal Call</span>
+            <p>Target Group: {{ form.target_group.data }}</p>
+            <p>Proposal Template: {{ form.proposal_template.data }}</p>
+            <p>Deadline: {{ form.deadline.data }}</p>
+            <p>File: {{ form.file.data.filename }}</p>
+            <a onclick="generatePDF();"
+            id="ignorePDF" class="waves-effect waves-light btn">Save as PDF
+            <i class="material-icons right">picture_as_pdf</i></a>
+        </div>
+    </div>
+</div>
+
+<script>
+function generatePDF() {
+  var doc = new jsPDF();
+  var elementHandler = {
+    '#ignorePDF': function (element, renderer) {
+      return true;
+    }
+  };
+  var source = window.document.getElementsByTagName("body")[0];
+  doc.fromHTML(
+      source,
+      15,
+      15,
+      {
+        'width': 90,'elementHandlers': elementHandler
+      });
+
+      doc.save('a4.pdf')
+}
+</script>
+
+{% endblock %}
