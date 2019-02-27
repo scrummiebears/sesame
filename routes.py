@@ -29,6 +29,37 @@ def home():
         navs = ["Teams", "Query", "Log Out",]
     else:
         navs = ["Login", "Register"]
+    #creates an array of all proposals from this reasearcher
+    user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
+    approved = []
+    rejected = []
+    pending_admin = []
+    pending_review = []
+    edit=[]
+
+    approvedNum=0
+    rejectedNum=0
+    pending_adminNum=0
+    pending_reviewNum=0
+    editNum=0
+    for prop in user_proposals:
+        if prop.approved == "APPROVED":
+            approved.append(prop)
+            approvedNum += 1
+        elif prop.approved == "REJECTED":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "EDIT":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "PENDING ADMIN":
+            rejected.append(prop)
+            rejectedNum += 1
+        elif prop.approved == "PENDING REVIEW":
+            rejected.append(prop)
+            rejectedNum += 1
+    return render_template('auth/home.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum)
+
     return render_template("auth/home.html", navs=navs)
 
 
@@ -174,40 +205,6 @@ def profile():
     user_educationAndPublicEngagement = EducaionAndPublicEngagement.query.filter_by(researcher_id=current_user.id).first()
     return render_template('auth/account.html', title ="Profile",user=user,user_education=user_education,user_employment=user_employment,user_membership=user_membership,user_award=user_award,user_funding=user_funding,user_team=user_team,user_impact=user_impact,user_innovation=user_innovation,user_publication=user_publication,user_presentation=user_presentation,user_academicCollabaration=user_academicCollabaration,user_nonAcademicCollabaration=user_nonAcademicCollabaration,user_confrence=user_confrence,user_communicationOverview=user_communicationOverview,user_sfiFundingq=user_sfiFunding,user_educationAndPublicEngagement=user_educationAndPublicEngagement)
 
-
-@auth.route("/stats",methods=['GET'])
-@login_required
-def proposals():
-    #creates an array of all proposals from this reasearcher
-    user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
-    approved = []
-    rejected = []
-    pending_admin = []
-    pending_review = []
-    edit=[]
-
-    approvedNum=0
-    rejectedNum=0
-    pending_adminNum=0
-    pending_reviewNum=0
-    editNum=0
-    for prop in user_proposals:
-        if prop.approved == "APPROVED":
-            approved.append(prop)
-            approvedNum += 1
-        elif prop.approved == "REJECTED":
-            rejected.append(prop)
-            rejectedNum += 1
-        elif prop.approved == "EDIT":
-            rejected.append(prop)
-            rejectedNum += 1
-        elif prop.approved == "PENDING ADMIN":
-            rejected.append(prop)
-            rejectedNum += 1
-        elif prop.approved == "PENDING REVIEW":
-            rejected.append(prop)
-            rejectedNum += 1
-    return render_template('auth/home.html',title="Statistics",approved=approved,pending_reviewNum=pending_reviewNum,editNum=editNum,pending_adminNum=pending_adminNum,edit=edit,rejected=rejected,pending_review=pending_review,pending_admin=pending_admin,approvedNum=approvedNum,rejectedNum=rejectedNum)
 
 
 
