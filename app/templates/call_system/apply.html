@@ -17,6 +17,7 @@
                 {% endif %}
 
                 <form method="POST" id="proposal-form" role="form" enctype="multipart/form-data">
+<<<<<<< HEAD
                     {{ form.csrf_token }}
                     {{ render_field(form.title, placeholder="title") }}
                     {{ render_field(form.duration, placeholder="duration" ) }}
@@ -33,6 +34,15 @@
                     {{ render_field(form.programme_documents, placeholder="programme_documents") }}
                     {{ form.agree.label }}
                     {{ render_field(form.agree, placeholder="agree") }}
+=======
+                    {{ form.hidden_tag() }}
+                    {% for field in form if field.widget.input_type != 'hidden'  %}
+                        <div class="input-field">
+                            {{ field.label }}{{ field }}
+                        </div>
+                    {% endfor %}
+
+>>>>>>> ronan/profile
                     <a class="waves-effect waves-light btn"
                         onclick="document.getElementById('proposal-form').submit();">Apply</a>
                 </form>
