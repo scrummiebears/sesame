@@ -380,3 +380,8 @@ def populateForm(form, instance, columns):
             field.data = getattr(instance, c)
 
     return form
+
+@profile.route("view")
+def view():
+    researcher = current_user.researcher
+    return render_template("profile/view_general.html", researcher=researcher)

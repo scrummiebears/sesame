@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="user-view">
+      <div class="background deep-purple darken-1">
+      </div>
+      <a href="#name"><span class="white-text name">{{ current_user.researcher.name }}</span></a>
+      <a href="#email"><span class="white-text email">{{ current_user.email }}</span></a>
+    </div></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="general") }}"><i class="material-icons">info</i>General Information</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="education") }}"><i class="material-icons">school</i>Education</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="employment") }}"><i class="material-icons">work</i>Employment</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="membership") }}"><i class="material-icons">person</i>Membership</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="award") }}"><i class="material-icons">card_giftcard</i>Awards</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="funding_diversification") }}"><i class="material-icons">euro_symbol</i>Funding Diversification</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="team_member") }}"><i class="material-icons">people</i>Team Member</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="impact") }}"><i class="material-icons">title</i>Impact</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="innovation") }}"><i class="material-icons">create</i>Innovation</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="publication") }}"><i class="material-icons">book</i>Publications</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="presentation") }}"><i class="material-icons">content_paste</i>Presentations</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="academic_collaboration") }}"><i class="material-icons">donut_small</i>Academic Collaborations</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="non_academic_collaboration") }}"><i class="material-icons">donut_large</i>Non-Academic Collaborations</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="conference") }}"><i class="material-icons">event</i>Conferences</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="communication_overview") }}"><i class="material-icons">event_seat</i>Communication</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="sfi_funding_ratio") }}"><i class="material-icons">account_balance</i>SFI Funding Ratio</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="education_and_public_engagement") }}"><i class="material-icons">public</i>Education & Public Engagement</a></li>
+  </ul>
+
+  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons medium">navigate_next</i></a>
+
+<div class="container">
+    <div class="row">
+    <div class="col s12 m8 offset-m2 xl8 offset-xl2">
+      <div class="card">
+          <div class="card-content ">
+              <table class="striped">
+                  <tr>
+                      <td>
+                          First Name
+                      </td>
+                      <td>
+                          {{ researcher.first_name }}
+                      </td>
+                  </tr>
+                  <tr>
+                    <td>
+                        Last Name
+                    </td>
+                    <td>
+                        {{ researcher.last_name }}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        Email
+                    </td>
+                    <td>
+                        {{ researcher.user.email }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Job Title
+                    </td>
+                    <td>
+                        {{ researcher.job_title }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Prefix
+                    </td>
+                    <td>
+                        {{ researcher.prefix }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Suffix
+                    </td>
+                    <td>
+                        {{ researcher.suffix }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Phone
+                    </td>
+                    <td>
+                        ({{ researcher.phone_ext }}) {{ researcher.phone }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        ORCID
+                    </td>
+                    <td>
+                        {{ researcher.orcid }}
+                    </td>
+                </tr>
+
+
+              </table>
+          </div>
+      </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
