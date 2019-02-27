@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container center-align">
-    <h2>Dashboard</h2>
+    <h3>Dashboard</h3>
     <div class="row">
         <div class="col s12 m4 offset-m2">
             <div class="card #eeeeee grey lighten-3">
@@ -11,7 +11,7 @@
                     <p>View and edit your information</p>
                 </div>
                 <div class="card-action">
-                    <a href="" class="orange-text">View Profile</a>
+                    <a href="{{ url_for("profile.view") }}" class="orange-text">View Profile</a>
                 </div>
             </div>
         </div>
