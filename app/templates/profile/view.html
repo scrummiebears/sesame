@@ -5,8 +5,7 @@
   <ul id="slide-out" class="sidenav">
     <li><div class="user-view">
       <div class="background deep-purple darken-1">
-      </div>
-      <a href="#name"><span class="white-text name">{{ current_user.researcher.name }}</span></a>
+      <a href="#name"><span class="white-text name">{{ current_user.researcher.first_name }} {{current_user.researcher.last_name }}</span></a>
       <a href="#email"><span class="white-text email">{{ current_user.email }}</span></a>
     </div></li>
       <li><a class="waves-effect" href="{{ url_for("profile.view") }}"><i class="material-icons">info</i>General Information</a></li>

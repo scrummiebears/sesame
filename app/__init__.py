@@ -37,7 +37,7 @@ def create_app():
     # Navbar for logged in users (researchers)
     nav.Bar('user', [
         nav.Item('Home', 'auth.home'),
-        nav.Item('Profile', 'auth.home'),
+        nav.Item('Profile', 'profile.view'),
         nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
         nav.Item('Logout', 'auth.logout')
     ])
