@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% macro render_form(form) %}
+{% for field in form %}
+{% if field.name != "csrf_token" %}
+{{ field.label}}
+{{ render_field(field) }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% block body %}
+	<div>
+		<form id="team-form" method="POST"  accept-charset="UTF-8" role="form">
+				{{ form.csrf_token }}
+                {{ render_form(form) }}				
+				<a class="waves-effect waves-light btn" onclick="document.getElementById('team-form').submit();">Register</a>
+				
+			
+		</form>
+	</div>
+		
+	<h1>Your Team</h1>
+	<table>
+		<tr>
+			<th>Start Date</th><th>Departure Date</th><th>Name</th><th>Position</th><th>Primary Attribute</th>
+		</tr>
+			{% for member in members %}
+			<tr><td>{{ member.start_date }}</td><td>{{ member.end_date }}</td><td>{{ member.name }}</td><td>{{ member.position }}</td><td>{{ member.primary_attribute }}</td></tr>	
+			{% endfor %}
+	</table>
+{% endblock body %}

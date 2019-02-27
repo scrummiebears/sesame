@@ -1,0 +1,33 @@
+<style>
+    form * {display: block; margin: 10px;}
+</style>
+
+{% macro render_field(field, placeholder="") %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+{% endmacro %}
+
+{% block body %}
+<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
+    <div class="card white darken-1">
+        <div class="card-content">
+            <span class="card-title center-align">Grant Application</span>
+            {% if error %}
+            <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %}
+
+                <form method="POST" id="proposal-form" role="form" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    {% for field in form if field.widget.input_type != 'hidden'  %}
+                        <div class="input-field">
+                            {{ field.label }}{{ field }}
+                        </div>
+                    {% endfor %}
+
+                    <a class="waves-effect waves-light btn"
+                        onclick="document.getElementById('proposal-form').submit();">Apply</a>
+                </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

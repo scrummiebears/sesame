@@ -20,8 +20,12 @@
         <div class="card-content">
             <span class="card-title center-align">Call for Proposals</span>
             <form id="proposal-form" method="POST"  accept-charset="UTF-8" role="form">
-                {{ form.csrf_token }}
-                {{ render_form(form) }}
+                {{ form.hidden_tag() }}
+                {% for field in form if field.widget.input_type != 'hidden'  %}
+                    <div class="input-field">
+                    {{ field.label }}{{ field }}
+                    </div>
+                {% endfor %}
                 <a class="waves-effect waves-light btn" onclick="document.getElementById('proposal-form').submit();">Send</a>
             </form>
         </div>
