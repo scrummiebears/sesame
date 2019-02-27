@@ -17,24 +17,6 @@
                 {% endif %}
 
                 <form method="POST" id="proposal-form" role="form" enctype="multipart/form-data">
-<<<<<<< HEAD
-                    {{ form.csrf_token }}
-                    {{ render_field(form.title, placeholder="title") }}
-                    {{ render_field(form.duration, placeholder="duration" ) }}
-                    {{ form.nrp.label }}
-                    {{ form.nrp() }}
-
-                    {{ render_field(form.legal_remit, placeholder="legal_remit" ) }}
-                    {{ render_field(form.ethical_issues, placeholder="ethical_issues" ) }}
-                    {{ render_field(form.location, placeholder="location" ) }}
-                    {{ render_field(form.co_applicants, placeholder="co_applicants" ) }}
-                    {{ render_field(form.collaborators, placeholder="collaborators" ) }}
-                    {{ render_field(form.scientific_abstact, placeholder="scientific_abstract") }}
-                    {{ render_field(form.lay_abstract, placeholder="lay_abstract") }}
-                    {{ render_field(form.programme_documents, placeholder="programme_documents") }}
-                    {{ form.agree.label }}
-                    {{ render_field(form.agree, placeholder="agree") }}
-=======
                     {{ form.hidden_tag() }}
                     {% for field in form if field.widget.input_type != 'hidden'  %}
                         <div class="input-field">
@@ -42,7 +24,6 @@
                         </div>
                     {% endfor %}
 
->>>>>>> ronan/profile
                     <a class="waves-effect waves-light btn"
                         onclick="document.getElementById('proposal-form').submit();">Apply</a>
                 </form>
