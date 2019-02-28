@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<ul>
+    <li>Need Reviewers: {{ proposal_stats["PENDING ADMIN 1"] }}</li>
+    <li>Reviewed: {{ proposal_stats["PENDING ADMIN 2"] }}</li>
+    <li>Pending Review: {{ proposal_stats["PENDING REVIEW"] }}</li>
+    <li>Approved: {{ proposal_stats["APPROVED"] }}</li>
+</ul>
+{% endblock %}
