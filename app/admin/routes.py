@@ -12,7 +12,7 @@ def dashboard():
     p_stats = {"PENDING ADMIN 1": p_pending_admin_1, "PENDING ADMIN 2": p_pending_admin_2, "PENDING REVIEW": p_pending_review, "APPROVED":p_approved}
     return render_template("admin/dashboard.html", user=admin, proposal_stats=p_stats)
 
-@admin.route("new_admin", methodfisrt_names=["GET", "POST"])
+@admin.route("new_admin", methods=["GET", "POST"])
 def newAdmin():
     form = NewAdminForm
     if request.method == "POST" and form.validate:
