@@ -41,6 +41,7 @@ class Proposal(db.Model):
     "PENDING ADMIN 1" - Researcher has submitted the grant and is waiting for admin to assign reviewers
     "PENDING REVIEWER" - Reviewer must review it and accept or decline
     "APPROVED" - The admin has approved the proposal and granted a reward
+    "PENDING ADMIN 2" - All reviews have approved the proposal, an admin can now approve the grant
     "REJECTED" - The proposal was rejected either by reviewer or admin
     "EDIT" - The proposal is not fully finished by the researcher and has not been submitted
     """
