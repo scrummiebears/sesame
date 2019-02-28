@@ -64,7 +64,7 @@ class Membership(db.Model):
     __tablename__ = "memberships"
     
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="memberships")
+    researcher = db.relationship("Researcher", backref="membership")
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     start_date  = db.Column(db.Date)
@@ -82,7 +82,7 @@ class Award(db.Model):
     __tablename__ = "awards"
     
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="awards")     
+    researcher = db.relationship("Researcher", backref="award")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -95,7 +95,7 @@ class FundingDiversification(db.Model):
     __tablename__ = "funding_diversification"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="funding_diversifications")     
+    researcher = db.relationship("Researcher", backref="funding_diversification")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     start_date = db.Column(db.Date)
@@ -129,7 +129,7 @@ class Impact(db.Model):
     __tablename__ = "impacts"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="impacts")     
+    researcher = db.relationship("Researcher", backref="impact")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     title = db.Column(db.String)
@@ -143,7 +143,7 @@ class Innovation(db.Model):
     __tablename__ = "inovations_and_commercialisation"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="innovations")     
+    researcher = db.relationship("Researcher", backref="innovation")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -156,7 +156,7 @@ class Publication(db.Model):
     __tablename__ = "publications"
     
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="publications")     
+    researcher = db.relationship("Researcher", backref="publication")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -180,7 +180,7 @@ class Presentation(db.Model):
     __tablename__ = "presentations"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="presentations")     
+    researcher = db.relationship("Researcher", backref="presentation")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -198,7 +198,7 @@ class AcademicCollaboration(db.Model):
     __tablename__ = "academic_collaborations"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="academic_collaborations")     
+    researcher = db.relationship("Researcher", backref="academic_collaboration")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     start_date = db.Column(db.DateTime)
@@ -216,7 +216,7 @@ class NonAcademicCollaboration(db.Model):
     __tablename__ = "non_academic_collaborations"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="non_academic_collaborations")     
+    researcher = db.relationship("Researcher", backref="non_academic_collaboration")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     start_date = db.Column(db.DateTime)
@@ -234,7 +234,7 @@ class Conference(db.Model):
     __tablename__ = "conferences"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="conferences")     
+    researcher = db.relationship("Researcher", backref="conference")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     start_date = db.Column(db.DateTime)
@@ -250,7 +250,7 @@ class CommunicationOverview(db.Model):
     __tablename__ = "communication_overview"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="communications_overviews")     
+    researcher = db.relationship("Researcher", backref="communications_overview")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -263,7 +263,7 @@ class SFIFundingRatio(db.Model):
     __tablename__ = "sfi_funding_ratios"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="sfi_funding_ratios")     
+    researcher = db.relationship("Researcher", backref="sfi_funding_ratio")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -274,7 +274,7 @@ class EducationAndPublicEngagement(db.Model):
     __tablename__ = "education_and_public_engagement"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="education_and_public_engagments")     
+    researcher = db.relationship("Researcher", backref="education_and_public_engagement")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     project_name = db.Column(db.String)
