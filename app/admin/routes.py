@@ -61,7 +61,7 @@ def rejectProposal(propsoal_id):
     proposal = Proposal.query.get(proposal_id)
     proposal.query.update({"status": "REJECTED"})
     flash("Proposal has been rejected")
-    return redirect(url_for(""))
+    return redirect(url_for("admin.dashboard"))
 
 @admin.route("<proposal_id>/assign_reviewers", method=["GET", "POST"])
 def assignReviewers(proposal_id):
