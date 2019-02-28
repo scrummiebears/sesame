@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, DateField, SubmitField, PasswordField
 from wtforms.validators import InputRequired, Length
+from wtforms.fields.html5 import DateTimeLocalField
 
 class LoginForm(FlaskForm):
     email = StringField("Email")
@@ -21,11 +22,11 @@ class RegistrationForm(FlaskForm):
     orcid = StringField("Orcid")
 
 class TeamForm(FlaskForm):
-    start_date = DateField('Start date',validators=[InputRequired()])
-    end_date =  DateField('Departure Date',validators=[InputRequired()])#Departure Date
+    start_date = DateTimeLocalField('Start date',validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
+    end_date =  DateTimeLocalField('Departure Date',validators=[InputRequired()], format='%Y-%m-%dT%H:%M')
     name = StringField('Name',
                        validators=[InputRequired(),Length(min=3,max=20)])
     position = StringField('Position',
                        validators=[InputRequired(),Length(max=80)])
-    grant_number = IntegerField('Primary Attribute',validators=[InputRequired()])#Primary attribution(grant number)
+    grant_number = StringField('Primary Attribute',validators=[InputRequired()])
 
