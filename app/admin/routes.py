@@ -1,11 +1,15 @@
 from app.admin import admin
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, request, abort
 from app.call_system.models import *
+from .forms import *
+from flask_login import current_user
 
 @admin.route("dashboard")
 def dashboard():
+    if current_user.admin is None:
+        abort(403)
     admin = None#current_user.admin
-    p_pending_admin_1 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 1").all()) or 0
+    p_pending_admin_1 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 1").all())
     p_pending_review = len(Proposal.query.filter(Proposal.status == "PENDING REVIEWER").all())
     p_pending_admin_2 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 2").all())
     p_approved = len(Proposal.query.filter(Proposal.status == "APPROVED").all())
@@ -14,6 +18,8 @@ def dashboard():
 
 @admin.route("new_admin", methods=["GET", "POST"])
 def newAdmin():
+    if current_user.admin is None:
+        abort(403)
     form = NewAdminForm
     if request.method == "POST" and form.validate:
 
@@ -34,23 +40,58 @@ def newAdmin():
 
 @admin.route("<call>/proposals")
 def proposals(call):
-    return render_template("admin/proposals.html")
+    if current_user.admin is None:
+        abort(403)
+    proposals = Proposal.query.filter(Proposal.call_id == call).all()
+    admin = current_user.admin
+    return render_template("admin/proposals.html", user=admin, proposals=proposals)
 
-@admin.route("<proposal>/review")
+@admin.route("<proposal_id>/review")
 def review(proposal):
-    return render_template("admin/review.html")
+    if current_user.admin is None:
+        abort(403)
+    proposal = Proposal.query.get(proposal_id) or abort(404)
+    admin = current_user.admin
+    return render_template("admin/review.html", user=admin, proposal=proposal)
 
-@admin.route("<proposal>/deny")
-def rejectProposal(propsoal):
+@admin.route("<proposal_id>/deny")
+def rejectProposal(propsoal_id):
+    if current_user.admin is None:
+        abort(403)
+    proposal = Proposal.query.get(proposal_id)
+    proposal.query.update({"status": "REJECTED"})
+    flash("Proposal has been rejected")
     return redirect(url_for(""))
 
-@admin.route("<proposal>/assign_reviewers")
-def assignReviewers(proposal):
-    return render_template("admin/assign_reviewers")
+@admin.route("<proposal_id>/assign_reviewers", method=["GET", "POST"])
+def assignReviewers(proposal_id):
+    if current_user.admin is None:
+        abort(403)
+    form = AssignReviewersForm()
+    proposal = Proposal.query.get(proposal_id) or abort(404)
+    if method == "POST" and form.validate:
+        reviewer_emails = emails.replace(" ","")
+        review_emails = emails.split(",")
+        
+        # create new reviewers
 
-@admin.route("<proposal>/approve")
-def approveProposal(proposal):
-    return redirect(url_for(""))
+        proposal.status = "PENDING REVIEWER"
+        db.session.commit()
+        flash("Proposal has been sent out for review")
+        return redirect(url_for("admin.dashboard")) 
+    
+    return render_template("admin/assign_reviewers", form=form, proposal=proposal)
+
+@admin.route("<proposal_id>/approve")
+def approveProposal(proposal_id):
+    if current_user.admin is None:
+        abort(403)
+    proposal = Proposal.query.get(proposal_id) or abort(404)
+    proposal.status = "APPROVED"
+    db.session.commit()
+    admin = current_user.admin
+    flash("Proposal has been approved")
+    return redirect(url_for("admin.dashboard"))
 
 
 

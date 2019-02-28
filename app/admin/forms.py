@@ -8,3 +8,6 @@ class NewAdminForm(FlaskForm):
 
     first_name = StringField("First Name")
     last_name = StringField("Last name")
+
+class AssignReviewersForm(FlaskForm):
+    emails = StringField("emails")
