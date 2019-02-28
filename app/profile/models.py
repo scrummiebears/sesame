@@ -21,6 +21,8 @@ class Researcher(db.Model):
     __tablename__ = "researchers"
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User", backref=db.backref("researcher", uselist=False))
+
 
     first_name = db.Column(db.String, nullable = False)
     last_name = db.Column(db.String, nullable=False)
