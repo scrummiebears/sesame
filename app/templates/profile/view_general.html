@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
   <ul id="slide-out" class="sidenav">
     <li><div class="user-view">
       <div class="background deep-purple darken-1">
@@ -23,12 +22,12 @@
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="academic_collaboration") }}"><i class="material-icons">donut_small</i>Academic Collaborations</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="non_academic_collaboration") }}"><i class="material-icons">donut_large</i>Non-Academic Collaborations</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="conference") }}"><i class="material-icons">event</i>Conferences</a></li>
-      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="communication_overview") }}"><i class="material-icons">event_seat</i>Communication</a></li>
+      <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="communication_overview") }}"><i class="material-icons">local_phone</i>Communication</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="sfi_funding_ratio") }}"><i class="material-icons">account_balance</i>SFI Funding Ratio</a></li>
       <li><a class="waves-effect" href="{{ url_for("profile.viewSection" , section="education_and_public_engagement") }}"><i class="material-icons">public</i>Education & Public Engagement</a></li>
   </ul>
 
-  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons medium">navigate_next</i></a>
+  <a href="#" data-target="slide-out" class="sidenav-trigger btn"><i class="material-icons large">navigate_next</i></a>
 
 <div class="container">
     <div class="row">

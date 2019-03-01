@@ -8,7 +8,7 @@
     <head>
         <title>Sesame</title>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">
+        <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">-->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css')}}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -16,7 +16,8 @@
     </head>
 
     <body>
-        <nav>
+        <div class="row">
+            <nav>
                 <div class="nav-wrapper teal">
                     <div class="container">
                         <a href="#" class="brand-logo">Sesame</a>
@@ -47,6 +48,7 @@
                     </a>
                 </div>
             </nav>
+        </div>
 
             <!-- Mobile sidenav -->
             <ul class="sidenav" id="mobile-links">
