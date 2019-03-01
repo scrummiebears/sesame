@@ -4,6 +4,7 @@
     <div class="row">
         <div class="column s12">
             <div class="card-panel large">
+            <h4>Proposals for Call #{{proposals[0].call.id}}</h4>
             <table>
                 <thead>
                     <th>ID</th>
@@ -19,7 +20,7 @@
                         <td>{{ p.id }}</td>
                         <td>{{ p.datetime_applied }}</td>
                         <td>{{ p.title }}</td>
-                        <td></td>
+                        <td>{{ p.researcher.first_name}} {{ p.researcher.last_name }}</td>
                         <td><a href="{{ url_for('admin.review', proposal_id=p.id ) }}">Review</a></td>
                     </tr>
                     {% endfor%}
