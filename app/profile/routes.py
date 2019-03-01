@@ -36,7 +36,7 @@ def addEmployment():
         db.session.add(employment)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addEmployment"))
+        return redirect(url_for("profile.aview.htmlddEmployment"))
     return render_template("profile/add.html", form=form, title="Employment")
 
 @profile.route("add/membership", methods=["GET", "POST"])
@@ -345,24 +345,30 @@ def edit(section, id):
     columns = getColumnList(models[section])
 
     forms = {"education": EducationForm, "employment": EmploymentForm, "membership": MembershipForm, "award": AwardForm, "funding_diversification": FundingDiversificationForm, "team_member": TeamMemberForm, "impact": ImpactForm, "innovation": InnovationForm, "publication": PublicationForm, "presentation": PresentationForm, "academic_collaboration": AcademicCollaborationForm, "non_academic_collaboration": NonAcademicCollaborationForm, "conference": ConferenceForm, "communicaiton_overview": CommunicationOverviewForm, "sfi_funding_ratio": SFIFundingRatioForm, "education_and_public_engagement": EducationAndPublicEngagementForm}
-    form = forms[section].__call__()
 
     instance = models[section].query.get(id)
-    form = populateForm(form, instance, columns)
+    data = populateFormData(instance, columns)
+    form = forms[section].__call__(data=data)
 
     if request.method == "POST" and form.validate():
         updates = {}
         for column in columns:
             if column not in ["researcher", "researcher_id", "user_id", "id"]:
                 updates[column] = getattr(form, column).data
+                flash(updates[column])
         
         db.session.query(models[section]).filter_by(id=id).update(updates)
         db.session.commit()
+        flash("profile updated")
+        flash(str(updates))
         return redirect(url_for("profile.viewSection", section=section))
+    elif request.method is not "POST":
+        flash("Request method was not post")
+    if not form.validate():
+        flash("Form didnt validate")
     return render_template("profile/edit.html", form=form)
     
 
-    
 def getColumnList(model):
     mapper = inspect(model)
     columns = []
@@ -372,14 +378,13 @@ def getColumnList(model):
     
     return columns
 
-def populateForm(form, instance, columns):
-    
+def populateFormData( instance, columns):
+    data = {}
     for c in columns:
         if c not in ["researcher", "researcher_id", "user_id", "id"]:
-            field = getattr(form, c)
-            field.data = getattr(instance, c)
+            data[str(c)] = getattr(instance, c)
 
-    return form
+    return data
 
 @profile.route("view")
 def view():
