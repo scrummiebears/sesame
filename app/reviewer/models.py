@@ -6,9 +6,10 @@ from app.profile.models import *
 
 import datetime
 
-class Reviewer(db.model):
+class Reviewer(db.Model):
     __tablename__ = "reviewers"
 
+    id = db.Column(db.Integer, primary_key=True)
     researcher = db.relationship("Researcher", backref="reviews")
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
