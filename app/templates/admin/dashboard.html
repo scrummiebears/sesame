@@ -1,10 +1,42 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<ul>
-    <li>Need Reviewers: {{ proposal_stats["PENDING ADMIN 1"] }}</li>
-    <li>Reviewed: {{ proposal_stats["PENDING ADMIN 2"] }}</li>
-    <li>Pending Review: {{ proposal_stats["PENDING REVIEW"] }}</li>
-    <li>Approved: {{ proposal_stats["APPROVED"] }}</li>
-</ul>
+<div class="container">
+    <!-- <div class="row">
+        <div class="col s4">
+            <h1>Proposal Statistics</h1>
+        </div>
+    </div> -->
+    <!-- <div class="row">
+        <div class="col s6">
+            <div class="card center-align">
+                <div class="card-content blue-light-custom white-darken-text">
+                    <h5>Proposals Requiring Admin Review</h5>
+                    <h4>{{ proposal_stats["PENDING ADMIN 1"] + proposal_stats["PENDING ADMIN 2"] }}</h4>
+                </div>
+            </div>
+        </div> -->
+    <div class="row">
+        <div class="col s6">
+            <div class="card-panel grey lighten-3 center-align">
+                <h5>Proposals Requiring Admin Review</h5>
+                <h4>{{ proposal_stats["PENDING ADMIN 1"] + proposal_stats["PENDING ADMIN 2"] }}</h4>
+            </div>
+        </div>
+        <div class="col s6">
+            <div class="card-panel grey lighten-3 center-align">
+                <h5>Proposals Under External Review</h5>
+                <h4>{{ proposal_stats["PENDING REVIEW"] }}</h4>
+            </div>
+        </div>
+        <!-- <div class="col s4">
+            <div class="card">
+                <div class="card-content teal white-text">
+                    <h5>Accepted Proposals</h5>
+                    <h4>{{ proposal_stats["APPROVED"] }}</h4>
+                </div>
+            </div> -->
+    </div>
+</div>
+</div>
 {% endblock %}
