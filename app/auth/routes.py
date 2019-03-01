@@ -214,3 +214,16 @@ def createAdmin():
     db.session.commit()
     flash("Admin made")
     return redirect(url_for("auth.login"))
+
+
+@auth.route("/viewProposals",methods=["GET"])
+def viewProposals():
+    prop = Proposal.query.filter_by(id=current_user.id).all()
+    reviewProp = []
+    adminProp = []
+    for prop in prop:
+        if prop.approved == "PENDING REVIEWER":
+            reviewProp.append(prop)
+        else:
+            adminProp.append(prop)
+    return render_template('auth/viewProposals.html',title="View Proposals", Rprop=reviewProp,Aprop=adminProp)
