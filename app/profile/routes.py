@@ -359,13 +359,8 @@ def edit(section, id):
         
         db.session.query(models[section]).filter_by(id=id).update(updates)
         db.session.commit()
-        flash("profile updated")
-        flash(str(updates))
+        flash("profile Updated")
         return redirect(url_for("profile.viewSection", section=section))
-    elif request.method is not "POST":
-        flash("Request method was not post")
-    if not form.validate():
-        flash("Form didnt validate")
     return render_template("profile/edit.html", form=form)
     
 
