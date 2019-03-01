@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="col-sm-12 col-lg-8 col-lg-offset-2">
+
+    <h1 class="center-align teal-text">Proposals</h1>
+
+    <div class="row">
+        <h1 class="center-align teal-text">Admin pending proposals</h1>
+
+        {% for prop in Aprop %}
+            <div class="col-sm-6 ">
+                <div class="col-md-12 card large white darken-1 hoverable">
+                    <div class="card-content">
+                        <span class="card-title teal-text center-align">Proposal Title</span>
+                        <hr>
+                        <p>{{prop.title}}</p><br>
+                        <p>{{prop.researcher}}</p><br>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+            <h1 class="center-align teal-text">Review pending proposals</h1>
+            {% for prop in Rprop %}
+                <div class="col-sm-6 ">
+                    <div class="col-md-12 card large white darken-1 hoverable">
+                        <div class="card-content">
+                            <span class="card-title teal-text center-align">Proposal Title</span>
+                            <hr>
+                            <p>{{prop.title}}</p><br>
+                            <p>{{prop.researcher}}</p><br>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+
+</div>
+
+{% endblock %}
