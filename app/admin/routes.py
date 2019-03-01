@@ -9,7 +9,7 @@ from flask_login import current_user, login_required
 def dashboard():
     if current_user.role != "ADMIN":
         abort(403)
-    admin = None#current_user.admin
+    admin = current_user.admin
     p_pending_admin_1 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 1").all())
     p_pending_review = len(Proposal.query.filter(Proposal.status == "PENDING REVIEWER").all())
     p_pending_admin_2 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 2").all())
@@ -81,6 +81,10 @@ def assignReviewers(proposal_id):
         review_emails = emails.split(",")
         
         # create new reviewers
+        for email in reviewer_emails:
+            researcher = Researcher.query.filter_by(email=email)
+            db.session.add(reviewer(researcher_id=researcher.user_id, proposal_id=proposal_id))
+            
 
         proposal.status = "PENDING REVIEWER"
         db.session.commit()
