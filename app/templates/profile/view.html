@@ -32,6 +32,9 @@
 
 <div class="row">
 <div class="container">
+    <div class="center-align">
+    <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+    </div>
 {% for instance in data %}
     <div class="row">
     <div class="col s12 m8 offset-m2 l8 offset-l2">
@@ -57,13 +60,6 @@
     </div>
     </div>
 {% endfor %}
-    <div class="row center-align">
-        <a href={{ url_for("profile.add"+ models[section] ) }} class="waves-effect waves-light btn">
-            <div class="valign-wrapper">
-                <i class="material-icons medium">add</i>
-                <span>add</span>
-            </div>
-        </a>
-    </div>
+
 </div>{% endblock %}
 </div>
