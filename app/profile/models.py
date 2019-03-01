@@ -275,7 +275,7 @@ class EducationAndPublicEngagement(db.Model):
     __tablename__ = "education_and_public_engagement"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="education_and_public_engagment")     
+    researcher = db.relationship("Researcher", backref="education_and_public_engagement")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     project_name = db.Column(db.String)
