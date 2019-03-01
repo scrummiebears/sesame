@@ -5,6 +5,7 @@
   <ul id="slide-out" class="sidenav">
     <li><div class="user-view">
       <div class="background deep-purple darken-1">
+      </div>
       <a href="#name"><span class="white-text name">{{ current_user.researcher.first_name }} {{current_user.researcher.last_name }}</span></a>
       <a href="#email"><span class="white-text email">{{ current_user.email }}</span></a>
     </div></li>
@@ -29,10 +30,11 @@
 
   <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons medium">navigate_next</i></a>
 
+<div class="row">
 <div class="container">
 {% for instance in data %}
     <div class="row">
-    <div class="col s12 m8 offset-m2 xl8 offset-xl2">
+    <div class="col s12 m8 offset-m2 l8 offset-l2">
       <div class="card">
           <div class="card-content ">
               <table class="striped">
@@ -49,12 +51,19 @@
                   {% endif %}
                   {% endfor %}
               </table>
-              <a href={{ url_for("profile.edit" , section=section, id=instance.ID ) }}>Make Change</a>
-              <a href={{ url_for("profile.add"+ models[section] ) }}>Add New</a>
+              <a href={{ url_for("profile.edit" , section=section, id=instance.ID ) }} class="waves-effect waves-light btn">Make Change</a>
           </div>
       </div>
     </div>
     </div>
 {% endfor %}
+    <div class="row center-align">
+        <a href={{ url_for("profile.add"+ models[section] ) }} class="waves-effect waves-light btn">
+            <div class="valign-wrapper">
+                <i class="material-icons medium">add</i>
+                <span>add</span>
+            </div>
+        </a>
+    </div>
+</div>{% endblock %}
 </div>
-{% endblock %}
