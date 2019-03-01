@@ -124,7 +124,9 @@ def apply(call_id):
 from datetime import datetime
 @call_system.route("/all_cfp")
 def view_all_calls():
-    calls = Call.query.order_by(Call.deadline.desc()).all();
+    calls = Call.query.order_by(Call.deadline.desc()).all()
+    print(calls)
     if len(calls) == 0:
         flash("No calls to display")
+        return render_template("auth/home.html")
     return render_template("call_system/view_all_calls.html", calls=calls)
