@@ -358,7 +358,7 @@ def edit(section, id):
         
         db.session.query(models[section]).filter_by(id=id).update(updates)
         db.session.commit()
-        return redirect(url_for(profile.edit))
+        return redirect(url_for("profile.viewSection", section=section))
     return render_template("profile/edit.html", form=form)
     
 
