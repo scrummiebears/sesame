@@ -12,7 +12,8 @@ class Call(db.Model):
     # Meta information about the call
     id = db.Column(db.Integer, primary_key=True)
     date_published = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    published_by = db.Column(db.Integer)#, db.ForeignKey("users.user_id"))
+    admin = db.relationship("Admin", backref="calls_made")
+    admin_id = db.Column(db.Integer, db.ForeignKey("admins.user_id"))
 
     # Actual content of the call
     information = db.Column(db.String)
@@ -29,10 +30,24 @@ class Proposal(db.Model):
     The table is designed according to the specification in Briefing 3
     """
 
-    __tablename__ = "applications"
+    __tablename__ = "proposals"
 
     id = db.Column(db.Integer, primary_key=True)
-    #call = relationship("app.call_system.models.Call", back_populates="proposals")
+    call_id = db.Column(db.Integer, db.ForeignKey("calls.id"))
+    call = db.relationship("app.call_system.models.Call", backref="proposals")
+    researcher = db.relationship("Researcher", backref="proposals")
+    researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
+    datetime_applied = db.Column(db.DateTime, default=datetime.datetime.now())
+    status = db.Column(db.String, default="PENDING ADMIN 1")
+    # "reviewers" specified as a relationship backref in the "reviewers" table
+    """
+    "PENDING ADMIN 1" - Researcher has submitted the grant and is waiting for admin to assign reviewers
+    "PENDING REVIEWER" - Reviewer must review it and accept or decline
+    "APPROVED" - The admin has approved the proposal and granted a reward
+    "PENDING ADMIN 2" - All reviews have approved the proposal, an admin can now approve the grant
+    "REJECTED" - The proposal was rejected either by reviewer or admin
+    "EDIT" - The proposal is not fully finished by the researcher and has not been submitted
+    """
 
     title = db.Column(db.String)
     duration = db.Column(db.Integer) # Duration of the award requested (in months)
@@ -43,8 +58,8 @@ class Proposal(db.Model):
     location = db.Column(db.String) # Applicants country at time of the submission
     co_applicants = db.Column(db.String, nullable=True) # A list of co-applicant emails, if applicable
     collaborators = db.Column(db.String, nullable=True) # A list of collaborators, if applicable
-    scientific_abstact = db.Column(db.String) # Scienctific abstract, max 200 words
-    lay_abstact = db.Column(db.String) # Lay abstact, max 100 words
+    scientific_abstract = db.Column(db.String) # Scienctific abstract, max 200 words
+    lay_abstract = db.Column(db.String) # Lay abstact, max 100 words
 
     # Programme documents - to be uploaded as a .pdf file
     # These columns relate to information needed by the 

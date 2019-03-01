@@ -4,6 +4,7 @@ from app import db, bcrypt
 from sqlalchemy import text
 from app.auth.models import *
 from app.profile.models import *
+from app.admin.models import *
 
 db_cli = AppGroup("db")
 
@@ -94,10 +95,16 @@ user_cli = AppGroup("user")
 @user_cli.command("init")
 def user_init():
     password = bcrypt.generate_password_hash("1234").decode("utf-8")
-    user = User("root", password, "RESEARCHER")
-    db.session.add(user)
+    a_user = User("admin@sesame.com", password, "ADMIN")
+    db.session.add(a_user)
+    a = Admin(user_id=1,first_name="admin",last_name="ses")
+    db.session.add(a)
+    db.session.commit()
+    
+    r_user = User("researcher@sesame.com", password, "RESEARCHER")
+    db.session.add(r_user)
     db.session.commit()
 
-    r = Researcher(user_id=1, first_name="root", last_name="", job_title="", prefix="")
+    r = Researcher(user_id=2, first_name="", last_name="", job_title="", prefix="")
     db.session.add(r)
     db.session.commit()

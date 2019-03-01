@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="row">
+        <div class="column s12">
+            <div class="card-panel large">
+            <h4>Proposals for Call #{{proposals[0].call.id}}</h4>
+            <table>
+                <thead>
+                    <th>ID</th>
+                    <th>Date Applied</th>
+                    <th>Title</th>
+                    <th>Submitted By</th>
+                    <th><th>
+                </thead>
+
+                <tbody>
+                    {% for p in proposals %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.datetime_applied }}</td>
+                        <td>{{ p.title }}</td>
+                        <td>{{ p.researcher.first_name}} {{ p.researcher.last_name }}</td>
+                        <td><a href="{{ url_for('admin.review', proposal_id=p.id ) }}">Review</a></td>
+                    </tr>
+                    {% endfor%}
+                    
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

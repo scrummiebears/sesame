@@ -64,6 +64,10 @@ def create_app():
     app.register_blueprint(profile, url_prefix="/profile/")
     from app.call_system import call_system
     app.register_blueprint(call_system, url_prefix="/calls/")
+    from app.admin import admin
+    app.register_blueprint(admin, url_prefix="/admin/")
+    from app.reviewer import reviewer
+    app.register_blueprint(reviewer, url_prefix="/review/")
 
     with app.app_context():
         db.create_all()
