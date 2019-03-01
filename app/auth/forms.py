@@ -17,8 +17,8 @@ class RegistrationForm(FlaskForm):
     prefix = StringField("Prefix", [InputRequired()])
 
     suffix = StringField("Suffix")
-    phone = IntegerField("Phone")
-    phone_ext = IntegerField("Phone Extension")
+    phone = StringField("Phone")
+    phone_ext = StringField("Phone Extension")
     orcid = StringField("Orcid")
 
 class TeamForm(FlaskForm):
