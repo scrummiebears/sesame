@@ -6,6 +6,10 @@ import app.profile.models
 
 
 class Call(db.Model):
+    """The data model for a call for proposals
+    
+    This has been updated to include information about calls in Briefing 4
+    """
 
     __tablename__ = "calls"
 
@@ -21,8 +25,12 @@ class Call(db.Model):
     proposal_template = db.Column(db.String)
     deadline = db.Column(db.DateTime)
 
-    # The applications associated with the call
-    #proposals = db.Column(db.relationship("app.call_system.models.Proposal"))
+    eligibility_criteria = db.Column(db.String)
+    duration_of_award = db.Column(db.String)
+    reporting_guidelines = db.Column(db.String)
+    expected_start_date = db.Column(db.String)
+
+    # The applications associated with the call (specified as backref in Proposal)
 
 class Proposal(db.Model):
     """The table containing all proposals

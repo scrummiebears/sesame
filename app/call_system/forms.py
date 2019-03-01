@@ -12,11 +12,21 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 #         self.choices = [(country.alpha_2, country.name) for country in pycountry.countries]
 
 class CallForm(FlaskForm):
+    """Form for Call for Proposals
+
+    This form has been updated to reflect call information in Briefing 4
+    """
 
     information = TextAreaField("Information", [InputRequired()])
     target_group = TextAreaField("Target Group", [InputRequired()])
     proposal_template = TextAreaField("Proposal Template", [InputRequired()])
     deadline = DateTimeLocalField("Deadline", format='%Y-%m-%dT%H:%M')
+
+    eligibility_criteria = StringField("Eligibility Criteria", [InputRequired()])
+    duration_of_award = StringField("Duration of Award", [InputRequired()])
+    reporting_guidelines = StringField("Reporting Guidelines", [InputRequired()])
+    expected_start_date = StringField("Expected Start Date", [InputRequired()]) # String Field because can be a date range
+
     file = FileField('image', validators=[
         FileRequired(),
         FileAllowed(['pdf'], 'PDFs only!')])
