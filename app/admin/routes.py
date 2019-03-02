@@ -1,6 +1,6 @@
 from app.admin import admin
 from flask import render_template, url_for, redirect, request, abort
-from app.call_system.models import Call, Proposal
+#from app.call_system.models import Call, Proposal
 from .forms import *
 from flask_login import current_user, login_required
 from app.profile.models import Researcher

@@ -55,7 +55,7 @@ class Proposal(db.Model):
     call = db.relationship("app.call_system.models.Call", backref="proposals")
     researcher = db.relationship("Researcher", backref="proposals")
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
-    reviewer_id = db.Column(db.Integer,db.ForeignKey("reviewer.user_id"))
+    reviewer_id = db.Column(db.Integer,db.ForeignKey("reviewers.id"))
     datetime_applied = db.Column(db.DateTime, default=datetime.datetime.now())
     status = db.Column(db.String, default="PENDING ADMIN 1")
     # "reviewers" specified as a relationship backref in the "reviewers" table
