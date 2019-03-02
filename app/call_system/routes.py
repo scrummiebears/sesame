@@ -1,5 +1,5 @@
 # Import Flask
-from flask import Flask, render_template, flash, redirect, url_for, make_response, request
+from flask import Flask, render_template, flash, redirect, url_for, make_response, request, abort
 from werkzeug import secure_filename
 import os
 # Import the extensions used here
@@ -13,7 +13,7 @@ from app import programme_docs
 from app.call_system import call_system
 
 # Import the Models used
-from app.call_system.models import Call
+from app.call_system.models import Call, Proposal
 from app.auth.models import User
 
 # Import the forms
@@ -25,7 +25,7 @@ import config
 @login_required
 def make_call():
     if current_user.role != "ADMIN":
-        return redirect(url_for("auth.login"))
+        abort(403)
 
     form = CallForm()
     if form.is_submitted():
@@ -69,57 +69,32 @@ def make_call():
     else:
         return render_template("call_system/make_call.html", form=form)
 
-@call_system.route("/query")
-def query():
-    calls = Call.query.all()
-    return str(len(calls))
-
-@call_system.route("/user")
-def user():
-    u = current_user
-    return str(current_user)
-
-# @call_system.route("/upload", methods=["GET", "POST"])
-# def upload():
-#     # Cannot pass in 'request.form' to AddRecipeForm constructor, as this will cause 'request.files' to not be
-#     # sent to the form.  This will cause AddRecipeForm to not see the file data.
-#     # Flask-WTF handles passing form data to the form, so not parameters need to be included.
-#     from app.call_system.forms import TextForm
-#     form = TextForm()
-#     if request.method == 'POST':
-#         if form.validate_on_submit():
-#             filename = texts.save(request.files['text'])
-#             url = texts.url(filename)
-#             text = File(title=form.title.data, filename=filename, url=url)
-#             db.session.add(text)
-#             db.session.commit()
-#             flash('added, success')
-#         else:
-#             flash_errors(form)
-#             flash('ERROR! Recipe was not added.', 'error')
-#     return render_template('call_system/text_upload.html', form=form)
-
-@call_system.route("/apply/<call_id>")
+@call_system.route("/apply/<call_id>", methods=["GET", "POST"])
+@login_required
 def apply(call_id):
     """The form for grant application
 
     The <call_id> is the call you are applying to.
     All fields are required. Bootstrap wont show the options field for some reason.
     """
+    if current_user.role != "RESEARCHER":
+        abort(403)
+    call = Call.query.get(call_id) or abort(404)
     form = ProposalForm()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            filename = programme_docs.save(request.files["programme_documents"])
-            url = programme_docs.url(filename)
-            proposal = Proposal(title=form.title.data, duration=form.duration.data, nrp=form.nrp.data,
-                                legal_remit=form.legal_remit.data, ethical_issues=form.ethical_issues.data,
-                                location=form.location.data, co_applicants=form.co_applicants.data,
-                                collaborators=form.collaborators.data, scientific_abstract=form.scientific_abstract.data,
-                                lay_abstract=form.lay_abstract.data, programme_docs_filename=filename,
-                                programme_docs_url=url)
-            db.session.add(proposal)
-            db.session.commit()
-    return render_template("call_system/apply.html", form=form)
+    if request.method == "POST" and form.validate:
+        filename = programme_docs.save(request.files["programme_documents"])
+        url = programme_docs.url(filename)
+        proposal = Proposal(call_id=call_id, researcher_id=current_user.id, title=form.title.data, duration=form.duration.data, nrp=form.nrp.data,
+                            legal_remit=form.legal_remit.data, ethical_issues=form.ethical_issues.data,
+                            location=form.location.data, co_applicants=form.co_applicants.data,
+                            collaborators=form.collaborators.data, scientific_abstract=form.scientific_abstract.data,
+                            lay_abstract=form.lay_abstract.data, programme_docs_filename=filename,
+                            programme_docs_url=url)
+        db.session.add(proposal)
+        db.session.commit()
+        flash("Your proposal has been submitted")
+        return redirect(url_for(".apply", call_id=call.id))
+    return render_template("call_system/apply.html", form=form, call=call)
 
 from datetime import datetime
 @call_system.route("/all_cfp")

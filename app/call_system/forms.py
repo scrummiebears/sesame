@@ -39,22 +39,22 @@ class ProposalForm(FlaskForm):
     
     title = StringField("Title")
     duration = IntegerField("Duration")
-    nrp_choices = [("A", "Priority Area A - Future Networks & Communications"),
-                   ("B", "Priority Area B - Data analytics, Management, Security & Privacy"),
-                   ("C", "Priority Area C - Digital Platforms, Content & Applications"), 
-                   ("D", "Priority Area D - Conected Health and Independant Living"), 
-                   ("E", "Priority Area E - Medical Devices"), 
-                   ("F", "Priority Area F - Diagnostics"), 
-                   ("G", "Priority Area G - Therapeutics: Syntesis, Formulation, Processing, and Drug Delivery"),
-                   ("H", "Priority Area H - Food for Health"), 
-                   ("I", "Priority Area I - Sustainable Food Production and Processing"), 
-                   ("J", "Priority Area J - Marine Renewable Energy"), 
-                   ("K", "Priority Area K - Smart Grids & Smart Cities"), 
-                   ("L", "Priority Area L - Manufacturing Competitvness"), 
-                   ("M", "Priority Area M - Processing Technologies and Novel Materials"), 
-                   ("N", "Priority Area N - Innovation in Services and Business Processes"), 
-                   ("O", "Software"),
-                   ("P", "Other")]
+    nrp_choices = [("Priority Area A - Future Networks & Communications", "Priority Area A - Future Networks & Communications"),
+                   ("Priority Area B - Data analytics, Management, Security & Privacy", "Priority Area B - Data analytics, Management, Security & Privacy"),
+                   ("Priority Area C - Digital Platforms, Content & Applications", "Priority Area C - Digital Platforms, Content & Applications"), 
+                   ("Priority Area D - Conected Health and Independant Living", "Priority Area D - Conected Health and Independant Living"), 
+                   ("Priority Area E - Medical Devices", "Priority Area E - Medical Devices"), 
+                   ("Priority Area F - Diagnostics", "Priority Area F - Diagnostics"), 
+                   ("Priority Area G - Therapeutics: Syntesis, Formulation, Processing, and Drug Delivery", "Priority Area G - Therapeutics: Syntesis, Formulation, Processing, and Drug Delivery"),
+                   ("Priority Area H - Food for Health", "Priority Area H - Food for Health"), 
+                   ("Priority Area I - Sustainable Food Production and Processing", "Priority Area I - Sustainable Food Production and Processing"), 
+                   ("Priority Area J - Marine Renewable Energy", "Priority Area J - Marine Renewable Energy"), 
+                   ("Priority Area K - Smart Grids & Smart Cities", "Priority Area K - Smart Grids & Smart Cities"), 
+                   ("Priority Area L - Manufacturing Competitvness", "Priority Area L - Manufacturing Competitvness"), 
+                   ("Priority Area M - Processing Technologies and Novel Materials", "Priority Area M - Processing Technologies and Novel Materials"), 
+                   ("Priority Area N - Innovation in Services and Business Processes", "Priority Area N - Innovation in Services and Business Processes"), 
+                   ("Software", "Software"),
+                   ("Other", "Other")]
     nrp = SelectField("National Research Priority", choices=nrp_choices)
     legal_remit = TextAreaField("Legal Remit")
     ethical_issues = TextAreaField("Ethical Issues")
@@ -62,7 +62,7 @@ class ProposalForm(FlaskForm):
     location = StringField("Country")
     co_applicants = TextAreaField("Co-Applicants")
     collaborators = TextAreaField("Collaborators")
-    scientific_abstact = TextAreaField("Scientific Abstract")
+    scientific_abstract = TextAreaField("Scientific Abstract")
     lay_abstract = TextAreaField("Lay Abstract")
     programme_documents = FileField("Programme Documents")
 

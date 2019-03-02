@@ -16,8 +16,8 @@ class Call(db.Model):
     # Meta information about the call
     id = db.Column(db.Integer, primary_key=True)
     date_published = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    admin = db.relationship("Admin", backref="calls_made")
     admin_id = db.Column(db.Integer, db.ForeignKey("admins.user_id"))
+    admin = db.relationship("Admin", backref="calls_made")
 
     # Actual content of the call
     information = db.Column(db.String)
@@ -78,3 +78,5 @@ class Proposal(db.Model):
     approved = db.Column(db.String)
 
 #class collaborators
+
+from app.admin.models import *
