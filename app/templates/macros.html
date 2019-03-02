@@ -1,6 +1,6 @@
-{% macro call_card(call, col_settings="col s3") %}
+{% macro call_card(call, col_settings="col s3", style="") %}
         <div class="{{ col_settings }}">
-            <div class="card-panel" style="min-height: 102vh;">
+            <div class="card-panel" style="{{ style }}">
                 <span>CALL ID #{{ call.id }}</span>
                 <h1>{{ call.title }}</h1>
                 <p>{{ call.information }}</p>
