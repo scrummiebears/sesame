@@ -2,24 +2,49 @@
 
 {% block body %}
 
-<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
-    <div class="card white darken-1">
-        <div class="card-content">
-            <span class="card-title center-align">Make Call</span>
+<div class="row">
+    <div class="col s6 offset-s3">
+        <div class="card white darken-1">
+            <div class="card-panel">
+                <h3 class="card-title center-align">Make Call for Proposals</h3>
                 {% if error %}
-                    <p class=error><strong>Error:</strong> {{ error }}
-                {% endif %}
+                <p class=error><strong>Error:</strong> {{ error }}
+                    {% endif %}
 
-            <form method="POST" id="call-form" role="form" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-                {% for field in form if field.widget.input_type != 'hidden'  %}
-                <div class="input-field">
-                    {{ field.label }}{{ field }}
-                </div>
-                {% endfor %}) }}
+                    <form method="POST" id="call-form" role="form" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
 
-              <a class="waves-effect waves-light btn" onclick="document.getElementById('call-form').submit();">Publish Call</a>
-            </form>
+                        <div class="input-field">
+                            {{ form.information(class="materialize-textarea") }}{{ form.information.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.target_group(class="materialize-textarea") }}{{ form.target_group.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.proposal_template(class="materialize-textarea") }}{{ form.proposal_template.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.deadline(class="datepicker") }} {{ form.deadline.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.eligibility_criteria(class="materialize-textarea") }}
+                            {{ form.eligibility_criteria.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.duration_of_award }}{{ form.duration_of_award.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.reporting_guidelines(class="materialize-textarea") }}{{ form.reporting_guidelines.label }}
+                        </div>
+                        <div class="input-field">
+                            {{ form.expected_start_date(class="datepicker") }}{{ form.expected_start_date.label }}
+                        </div>
+
+
+                        <a class="waves-effect waves-light btn"
+                            onclick="document.getElementById('call-form').submit();">Publish Call</a>
+                    </form>
+            </div>
         </div>
     </div>
 </div>

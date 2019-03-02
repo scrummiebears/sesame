@@ -6,14 +6,18 @@ import app.profile.models
 
 
 class Call(db.Model):
+    """The data model for a call for proposals
+    
+    This has been updated to include information about calls in Briefing 4
+    """
 
     __tablename__ = "calls"
 
     # Meta information about the call
     id = db.Column(db.Integer, primary_key=True)
     date_published = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    admin = db.relationship("Admin", backref="calls_made")
     admin_id = db.Column(db.Integer, db.ForeignKey("admins.user_id"))
+    admin = db.relationship("Admin", backref="calls_made")
 
     # Actual content of the call
     information = db.Column(db.String)
@@ -21,8 +25,21 @@ class Call(db.Model):
     proposal_template = db.Column(db.String)
     deadline = db.Column(db.DateTime)
 
-    # The applications associated with the call
-    #proposals = db.Column(db.relationship("app.call_system.models.Proposal"))
+    eligibility_criteria = db.Column(db.String)
+    duration_of_award = db.Column(db.String)
+    reporting_guidelines = db.Column(db.String)
+    expected_start_date = db.Column(db.String)
+
+    status = db.Column(db.String)
+    """
+    Status possible values
+    -----------------------
+    "PUBLISHED" - The call has been published and is accepting proposals
+    "FINISHED" - The call is over and not accepting proposals
+    "EDIT" - The call was in process of being made, and the admin saved it for later
+    """
+
+    # The applications associated with the call (specified as backref in Proposal)
 
 class Proposal(db.Model):
     """The table containing all proposals
@@ -70,3 +87,5 @@ class Proposal(db.Model):
     approved = db.Column(db.String)
 
 #class collaborators
+
+from app.admin.models import *
