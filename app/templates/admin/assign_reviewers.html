@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form>
+    {{ form.hidden_tag() }}
+    {{ form.emails() }}
+</form>
+
+<script type="text/javascript">
+        function test_func(data) {
+            console.log(data);
+        }
+        test_func({{ data|safe }});
+
+
+</script>
+{% endblock %}

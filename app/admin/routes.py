@@ -3,13 +3,15 @@ from flask import render_template, url_for, redirect, request, abort
 from app.call_system.models import Call, Proposal
 from .forms import *
 from flask_login import current_user, login_required
+from app.profile.models import Researcher
+import json
 
 @admin.route("dashboard")
 @login_required
 def dashboard():
     if current_user.role != "ADMIN":
         abort(403)
-    admin = None#current_user.admin
+    admin = current_user.admin
     p_pending_admin_1 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 1").all())
     p_pending_review = len(Proposal.query.filter(Proposal.status == "PENDING REVIEWER").all())
     p_pending_admin_2 = len(Proposal.query.filter(Proposal.status == "PENDING ADMIN 2").all())
@@ -40,7 +42,7 @@ def newAdmin():
     admin = current_user.admin
     return render_template("admin/new_admin.html", user=admin, form=form)
 
-@admin.route("<call>/proposals")
+@admin.route("call/<call>/proposals")
 @login_required
 def proposals(call):
     if current_user.role != "ADMIN":
@@ -50,7 +52,7 @@ def proposals(call):
     admin = current_user.admin
     return render_template("admin/proposals.html", user=admin, proposals=proposals)
 
-@admin.route("<proposal_id>/review")
+@admin.route("proposal/<proposal_id>/review")
 @login_required
 def review(proposal_id):
     if current_user.role != "ADMIN":
@@ -59,7 +61,7 @@ def review(proposal_id):
     admin = current_user.admin
     return render_template("admin/review.html", user=admin, proposal=proposal)
 
-@admin.route("<proposal_id>/deny")
+@admin.route("proposal/<proposal_id>/deny")
 @login_required
 def rejectProposal(propsoal_id):
     if current_user.role != "ADMIN":
@@ -69,27 +71,36 @@ def rejectProposal(propsoal_id):
     flash("Proposal has been rejected")
     return redirect(url_for("admin.dashboard"))
 
-@admin.route("<proposal_id>/assign_reviewers", methods=["GET", "POST"])
+@admin.route("proposal/<proposal_id>/assign_reviewers", methods=["GET", "POST"])
 @login_required
 def assignReviewers(proposal_id):
     if current_user.role != "ADMIN":
         abort(403)
     form = AssignReviewersForm()
     proposal = Proposal.query.get(proposal_id) or abort(404)
-    if method == "POST" and form.validate:
+    if request.method == "POST" and form.validate:
         reviewer_emails = emails.replace(" ","")
         review_emails = emails.split(",")
         
         # create new reviewers
+        for email in reviewer_emails:
+            researcher = Researcher.query.filter_by(email=email)
+            db.session.add(reviewer(researcher_id=researcher.user_id, proposal_id=proposal_id))
+            
 
         proposal.status = "PENDING REVIEWER"
         db.session.commit()
         flash("Proposal has been sent out for review")
         return redirect(url_for("admin.dashboard")) 
     
-    return render_template("admin/assign_reviewers", form=form, proposal=proposal)
+    
+    researchers = Researcher.query.all()
+    data = []
+    for r in researchers:
+        data.append(r.user.email)
+    return render_template("admin/assign_reviewers.html", form=form, proposal=proposal, r_emails=json.dumps(data))
 
-@admin.route("<proposal_id>/approve")
+@admin.route("proposal/<proposal_id>/approve")
 @login_required
 def approveProposal(proposal_id):
     if current_user.role != "ADMIN":
@@ -101,5 +112,13 @@ def approveProposal(proposal_id):
     flash("Proposal has been approved")
     return redirect(url_for("admin.dashboard"))
 
-
-
+@admin.route("calls/all_calls")
+@login_required
+def allCalls():
+    if current_user.role != "ADMIN":
+        abort(403)
+    user = current_user.admin
+    calls = {}
+    calls["PUBLISHED"] = Call.query.filter(Call.status=="PUBLISHED").order_by(Call.date_published).all()
+    calls["FINISHED"] = Call.query.filter(Call.status=="FINISHED").order_by(Call.date_published).all()
+    return render_template("admin/all_calls.html", user=admin, calls=calls)
