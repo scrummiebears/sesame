@@ -203,9 +203,6 @@ def profile():
     return render_template('auth/account.html', title ="Profile",user=user,user_education=user_education,user_employment=user_employment,user_membership=user_membership,user_award=user_award,user_funding=user_funding,user_team=user_team,user_impact=user_impact,user_innovation=user_innovation,user_publication=user_publication,user_presentation=user_presentation,user_academicCollabaration=user_academicCollabaration,user_nonAcademicCollabaration=user_nonAcademicCollabaration,user_confrence=user_confrence,user_communicationOverview=user_communicationOverview,user_sfiFundingq=user_sfiFunding,user_educationAndPublicEngagement=user_educationAndPublicEngagement)
 
 
-
-
-
 @auth.route("/createAdmin",methods=["GET","POST"])
 def createAdmin():
     password = bcrypt.generate_password_hash("password").decode("utf-8")
@@ -215,10 +212,9 @@ def createAdmin():
     flash("Admin made")
     return redirect(url_for("auth.login"))
 
-
 @auth.route("/viewProposals",methods=["GET"])
 def viewProposals():
-    prop = Proposal.query.filter_by(id=current_user.id).all()
+    prop = Proposal.query.filter_by(reasearcher_id=current_user.id).all()
     reviewProp = []
     adminProp = []
     for prop in prop:
@@ -227,3 +223,22 @@ def viewProposals():
         else:
             adminProp.append(prop)
     return render_template('auth/viewProposals.html',title="View Proposals", Rprop=reviewProp,Aprop=adminProp)
+
+
+@auth.route("/createReviewer",methods=["GET","POST"])
+def createReviewer():
+    password = bcrypt.generate_password_hash("password").decode("utf-8")
+    user = User("review",password, "REVIEWER")
+    db.session.add(user)
+    db.session.commit()
+    flash("Reviewer made")
+    return redirect(url_for("auth.login"))
+
+
+@auth.route("/review",methods=["GET"])
+def review():
+    if current_user.role == "REVIEWER":
+        reviews = Proposal.query.filter_by(reviewer_id=current_user.id).all()
+        return render_template('auth/viewProposals.html',title="Review",Rprop=reviews)
+    else:
+        return redirect(url_for("auth.login"))

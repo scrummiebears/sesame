@@ -3,7 +3,8 @@ import datetime
 
 from app import db
 import app.profile.models
-
+import app.reviewer.models
+from app.admin.models import Admin
 
 class Call(db.Model):
 
@@ -37,6 +38,7 @@ class Proposal(db.Model):
     call = db.relationship("app.call_system.models.Call", backref="proposals")
     researcher = db.relationship("Researcher", backref="proposals")
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
+    reviewer_id = db.Column(db.Integer,db.ForeignKey("reviewer.user_id"))
     datetime_applied = db.Column(db.DateTime, default=datetime.datetime.now())
     status = db.Column(db.String, default="PENDING ADMIN 1")
     # "reviewers" specified as a relationship backref in the "reviewers" table
@@ -68,5 +70,3 @@ class Proposal(db.Model):
     programme_docs_filename = db.Column(db.String)
     programme_docs_url = db.Column(db.String)
     approved = db.Column(db.String)
-
-#class collaborators

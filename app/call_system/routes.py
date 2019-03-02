@@ -13,7 +13,7 @@ from app import programme_docs
 from app.call_system import call_system
 
 # Import the Models used
-from app.call_system.models import Call
+from app.call_system.models import *
 from app.auth.models import User
 
 # Import the forms
