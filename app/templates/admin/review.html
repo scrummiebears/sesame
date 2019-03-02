@@ -5,25 +5,31 @@
 <div class="row">
     <div class="col s6">
         <div class="card-panel" style="min-height: 100vh;">
-            <span>CALL ID #{{ proposal.call.id}}</span>
+            <span>CALL</span>
             <h1>{{ proposal.call.title }}</h1>
             <p>{{ proposal.call.information }}</p>
             <p>{{ proposal.call.target_group }}</p>
         </div>
     </div>
     <div class="col s6">
-        <div class="card-panel">
-            <span>PROPOSAL ID #{{ proposal.id }}</span>
-            <h3>{{ proposal.title }}</h3>
+        <div class="card">
+            <div class="card-content">
+                <span>PROPOSAL</span>
+                <h3>{{ proposal.title }}</h3>
 
-            <p><b>Duration:</b> {{ proposal.duration }}</p>
-            <p><b>National Research Priority:</b> {{ proposal.nrp }}</p>
-            <p><b>Legal Remit:</b> {{ proposal.legal_remit }}</p>
-            <p><b>Ethical Issues:</b> {{ proposal.ethical_issues }}</p>
-            <p><b>Location:</b> {{ proposal.location }}</p>
-            <p><b>Scientific Abstract:</b> {{ proposal.scientific_abstract }}</p>
-            <p><b>Lay Abstract:</b> {{ proposal.lay_abstact }}</p>
-
+                <p><b>Duration:</b> {{ proposal.duration }}</p>
+                <p><b>National Research Priority:</b> {{ proposal.nrp }}</p>
+                <p><b>Legal Remit:</b> {{ proposal.legal_remit }}</p>
+                <p><b>Ethical Issues:</b> {{ proposal.ethical_issues }}</p>
+                <p><b>Location:</b> {{ proposal.location }}</p>
+                <p><b>Scientific Abstract:</b> {{ proposal.scientific_abstract }}</p>
+                <p><b>Lay Abstract:</b> {{ proposal.lay_abstact }}</p>
+            </div>
+            <div class="card-action">
+                <a href="{{ url_for('admin.assignReviewers', proposal_id=proposal.id)}}">Assign Reviewers</a>
+                    
+                <a href="{{ url_for('admin.rejectProposal', proposal_id=proposal.id ) }}">Reject</a>
+            </div>
         </div>
     </div>
 </div>

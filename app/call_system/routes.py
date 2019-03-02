@@ -39,9 +39,11 @@ def make_call():
             # or simply insert the call into the database
             #
             # Publishing stuff may also be trigered? its a backgrond job?
-            call = Call(published_by=current_user.id, information=form.information.data,
+            expected_start_date = datetime.strptime(form.deadline.data, "%Y-%m-%d")
+            deadline = datetime.strptime(form.deadline.data, "%Y-%m-%d")
+            call = Call(admin_id=current_user.id, information=form.information.data,
                         target_group=form.target_group.data, proposal_template=form.proposal_template.data,
-                        deadline=form.deadline.data)
+                        deadline=deadline, eligibility_criteria=form.eligibility_criteria.data, duration_of_award=form.duration_of_award.data, reporting_guidelines=form.reporting_guidelines.data, expected_start_date=expected_start_date, status="PUBLISHED")
             db.session.add(call)
             db.session.commit()
 
@@ -49,16 +51,16 @@ def make_call():
 
             for email, in emails:
                 msg = Message("Call for Proposal", recipients=[email])
-                msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + form.deadline.data.strftime('%m/%d/%Y')
+                msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + deadline.strftime('%m/%d/%Y')
 
-                pdf = form.file.data
-                filename = secure_filename(pdf.filename)
+                # pdf = form.file.data
+                # filename = secure_filename(pdf.filename)
 
-                pdf.save(os.path.join(
-                    config.UPLOAD_FOLDER, filename))
+                # pdf.save(os.path.join(
+                #     config.UPLOAD_FOLDER, filename))
 
-                msg.attach(filename, 'application/pdf', pdf.read())
-                mail.send(msg)
+                # msg.attach(filename, 'application/pdf', pdf.read())
+                # mail.send(msg)
 
             flash("Call for funding has been published")
             return render_template("call_system/call_info_view_page.html", form=form)

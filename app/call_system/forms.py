@@ -20,15 +20,15 @@ class CallForm(FlaskForm):
     information = TextAreaField("Information", [InputRequired()])
     target_group = TextAreaField("Target Group", [InputRequired()])
     proposal_template = TextAreaField("Proposal Template", [InputRequired()])
-    deadline = DateTimeLocalField("Deadline", format='%Y-%m-%dT%H:%M')
+    deadline = StringField("Deadline")
 
-    eligibility_criteria = StringField("Eligibility Criteria", [InputRequired()])
+    eligibility_criteria = TextAreaField("Eligibility Criteria", [InputRequired()])
     duration_of_award = StringField("Duration of Award", [InputRequired()])
-    reporting_guidelines = StringField("Reporting Guidelines", [InputRequired()])
+    reporting_guidelines = TextAreaField("Reporting Guidelines", [InputRequired()])
     expected_start_date = StringField("Expected Start Date", [InputRequired()]) # String Field because can be a date range
 
     file = FileField('image', validators=[
-        FileRequired(),
+        #FileRequired(),
         FileAllowed(['pdf'], 'PDFs only!')])
 
 class ProposalForm(FlaskForm):

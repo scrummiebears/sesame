@@ -3,6 +3,10 @@ $(document).ready(function(){
     
     M.AutoInit();
 
+    var today = new Date();
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+      });
 
-
+    
 })

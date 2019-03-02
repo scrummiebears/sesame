@@ -30,6 +30,15 @@ class Call(db.Model):
     reporting_guidelines = db.Column(db.String)
     expected_start_date = db.Column(db.String)
 
+    status = db.Column(db.String)
+    """
+    Status possible values
+    -----------------------
+    "PUBLISHED" - The call has been published and is accepting proposals
+    "FINISHED" - The call is over and not accepting proposals
+    "EDIT" - The call was in process of being made, and the admin saved it for later
+    """
+
     # The applications associated with the call (specified as backref in Proposal)
 
 class Proposal(db.Model):
