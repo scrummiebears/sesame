@@ -1,9 +1,3 @@
-.main-in-profile {
-    padding-left: 300px;
-}
-
-@media only screen and (max-width : 992px) {
-    .main-in-profile {
-        padding-left: 0;
-    }
+.padded-button{
+    padding-right: 20px;
 }

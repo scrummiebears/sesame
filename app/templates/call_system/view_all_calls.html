@@ -23,9 +23,9 @@
                     </div>
 
                     <div class="card-action">
-                        <a href="#" class="teal-text">Read more</a>
+                        <a href="{{url_for('call_system.view_call', call_id=call.id)}}" class="padded-button teal-text">Read more</a>
                         {% if current_user.is_authenticated %}
-                        <button class="btn waves-effect waves-light white teal-text" type="submit" name="action">Apply Now</button>
+                        <a href="{{url_for('call_system.apply', call_id=call.id)}}" class="btn waves-effect waves-light white teal-text">Apply Now</a>
                         {% endif %}
                     </div>
                 </div>

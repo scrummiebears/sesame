@@ -133,7 +133,7 @@ def CreateNewAdmin():
         return render_template("auth/register.html", form=form)
 
 @auth.route("/teams", methods=['GET','POST'])
-
+@login_required
 def team_form():
     if current_user.is_authenticated:
         form = TeamForm()

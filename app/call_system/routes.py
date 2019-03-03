@@ -98,6 +98,12 @@ def apply(call_id):
         return redirect(url_for(".apply", call_id=call.id))
     return render_template("call_system/apply.html", form=form, call=call)
 
+@call_system.route("/<int:call_id>/view")
+def view_call(call_id):
+    call = Call.query.filter_by(id=call_id).first()
+    # flash("Reading more about call #" + str(call_id))
+    return render_template("call_system/view_call.html", call=call)
+
 from datetime import datetime
 @call_system.route("/all_cfp")
 def view_all_calls():
