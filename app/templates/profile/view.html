@@ -48,7 +48,7 @@
                   {% endif %}
                   {% endfor %}
               </table>
-              <a href={{ url_for("profile.edit" , section=section, id=instance.ID ) }} class="waves-effect waves-light btn">Make Change</a>
+              <a href="{{ url_for('profile.edit' , section=section, id=instance.ID ) }}" class="waves-effect waves-light btn">Make Change</a>
           </div>
       </div>
     </div>

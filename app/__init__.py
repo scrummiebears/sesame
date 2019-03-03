@@ -57,6 +57,12 @@ def create_app():
         #nav.Item('Proposal Submissions', 'call_system.view_proposal_submissions'),
         nav.Item('Logout', 'auth.logout')
     ])
+    nav.Bar('researcher', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
+        nav.Item('Proposal Submissions', 'call_system.researcher_view_initial_pending_submissions'),
+        nav.Item('Logout', 'auth.logout')
+    ])
 
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
