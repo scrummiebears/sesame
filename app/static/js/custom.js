@@ -8,5 +8,19 @@ $(document).ready(function(){
         format: 'yyyy-mm-dd',
       });
 
+      var chip = {
+        tag: 'chip content',
+        image: '', //optional
+    };
+
+    $(".chips-custom").chips(
+        {onChipDelete : formUpdate
+        , onChipAdd: formUpdate,
+        autocompleteOptions: {
+          data: autoComplete_data
+      }, placeholder: "Reveiwers",
+    secondaryPlaceholder: " "}
+      );
+
     
 })
