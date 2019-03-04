@@ -99,10 +99,17 @@ def call_for_proposals():
         emails = db.session.query(User.email)
         for email, in emails:
             msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-            msg.body = "testing"
+            msg.body = """<h3>Call for Proposal: %s</h3><br>
+            Dear Researcher,<br>
+            This is a notification of a new call for proposal issued by the SFI.<br>
+            <b>Information:</b><br>%s<br>
+            <b>Target Group:</b><br>%s<br>
+            <b>Proposal Template:</b><br>%s<br>
+            <b>Deadline:</b><br>%s<br>
+            <b>Eligibility Crteria:</b><br>%s<br>
+            """()
             msg.html = "<b>testing</b>"
             mail.send(msg)
-
     return render_template("auth/proposals.html", title="Call For Proposals", form=form)
 
 @auth.route("/CreateNewAdmin")
@@ -145,7 +152,7 @@ def team_form():
             teamMem = TeamMembers(start_date = form.start_date.data, end_date = form.end_date.data, name = form.name.data,position = form.position.data, primary_attribute = form.grant_number.data,researcher_id = researcher_id)
             db.session.add(teamMem)
             db.session.commit()
-            flash("Your team member has been added!") 
+            flash("Your team member has been added!")
         members = TeamMembers.query.filter_by(researcher_id = researcher_id).all()
         for member in members:
             print(member.name)
@@ -156,7 +163,7 @@ def team_form():
 
 @auth.route("/profile",methods=['GET'])
 @login_required
-def profile(): 
+def profile():
     user = Researcher.query.filter_by(user_id=current_user.id).first()
     user_education = Education.query.filter_by(researcher_id=current_user.id).first()
     user_employment = Employment.query.filter_by(researcher_id=current_user.id).first()
