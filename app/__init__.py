@@ -44,8 +44,8 @@ def create_app():
 
     # Navbar for logged in admins
     nav.Bar('admin', [
-        nav.Item('Home', 'auth.home'),
-        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
+        nav.Item('Home', 'admin.dashboard'),
+        nav.Item('Calls For Proposals', 'admin.allCalls'),
         nav.Item('Make CFP', 'call_system.make_call'),
         nav.Item('Logout', 'auth.logout')
     ])
@@ -55,6 +55,12 @@ def create_app():
         nav.Item('Home', 'auth.home'),
         nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
         #nav.Item('Proposal Submissions', 'call_system.view_proposal_submissions'),
+        nav.Item('Logout', 'auth.logout')
+    ])
+    nav.Bar('researcher', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
+        nav.Item('Proposal Submissions', 'call_system.researcher_view_initial_pending_submissions'),
         nav.Item('Logout', 'auth.logout')
     ])
 

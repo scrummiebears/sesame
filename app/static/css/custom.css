@@ -7,3 +7,12 @@
         padding-left: 0;
     }
 }
+
+.input-field input[type=text]:focus, .materialize-textarea:focus:not([readonly]) {
+     border-bottom: 1px solid #0F4790 !important;
+     box-shadow: 0 1px 0 0 #0F4790 !important;
+}
+
+.input-field input[type=text]:focus + label {
+     color: #0F4790 !important;
+}
