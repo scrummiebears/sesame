@@ -42,7 +42,7 @@
                 <div class="nav-wrapper">
                      <div class="container">
                             {% if current_user.role == "ADMIN" %}
-                              <a href="#" class="brand-logo">Sesame - SFI Admin Portal</a>
+                              <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame - SFI Admin Portal</a>
                               <ul id="nav-mobile" class="right hide-on-med-and-down">
                                 {% for item in nav.admin %}
                         			  <li class="{{ 'active' if item.is_active else '' }}">
@@ -52,9 +52,9 @@
                               </ul>
 
                             {% elif current_user.role == "RESEARCHER" %}
-                              <a href="#" class="brand-logo">Sesame - Researcher Portal</a>
+                              <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame - Researcher Portal</a>
                               <ul id="nav-mobile" class="right hide-on-med-and-down">
-                                {% for item in nav.user %}
+                                {% for item in nav.researcher %}
                         			  <li class="{{ 'active' if item.is_active else '' }}">
                                   <a href="{{ item.url }}">{{item.label}}</a>
                                 </li>
@@ -62,9 +62,9 @@
                               </ul>
 
                             {% elif current_user.role == "REVIEWER" %}
-                                <a href="#" class="brand-logo">Sesame - Reviewer Portal</a>
+                                <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame - Reviewer Portal</a>
                                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                                {% for item in nav.reviewer %}
+                                {% for item in nav.researcher %}
                                   <li class="{{ 'active' if item.is_active else '' }}">
                                         <a href="{{ item.url }}">{{item.label}}</a>
                                   </li>
@@ -72,7 +72,7 @@
                                 </ul>
 
                             {% else %}
-                              <a href="#" class="brand-logo">Sesame</a>
+                              <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame</a>
                               <ul id="nav-mobile" class="right hide-on-med-and-down">
                                   {% for item in nav.top %}
                                       <li class="{{ 'active' if item.is_active else '' }}">
