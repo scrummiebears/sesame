@@ -63,7 +63,7 @@ def make_call():
                 # mail.send(msg)
 
             flash("Call for funding has been published")
-            return render_template("call_system/call_info_view_page.html", form=form)
+            return redirect(url_for("admin.allCalls"))
 
         else:
             flash("Unable to publish call - Please enter details in all fields")
