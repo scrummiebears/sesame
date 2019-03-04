@@ -2,17 +2,69 @@
 
 {% block body %}
 
-<form>
-    {{ form.hidden_tag() }}
-    {{ form.emails() }}
-</form>
+<div class="row">
+    <div class="col s6 offset-s3">
+        <div class="card-panel">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.emails(style="display:none;") }}
+                
+            
+            <p>Please select reviewers for the proposal by entering their email or selecting them from the table below.
+            </p>
+            <div id="r-chips" class="chips-custom"></div>
 
-<script type="text/javascript">
+            <div id="reviewers-select">
+                <ul id="researcher-list" class="collection">
+
+                </ul>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Assign Reviewers
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
         function test_func(data) {
             console.log(data);
         }
-        test_func({{ data|safe }});
+        var r_emails = {{ r_emails | safe }};
+        $("#reviewers-select").css({ "max-height": "40vh", "overflow": "scroll", "overflow-x": "hidden","border-left":"solid e0e0e0 1px", "border-top": "solid #e0e0e0 1px","margin-bottom":" 10px", "border-bottom": "solid #e0e0e0 1px", "margin-top": "0px !important" })
+        $(".collection").css("margin-top", "0px");
+        $("#researcher-list").css("margin-bottom", "0px");
+
+        autoComplete_data = {}
+        r_emails.forEach(function (e) {
+            autoComplete_data[e] = null;
+        });
 
 
-</script>
-{% endblock %}
+        r_emails.forEach(function (element) {
+            var add_button = "<a style='cursor: pointer;' class='secondary-content researcher' data-value='" + element + "'><i class='material-icons'>add</i></a>";
+            $("#researcher-list").append("<li class='collection-item'><div>" + element + add_button + "</div></li>");
+        });
+
+        $(".researcher").click(function (e) {
+            var email = $(this).data("value");
+
+            $(".chips").chips("addChip", { tag: email });
+        });
+
+        function formUpdate() {
+            var email_list = [];
+
+            var current_chips = M.Chips.getInstance($('.chips')).chipsData;
+            current_chips.forEach(function (e) {
+                for (var key in e) {
+                    email_list.push(e[key]);
+                }
+
+            });
+            document.getElementById('emails').setAttribute("value", email_list.toString());
+            console.log("Update: " + email_list.toString());
+        }
+
+    </script>
+    {% endblock %}

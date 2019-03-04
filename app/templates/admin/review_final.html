@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+proposal info goes here
+
+<a href="url_for('admin.approveProposal', proposal_id=proposal.id)">Accept</a>
+<a href="url_for('admin.rejectProposal', proposal_id=proposal.id)">Reject</a>
+
+{% endblock %}

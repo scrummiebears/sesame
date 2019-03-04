@@ -21,7 +21,7 @@
                         <td>{{ call.admin.first_name }} {{ call.admin.last_name }}</td>
                         <td style="width:33%;">{{ call.information|truncate(110) }}</td>
                         <td>{{ call.expected_start_date|truncate(10, end="") }}</td>
-                        <td><a href="">View more info</a></td>
+                        <td><a href="{{url_for('admin.proposals', call=call.id)}}">View Propoals</a></td>
                     </tr>
                     {% endfor%}
                     
