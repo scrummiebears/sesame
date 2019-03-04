@@ -22,13 +22,14 @@
                         <!-- <p>{{call.proposal_template}}</p> -->
                     </div>
 
+
+                    {% if current_user.role == 'RESEARCHER' %}
                     <div class="card-action">
                         <!-- <a href="#" class="teal-text">Read more</a> -->
                         <a href="{{ url_for('call_system.apply', call_id=call.id) }}" class="red-text text-darken-3">Apply Now</a>
-                        {% if current_user.is_authenticated %}
                         <!-- <button class="btn waves-effect waves-light white teal-text" type="submit" name="action">Apply Now</button> -->
-                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
