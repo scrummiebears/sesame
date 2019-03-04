@@ -73,7 +73,10 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('auth.home'))
+            if current_user.role == "RESEARCHER":
+                return redirect(url_for('auth.home'))
+            elif current_user.role == "ADMIN":
+                return redirect(url_for('admin.dashboard'))
         else:
             flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)

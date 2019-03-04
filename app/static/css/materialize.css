@@ -6225,8 +6225,8 @@ input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
   border-bottom: 1px solid #26a69a;
-  -webkit-box-shadow: 0 1px 0 0 #26a69a;
-          box-shadow: 0 1px 0 0 #26a69a;
+  -webkit-box-shadow: 0 1px 0 0 #0F4790;
+          box-shadow: 0 1px 0 0 #0F4790;
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -6242,7 +6242,7 @@ input[type=tel]:not(.browser-default):focus:not([readonly]) + label,
 input[type=number]:not(.browser-default):focus:not([readonly]) + label,
 input[type=search]:not(.browser-default):focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: #26a69a;
+  color: #0F4790;
 }
 
 input:not([type]):focus.valid ~ label,
@@ -6258,7 +6258,7 @@ input[type=tel]:not(.browser-default):focus.valid ~ label,
 input[type=number]:not(.browser-default):focus.valid ~ label,
 input[type=search]:not(.browser-default):focus.valid ~ label,
 textarea.materialize-textarea:focus.valid ~ label {
-  color: #4CAF50;
+  color: #;
 }
 
 input:not([type]):focus.invalid ~ label,

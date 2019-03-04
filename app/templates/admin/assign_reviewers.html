@@ -8,9 +8,10 @@
             <form method="POST">
                 {{ form.hidden_tag() }}
                 {{ form.emails(style="display:none;") }}
-                <input type="submit">
-            </form>
-            <p>Please select reviewers for the proposal by entering their email or selecting them from the table below.</p>
+                
+            
+            <p>Please select reviewers for the proposal by entering their email or selecting them from the table below.
+            </p>
             <div id="r-chips" class="chips-custom"></div>
 
             <div id="reviewers-select">
@@ -18,6 +19,10 @@
 
                 </ul>
             </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Assign Reviewers
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
         </div>
     </div>
 
@@ -26,17 +31,18 @@
             console.log(data);
         }
         var r_emails = {{ r_emails | safe }};
-        $("#reviewers-select").css({ "max-height": "40vh", "overflow": "scroll", "overflow-x": "hidden", "border-top": "solid grey 1px", "border-bottom": "solid grey 1px", "margin-top": "0px !important" })
+        $("#reviewers-select").css({ "max-height": "40vh", "overflow": "scroll", "overflow-x": "hidden","border-left":"solid e0e0e0 1px", "border-top": "solid #e0e0e0 1px","margin-bottom":" 10px", "border-bottom": "solid #e0e0e0 1px", "margin-top": "0px !important" })
         $(".collection").css("margin-top", "0px");
+        $("#researcher-list").css("margin-bottom", "0px");
 
         autoComplete_data = {}
-        r_emails.forEach(function(e) {
+        r_emails.forEach(function (e) {
             autoComplete_data[e] = null;
         });
 
 
         r_emails.forEach(function (element) {
-            var add_button = "<a class='secondary-content researcher' data-value='" + element + "'><i class='material-icons'>add</i></a>";
+            var add_button = "<a style='cursor: pointer;' class='secondary-content researcher' data-value='" + element + "'><i class='material-icons'>add</i></a>";
             $("#researcher-list").append("<li class='collection-item'><div>" + element + add_button + "</div></li>");
         });
 
