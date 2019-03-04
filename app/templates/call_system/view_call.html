@@ -6,18 +6,18 @@
 
     <h1 class="center-align teal-text">Calls for Proposals</h1>
 
-    <a href="{{url_for('call_system.view_all_calls')}}" class="teal-text valign-wrapper"><i class="material-icons">
+    <a href="{{url_for('call_system.view_all_calls')}}" class="red-text text-darken-3 valign-wrapper"><i class="material-icons">
 keyboard_backspace
 </i>Back</a>
 <br>
 
     <div class="col-md-12 card white darken-1 hoverable">
         <div class="card-content">
-            <span class="card-title teal-text center-align">Call For Proposal Title</span>
+            <span class="card-title red-text text-darken-3 center-align">Call For Proposal Title</span>
             <hr>
-            <p class="teal-text">Deadline &#9472; {{call.deadline.strftime('%d %h %Y at %H:%M')}}</p>
-            <p class="teal-text">Award &#9472; €40,000</p>
-            <p class="teal-text">Duration &#9472; 6 months</p><br>
+            <p class="red-text text-darken-3">Deadline &#9472; {{call.deadline.strftime('%d %h %Y at %H:%M')}}</p>
+            <p class="red-text text-darken-3">Award &#9472; €40,000</p>
+            <p class="red-text text-darken-3">Duration &#9472; 6 months</p><br>
             <p>{{call.target_group}}</p><br>
             <p>{{call.information}}</p><br>
             <p>{{call.proposal_template}}</p>

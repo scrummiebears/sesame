@@ -4,31 +4,32 @@
 
 <div class="col-sm-12 col-lg-8 col-lg-offset-2">
 
-    <h1 class="center-align teal-text">Calls for Proposals</h1>
+    <h1 class="center-align">Calls for Proposals</h1>
 
     <div class="row">
         {% for call in calls %}
             <div class="col s6 ">
                 <div class="col m12 card medium white darken-1 hoverable">
                     <div class="card-content">
-                        <span class="card-title teal-text center-align">Call For Proposal</span>
+                        <span class="card-title center-align">Call For Proposal</span>
                         <hr>
                         <!-- call.deadline.strftime('%d %h %Y at %H:%M' -->
-                        <p class="teal-text">Deadline &#9472; {{call.deadline}}</p>
-                        <p class="teal-text">Award &#9472; €40,000</p>
-                        <p class="teal-text">Duration &#9472; 6 months</p><br>
+                        <p class="red-text text-darken-3">Deadline &#9472; {{call.deadline}}</p>
+                        <p class="red-text text-darken-3">Award &#9472; €40,000</p>
+                        <p class="red-text text-darken-3">Duration &#9472; 6 months</p><br>
                         <p>{{call.target_group}}</p><br>
                         <p>{{call.information}}</p><br>
                         <!-- <p>{{call.proposal_template}}</p> -->
                     </div>
 
+
+                    {% if current_user.role == 'RESEARCHER' %}
                     <div class="card-action">
                         <!-- <a href="#" class="teal-text">Read more</a> -->
-                        <a href="{{ url_for('call_system.apply', call_id=call.id) }}" class="teal-text">Apply Now</a>
-                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('call_system.apply', call_id=call.id) }}" class="red-text text-darken-3">Apply Now</a>
                         <!-- <button class="btn waves-effect waves-light white teal-text" type="submit" name="action">Apply Now</button> -->
-                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
