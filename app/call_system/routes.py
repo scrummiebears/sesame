@@ -52,18 +52,18 @@ def make_call():
             for email, in emails:
                 msg = Message("Call for Proposal", recipients=[email])
                 msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + deadline.strftime('%m/%d/%Y')
-
+                # 
                 # pdf = form.file.data
                 # filename = secure_filename(pdf.filename)
-
+                #
                 # pdf.save(os.path.join(
                 #     config.UPLOAD_FOLDER, filename))
-
+                #
                 # msg.attach(filename, 'application/pdf', pdf.read())
-                # mail.send(msg)
+                mail.send(msg)
 
             flash("Call for funding has been published")
-            return render_template("call_system/call_info_view_page.html", form=form)
+            return redirect(url_for("admin.allCalls"))
 
         else:
             flash("Unable to publish call - Please enter details in all fields")
@@ -111,3 +111,23 @@ def view_all_calls():
     if len(calls) == 0:
         flash("No calls to display")
     return render_template("call_system/view_all_calls.html", calls=calls)
+
+@call_system.route("/researcher_view_all_submissions/<section>")
+def viewSection(section):
+    """Handles viewing specific proposal statuses"""
+    pendingSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status.contains("PENDING")).all()
+    approvedSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="APPROVED").all()
+    editSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="EDIT").all()
+    rejectedSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="REJECTED").all()
+    sections = {"pendingSubmissions":pendingSubmissions, "approvedSubmissions":approvedSubmissions, "rejectedSubmissions":rejectedSubmissions, "editSubmissions":editSubmissions}
+    if section not in sections:
+        abort(404)
+
+    data = sections[section]
+    return render_template("call_system/researcher_view_all_submissions.html", section=section, data=data)
+
+@call_system.route("/researcher_view_initial_pending_submissions")
+def researcher_view_initial_pending_submissions():
+    """Generates the initial view of proposal submissions with the pending proposals"""
+    pendingSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status.contains("PENDING")).all()
+    return render_template("call_system/researcher_view_initial_pending_submissions.html",data=pendingSubmissions)

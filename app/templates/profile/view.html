@@ -27,7 +27,7 @@
 <div class="row main-in-profile">
 <div class="container">
     <div class="center-align">
-    <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red darken-3"><i class="material-icons">add</i></a>
     </div>
 {% for instance in data %}
     <div class="row">
@@ -48,7 +48,7 @@
                   {% endif %}
                   {% endfor %}
               </table>
-              <a href={{ url_for("profile.edit" , section=section, id=instance.ID ) }} class="waves-effect waves-light btn">Make Change</a>
+              <a href="{{ url_for('profile.edit' , section=section, id=instance.ID ) }}" class="waves-effect waves-light btn red darken-3">Make Change</a>
           </div>
       </div>
     </div>

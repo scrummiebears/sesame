@@ -1,9 +1,12 @@
 from app.admin import admin
-from flask import render_template, url_for, redirect, request, abort
+from flask import render_template, url_for, redirect, request, abort, flash
 from app.call_system.models import Call, Proposal
 from .forms import *
 from flask_login import current_user, login_required
 from app.profile.models import Researcher
+from app.auth.models import User
+from app.reviewer.models import Reviewer
+from app import db
 import json
 
 @admin.route("dashboard")
@@ -61,9 +64,18 @@ def review(proposal_id):
     admin = current_user.admin
     return render_template("admin/review.html", user=admin, proposal=proposal)
 
+@admin.route("proposal/<proposal_id>/review_final")
+@login_required
+def reviewFinal(proposal_id):
+    if current_user.role != "ADMIN":
+        abort(403)
+    admin = current_user.admin
+    proposal = Proposal.query.get(proposal_id) or abort(404)
+    return render_template("admin/review_final.html", proposal=proposal,user=admin)
+
 @admin.route("proposal/<proposal_id>/deny")
 @login_required
-def rejectProposal(propsoal_id):
+def rejectProposal(proposal_id):
     if current_user.role != "ADMIN":
         abort(403)
     proposal = Proposal.query.get(proposal_id)
@@ -79,21 +91,25 @@ def assignReviewers(proposal_id):
     form = AssignReviewersForm()
     proposal = Proposal.query.get(proposal_id) or abort(404)
     if request.method == "POST" and form.validate:
+        emails = form.emails.data
         reviewer_emails = emails.replace(" ","")
         review_emails = emails.split(",")
         
         # create new reviewers
-        for email in reviewer_emails:
-            researcher = Researcher.query.filter_by(email=email)
-            db.session.add(reviewer(researcher_id=researcher.user_id, proposal_id=proposal_id))
-            
-
+        for email in review_emails:
+            print("Email is "+ email)
+            user = User.query.filter(User.email == email).first()
+            print(str(user))
+            researcher = user.researcher
+            r = Reviewer(researcher_id=researcher.user_id, proposal_id=proposal_id)
+            db.session.add(r)
+            db.session.commit()
+        
         proposal.status = "PENDING REVIEWER"
         db.session.commit()
         flash("Proposal has been sent out for review")
         return redirect(url_for("admin.dashboard")) 
-    
-    
+
     researchers = Researcher.query.all()
     data = []
     for r in researchers:
