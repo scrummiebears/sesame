@@ -1,5 +1,42 @@
 {% extends "layout.html" %}
 
+
+{% block head %}
+<style>
+    body {
+        font-family: sans-serif;
+    }
+
+
+
+    input[type='file'] {
+        display: none;
+    }
+
+    .file-info {
+        font-size: 0.9em;
+    }
+
+
+
+
+
+    @media (max-width: 300px) {
+        button {
+            width: 100%;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 0;
+        }
+
+        .file-info {
+            display: block;
+            margin: 10px 5px;
+        }
+    }
+</style>
+{% endblock %}
+
+
 {% block body %}
 
 <div class="row">
@@ -20,9 +57,17 @@
                         <div class="input-field">
                             {{ form.target_group(class="materialize-textarea") }}{{ form.target_group.label }}
                         </div>
-                        <div class="input-field">
-                            {{ form.proposal_template(class="materialize-textarea") }}{{ form.proposal_template.label }}
-                        </div>
+
+                        <p>
+                            <div class="input-container">
+                                {{ form.proposal_template(id="real-input")}}
+                                <a class="browse-btn btn-floating btn-small waves-effect waves-light teal">
+                                    <i class="material-icons">file_upload</i>
+                                </a>
+                                <span class="file-info">Upload Proposal Template</span>
+                            </div>
+                        </p>
+
                         <div class="input-field">
                             {{ form.deadline(class="datepicker") }} {{ form.deadline.label }}
                         </div>
@@ -48,5 +93,24 @@
         </div>
     </div>
 </div>
+
+<script>
+        const uploadButton = document.querySelector('.browse-btn');
+        const fileInfo = document.querySelector('.file-info');
+        const realInput = document.getElementById('real-input');
+    
+        uploadButton.addEventListener('click', (e) => {
+            realInput.click();
+        });
+    
+        realInput.addEventListener('change', () => {
+            const name = realInput.value.split(/\\|\//).pop();
+            const truncated = name.length > 20
+                ? name.substr(name.length - 20)
+                : name;
+    
+            fileInfo.innerHTML = truncated;
+        });
+    </script>
 
 {% endblock %}

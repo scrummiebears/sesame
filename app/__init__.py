@@ -15,10 +15,11 @@ login_manager = LoginManager()
 mail = Mail()
 
 programme_docs = UploadSet("programmeDocs", ALL)
+proposal_templates = UploadSet("proposalTemplates", ALL)
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile("../config.py")
+    app.config.from_pyfile("../config.py")  
 
     db.init_app(app)
     bcrypt.init_app(app)
@@ -79,6 +80,7 @@ def create_app():
         db.create_all()
 
     configure_uploads(app, programme_docs)
+    configure_uploads(app, proposal_templates)
 
     from app import commands
     app.cli.add_command(commands.db_cli)

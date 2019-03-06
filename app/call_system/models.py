@@ -22,7 +22,10 @@ class Call(db.Model):
     # Actual content of the call
     information = db.Column(db.String)
     target_group = db.Column(db.String)
-    proposal_template = db.Column(db.String)
+    
+    proposal_template_url = db.Column(db.String)
+    proposal_template_filename = db.Column(db.String)
+
     deadline = db.Column(db.DateTime)
 
     eligibility_criteria = db.Column(db.String)

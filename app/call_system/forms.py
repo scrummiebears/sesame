@@ -19,7 +19,7 @@ class CallForm(FlaskForm):
 
     information = TextAreaField("Information", [InputRequired()])
     target_group = TextAreaField("Target Group", [InputRequired()])
-    proposal_template = TextAreaField("Proposal Template", [InputRequired()])
+    proposal_template = FileField("Proposal Template", [InputRequired()])
     deadline = StringField("Deadline")
 
     eligibility_criteria = TextAreaField("Eligibility Criteria", [InputRequired()])
