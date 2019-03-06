@@ -52,7 +52,7 @@ def make_call():
             for email, in emails:
                 msg = Message("Call for Proposal", recipients=[email])
                 msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + deadline.strftime('%m/%d/%Y')
-
+                # 
                 # pdf = form.file.data
                 # filename = secure_filename(pdf.filename)
                 #
@@ -60,7 +60,7 @@ def make_call():
                 #     config.UPLOAD_FOLDER, filename))
                 #
                 # msg.attach(filename, 'application/pdf', pdf.read())
-                # mail.send(msg)
+                mail.send(msg)
 
             flash("Call for funding has been published")
             return redirect(url_for("admin.allCalls"))

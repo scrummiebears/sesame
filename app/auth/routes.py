@@ -55,6 +55,23 @@ def register():
             db.session.commit()
 
             flash("Your account has been created. You can now login")
+            email = form.email.data
+
+            msg = Message("Confirmation of Registration - " + form.first_name.data + " " + form.last_name.data, recipients=[email])
+            msg.body = """<h3>Confirmation of Registration: %s</h3><br>
+            Dear %s,<br>
+            This is a confirmation of your registration on SFI's <i>Sesame</i> portal.<br>
+            Here is the information you have registered with:<br>
+            First Name: <b>%s</b> Last Name: <b>%s</b><br>
+            Email: <b>%s</b><br>
+            Job Title: <b>%s</b><br>
+            Phone Ext.: <b>%s</b><br>
+            Phone Number: <b>%s</b><br>
+            ORCID: <b>%s</b><br>""" % (form.first_name.data, form.first_name.data, form.first_name.data,
+            form.last_name.data, form.email.data, form.job_title.data,
+            form.phone_ext.data, form.phone.data, form.orcid.data)
+            msg.html = msg.body
+            mail.send(msg)
             return redirect(url_for("auth.login"))
         else:
             flash("An account already exists with this email address. Please login.")
@@ -99,10 +116,18 @@ def call_for_proposals():
         emails = db.session.query(User.email)
         for email, in emails:
             msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-            msg.body = "testing"
-            msg.html = "<b>testing</b>"
+            msg.body = """<h3>Call for Proposal: %s</h3><br>
+            Dear Researcher,<br>
+            This is a notification of a new call for proposal issued by the SFI.<br>
+            <b>Information:</b><br>%s<br>
+            <b>Target Group:</b><br>%s<br>
+            <b>Proposal Template:</b><br>%s<br>
+            <b>Deadline:</b><br>%s<br>
+            <b>Eligibility Crteria:</b><br>%s<br>
+            """(form.proposal_name.data, form.information.data, form.target_group.data,
+            form.proposal_template.data, form.deadline.data, form.eligibility_criteria.data)
+            msg.html = msg.body
             mail.send(msg)
-
     return render_template("auth/proposals.html", title="Call For Proposals", form=form)
 
 @auth.route("/CreateNewAdmin")
@@ -145,7 +170,7 @@ def team_form():
             teamMem = TeamMembers(start_date = form.start_date.data, end_date = form.end_date.data, name = form.name.data,position = form.position.data, primary_attribute = form.grant_number.data,researcher_id = researcher_id)
             db.session.add(teamMem)
             db.session.commit()
-            flash("Your team member has been added!") 
+            flash("Your team member has been added!")
         members = TeamMembers.query.filter_by(researcher_id = researcher_id).all()
         for member in members:
             print(member.name)
@@ -156,7 +181,7 @@ def team_form():
 
 @auth.route("/profile",methods=['GET'])
 @login_required
-def profile(): 
+def profile():
     user = Researcher.query.filter_by(user_id=current_user.id).first()
     user_education = Education.query.filter_by(researcher_id=current_user.id).first()
     user_employment = Employment.query.filter_by(researcher_id=current_user.id).first()

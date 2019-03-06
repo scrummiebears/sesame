@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<ul style="margin-top:64px;" id="slide-out" class="sidenav sidenav-fixed">
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="pendingSubmissions") }}"><i class="material-icons">access_time</i>Pending Submissions</a></li>
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="approvedSubmissions") }}"><i class="material-icons">done</i>Approved Submissions</a></li>
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="rejectedSubmissions") }}"><i class="material-icons">clear</i>Rejected Submissions</a></li>
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="editSubmissions") }}"><i class="material-icons">edit</i>Edit Submissions</a></li>
+</ul>
+
+<div class="col-sm-12 col-lg-8 col-lg-offset-2" style="margin-left: 300px;">
+
+    <h1 class="center-align teal-text">Your Submitted Proposals</h1>
+
+    <div class="row">
+        {% for submission in data %}
+            <div class="col s6">
+                <div class="col-md-6 card medium white darken-1 hoverable">
+                    <div class="card-content">
+                        <span class="card-title teal-text center-align">{{submission.title}}</span>
+                        <hr>
+                        <p class="teal-text">Duration &#9472; {{submission.duration}}</p>
+                        <p class="teal-text">National Research Priority &#9472; {{submission.nrp}}</p>
+                        <p class="teal-text">Ethical Issues &#9472; {{submission.ethical_issues}}</p>
+                        <p class="teal-text">Country &#9472; {{submission.location}}</p><br>
+                    </div>
+
+                    <div class="card-action">
+                        <a href="#" class="teal-text">Read more</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+
+</div>
+
+{% endblock %}

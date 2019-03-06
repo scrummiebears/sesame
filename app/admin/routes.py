@@ -75,7 +75,7 @@ def reviewFinal(proposal_id):
 
 @admin.route("proposal/<proposal_id>/deny")
 @login_required
-def rejectProposal(propsoal_id):
+def rejectProposal(proposal_id):
     if current_user.role != "ADMIN":
         abort(403)
     proposal = Proposal.query.get(proposal_id)

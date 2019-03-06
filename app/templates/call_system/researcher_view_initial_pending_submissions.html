@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<ul style="margin-top:64px;" id="slide-out" class="sidenav sidenav-fixed">
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="pendingSubmissions") }}"><i class="material-icons">access_time</i>Pending Submissions</a></li>
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="approvedSubmissions") }}"><i class="material-icons">done</i>Approved Submissions</a></li>
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="rejectedSubmissions") }}"><i class="material-icons">clear</i>Rejected Submissions</a></li>
+    <li><a class="waves-effect" href="{{ url_for("call_system.viewSection" , section="editSubmissions") }}"><i class="material-icons">edit</i>Edit Submissions</a></li>
+</ul>
+<div class="main-in-profile" style="margin-left:10px;margin-right:10px;">
+    <div class="col s12 l12">
+
+        <h1 class="center-align">Your Submitted Proposals</h1>
+        <div class="row">
+        {% for submission in data %}
+            <div class="col s6">
+                <div class="col s12 card medium white darken-1 hoverable">
+                    <div class="card-content">
+                        <span class="card-title center-align">{{submission.title}}</span>
+                        <hr>
+                        <p class="red-text text-darken-3">Duration &#9472; <span class="black-text">{{submission.duration}}</span></p>
+                        <p class="red-text text-darken-3">National Research Priority &#9472; <span class="black-text">{{submission.nrp}}</span></p>
+                        <p class="red-text text-darken-3">Legal Remit &#9472; <span class="black-text">{{submission.legal_remit}}</span></p><br>
+                    </div>
+
+                    <div class="card-action">
+                        <a href="#" class="red-text text-darken-3">Read more</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+</div>
+</div>
+
+{% endblock %}
