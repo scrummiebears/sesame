@@ -30,15 +30,6 @@ def make_call():
     form = CallForm()
     if form.is_submitted():
         if form.validate():
-            # render a new page which confirms the call??
-            # two step process like asking a question on stack overflow
-
-            # check they are admin
-            # Obtain all info, make a new Call object,
-            # Render a new page that is a confirmation of input
-            # or simply insert the call into the database
-            #
-            # Publishing stuff may also be trigered? its a backgrond job?
             expected_start_date = datetime.strptime(form.deadline.data, "%Y-%m-%d")
             deadline = datetime.strptime(form.deadline.data, "%Y-%m-%d")
             call = Call(admin_id=current_user.id, information=form.information.data,
@@ -79,6 +70,14 @@ def make_call():
     else:
         return render_template("call_system/make_call.html", form=form)
 
+@call_system.route("/view_call/<call_id>")
+@login_required
+def view_call(call_id):
+    """Views a specific proposal submission made by a researcher"""
+
+    call = Call.query.filter(Proposal.id).first()
+    return render_template("call_system/view_call.html", call=call)
+
 @call_system.route("/apply/<call_id>", methods=["GET", "POST"])
 @login_required
 def apply(call_id):
@@ -115,6 +114,7 @@ def view_all_calls():
     return render_template("call_system/view_all_calls.html", calls=calls)
 
 @call_system.route("/researcher_view_all_submissions/<section>")
+@login_required
 def viewSection(section):
     """Handles viewing specific proposal statuses"""
     pendingSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status.contains("PENDING")).all()
@@ -122,10 +122,8 @@ def viewSection(section):
     editSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="EDIT").all()
     rejectedSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="REJECTED").all()
 
-    sections = {"pendingSubmissions":pendingSubmissions, "approvedSubmissions":approvedSubmissions,
-    "rejectedSubmissions":rejectedSubmissions, "editSubmissions":editSubmissions}
-    headings = {"pendingSubmissions":"Pending Proposals", "approvedSubmissions":"Approved Proposals",
-    "rejectedSubmissions":"Rejected Proposals", "editSubmissions":"Edit Proposals"}
+    sections = {"pendingSubmissions":pendingSubmissions, "approvedSubmissions":approvedSubmissions, "rejectedSubmissions":rejectedSubmissions, "editSubmissions":editSubmissions}
+    headings = {"pendingSubmissions":"Pending Proposals", "approvedSubmissions":"Approved Proposals","rejectedSubmissions":"Rejected Proposals", "editSubmissions":"Edit Proposals"}
 
     if section not in sections:
         abort(404)
@@ -135,7 +133,20 @@ def viewSection(section):
     return render_template("call_system/researcher_view_all_submissions.html", section=section, data=data, heading=heading)
 
 @call_system.route("/researcher_view_initial_pending_submissions")
+@login_required
 def researcher_view_initial_pending_submissions():
     """Generates the initial view of proposal submissions with the pending proposals"""
+    if current_user.role != "RESEARCHER":
+        abort(403)
     pendingSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status.contains("PENDING")).all()
     return render_template("call_system/researcher_view_initial_pending_submissions.html",data=pendingSubmissions)
+
+@call_system.route("/researcher_view_submission/<submission_id>")
+@login_required
+def researcher_view_submission(submission_id):
+    """Views a specific proposal submission made by a researcher"""
+    if current_user.role != "RESEARCHER":
+        abort(403)
+
+    submission = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.id).first()
+    return render_template("call_system/researcher_view_submission.html", submission=submission)
