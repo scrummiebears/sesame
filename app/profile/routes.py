@@ -14,7 +14,7 @@ def addEducation():
     form = EducationForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         education = Education(researcher_id=researcher.user_id, degree=form.degree.data, field_of_study=form.field_of_study.data,
                               institution=form.institution.data, location=form.location.data, degree_award_year=form.degree_award_year.data)
         db.session.add(education)
@@ -30,13 +30,13 @@ def addEmployment():
     form = EmploymentForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         employment = Employment(researcher_id=researcher.user_id, institution=form.institution.data,
                                 location=form.location.data, years=form.years.data)
         db.session.add(employment)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addEmployment"))
+        return redirect(url_for("profile.aview.htmlddEmployment"))
     return render_template("profile/add.html", form=form, title="Employment")
 
 @profile.route("add/membership", methods=["GET", "POST"])
@@ -209,7 +209,7 @@ def addAcademicCollaboration():
     form = AcademicCollaborationForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         start_date_input = form.start_date.data.split("-")
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
@@ -229,7 +229,7 @@ def addNonAcademicCollaboration():
     form = NonAcademicCollaborationForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         start_date_input = form.start_date.data.split("-")
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
@@ -249,7 +249,7 @@ def addConference():
     form = ConferenceForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         start_date_input = form.start_date.data.split("-")
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
@@ -269,7 +269,7 @@ def addCommunicationOverview():
     form = CommunicationOverviewForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         comm_overview = CommunicationOverview(researcher_id=researcher.id, year=form.year.data, num_of_public_lectures=form.num_of_public_lectures.data, num_of_visits=form)
         db.session.add(conference)
         db.session.commit()
@@ -284,8 +284,8 @@ def addSFIFundingRatio():
     form = SFIFundingRatioForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
-        fr = SFIFundingRatio(researcher_id=researcher.id, year=form.year.data, percentage_of_annual_spend=form.percentage_of_annual_spend.data) 
+
+        fr = SFIFundingRatio(researcher_id=researcher.id, year=form.year.data, percentage_of_annual_spend=form.percentage_of_annual_spend.data)
         db.session.add(fr)
         db.session.commit()
         flash("Your profile has been updated")
@@ -299,7 +299,7 @@ def addEducationAndPublicEngagement():
     form = EducationAndPublicEngagementForm()
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
-        
+
         start_date_input = form.start_date.data.split("-")
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
@@ -316,7 +316,7 @@ def addEducationAndPublicEngagement():
 
 @profile.route("view/<section>")
 def viewSection(section):
-    
+
     sections = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communication_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagement": EducationAndPublicEngagement}
     if section not in sections:
         abort(404)
@@ -329,57 +329,57 @@ def viewSection(section):
     columns = mapper.attrs.items()
 
     data = []
-    for obj in models:  
+    for obj in models:
         data.append(dict())
         for c in columns:
             if c[0] not in ["researcher", "researcher_id"]:
                 data[-1][labels[c[0]]] = getattr(obj, c[0])  # data[the last dict in data][labels dict[column][name of column]] = the value of column in the section instance
-    
-    models = {"education": "Education", "employment": "Employment", "membership": "Membership", "award": "Award", "funding_diversification": "FundingDiversification", "team_member": "TeamMember", "impact": "Impact", "innovation": "Innovation", "publication": "Publication", "presentation": "Presentation", "academic_collaboration": "AcademicCollaboration", "non_academic_collaboration": "NonAcademicCollaboration", "conference": "Conference", "communication_overview": "CommunicationOverview", "sfi_funding_ratio": "SFIFundingRatio", "education_and_public_engagement": "EducationAndPublicEngagement"}
+
+    models = {"education": "Education", "employment": "Employment", "membership": "Membership", "award": "Award", "funding_diversification": "FundingDiversification", "team_member": "TeamMember", "impact": "Impact", "innovation": "Innovation", "publication": "Publication", "presentation": "Presentation", "academic_collaboration": "AcademicCollaboration", "non_academic_collaboration": "NonAcademicCollaboration", "conference": "Conference", "communicaiton_overview": "CommunicationOverview", "sfi_funding_ratio": "SFIFundingRatio", "education_and_public_engagement": "EducationAndPublicEngagement"}
     return render_template("profile/view.html", section=section, data=data, models=models)
 
 @profile.route("edit/<section>/<id>", methods=["GET","POST"])
 def edit(section, id):
-    
-    models = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communication_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagement": EducationAndPublicEngagement}
+
+    models = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communicaiton_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagement": EducationAndPublicEngagement}
     columns = getColumnList(models[section])
 
-    forms = {"education": EducationForm, "employment": EmploymentForm, "membership": MembershipForm, "award": AwardForm, "funding_diversification": FundingDiversificationForm, "team_member": TeamMemberForm, "impact": ImpactForm, "innovation": InnovationForm, "publication": PublicationForm, "presentation": PresentationForm, "academic_collaboration": AcademicCollaborationForm, "non_academic_collaboration": NonAcademicCollaborationForm, "conference": ConferenceForm, "communication_overview": CommunicationOverviewForm, "sfi_funding_ratio": SFIFundingRatioForm, "education_and_public_engagement": EducationAndPublicEngagementForm}
-    form = forms[section].__call__()
+    forms = {"education": EducationForm, "employment": EmploymentForm, "membership": MembershipForm, "award": AwardForm, "funding_diversification": FundingDiversificationForm, "team_member": TeamMemberForm, "impact": ImpactForm, "innovation": InnovationForm, "publication": PublicationForm, "presentation": PresentationForm, "academic_collaboration": AcademicCollaborationForm, "non_academic_collaboration": NonAcademicCollaborationForm, "conference": ConferenceForm, "communicaiton_overview": CommunicationOverviewForm, "sfi_funding_ratio": SFIFundingRatioForm, "education_and_public_engagement": EducationAndPublicEngagementForm}
 
     instance = models[section].query.get(id)
-    form = populateForm(form, instance, columns)
+    data = populateFormData(instance, columns)
+    form = forms[section].__call__(data=data)
 
     if request.method == "POST" and form.validate():
         updates = {}
         for column in columns:
             if column not in ["researcher", "researcher_id", "user_id", "id"]:
                 updates[column] = getattr(form, column).data
-        
+                flash(updates[column])
+
         db.session.query(models[section]).filter_by(id=id).update(updates)
         db.session.commit()
-        return redirect(url_for(profile.edit))
+        flash("profile Updated")
+        return redirect(url_for("profile.viewSection", section=section))
     return render_template("profile/edit.html", form=form)
-    
 
-    
+
 def getColumnList(model):
     mapper = inspect(model)
     columns = []
     raw_columns = mapper.attrs.items()
     for c in raw_columns:
         columns.append(c[0])
-    
+
     return columns
 
-def populateForm(form, instance, columns):
-    
+def populateFormData( instance, columns):
+    data = {}
     for c in columns:
         if c not in ["researcher", "researcher_id", "user_id", "id"]:
-            field = getattr(form, c)
-            field.data = getattr(instance, c)
+            data[str(c)] = getattr(instance, c)
 
-    return form
+    return data
 
 @profile.route("view")
 def view():

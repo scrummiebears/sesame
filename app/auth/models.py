@@ -4,6 +4,8 @@ from sqlalchemy.ext.declarative import declared_attr
 from app import db
 from flask_login import UserMixin
 
+import datetime
+
 class User(UserMixin, db.Model):
 
     __tablename__ = 'users'
@@ -14,6 +16,8 @@ class User(UserMixin, db.Model):
     # Need for isActive? - Only for account validation
     #is_active = db.Column(db.Boolean,default=False)
     role = db.Column(db.String(80))
+
+    datetime_created = db.Column(db.DateTime, default=datetime.datetime.now())
 
 
     def __init__(self, email, pwd_hash, role):

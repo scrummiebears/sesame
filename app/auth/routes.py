@@ -9,10 +9,12 @@ from flask_mail import Message
 
 # Import auth blueprint
 from app.auth import auth
+from app.call_system import call_system
 
 # Import the Models used
 
 from app.profile.models import *
+from app.call_system.models import *
 
 
 
@@ -71,7 +73,10 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('auth.home'))
+            if current_user.role == "RESEARCHER":
+                return redirect(url_for('auth.home'))
+            elif current_user.role == "ADMIN":
+                return redirect(url_for('admin.dashboard'))
         else:
             flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
@@ -131,7 +136,7 @@ def CreateNewAdmin():
         return render_template("auth/register.html", form=form)
 
 @auth.route("/teams", methods=['GET','POST'])
-
+@login_required
 def team_form():
     if current_user.is_authenticated:
         form = TeamForm()
@@ -147,3 +152,62 @@ def team_form():
         return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
     else:
         return redirect(url_for("auth.login"))
+
+
+@auth.route("/profile",methods=['GET'])
+@login_required
+def profile(): 
+    user = Researcher.query.filter_by(user_id=current_user.id).first()
+    user_education = Education.query.filter_by(researcher_id=current_user.id).first()
+    user_employment = Employment.query.filter_by(researcher_id=current_user.id).first()
+    user_membership = Membership.query.filter_by(researcher_id=current_user.id).first()
+    user_award = Award.query.filter_by(researcher_id=current_user.id).first()
+    user_funding = FundingDiversification.query.filter_by(researcher_id=current_user.id).first()
+    user_team = TeamMember.query.filter_by(researcher_id=current_user.id).first()
+    user_impact = Impact.query.filter_by(researcher_id=current_user.id).first()
+    user_innovation = Innovation.query.filter_by(researcher_id=current_user.id).first()
+    user_publication = Publication.query.filter_by(researcher_id=current_user.id).first()
+    user_presentation = Presentation.query.filter_by(researcher_id=current_user.id).first()
+    user_academicCollabaration = AcademicCollabaration.query.filter_by(researcher_id=current_user.id).first()
+    user_nonAcademicCollabaration = NonAcademicCollabaration.query.filter_by(researcher_id=current_user.id).first()
+    user_confrence = Confrence.query.filter_by(researcher_id=current_user.id).first()
+    user_communicationOverview = CommunicationOverview.query.filter_by(researcher_id=current_user.id).first()
+    user_sfiFunding = SFIFundingRatio.query.filter_by(researcher_id=current_user.id).first()
+    user_educationAndPublicEngagement = EducaionAndPublicEngagement.query.filter_by(researcher_id=current_user.id).first()
+    return render_template('auth/account.html', title ="Profile",user=user,user_education=user_education,user_employment=user_employment,user_membership=user_membership,user_award=user_award,user_funding=user_funding,user_team=user_team,user_impact=user_impact,user_innovation=user_innovation,user_publication=user_publication,user_presentation=user_presentation,user_academicCollabaration=user_academicCollabaration,user_nonAcademicCollabaration=user_nonAcademicCollabaration,user_confrence=user_confrence,user_communicationOverview=user_communicationOverview,user_sfiFundingq=user_sfiFunding,user_educationAndPublicEngagement=user_educationAndPublicEngagement)
+
+
+@auth.route("/stats",methods=['GET'])
+@login_required
+def proposals():
+    #creates an array of all proposals from this reasearcher
+    user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
+    approved = []
+    rejected = []
+    pending = []
+    approvedNum=0
+    rejectedNum=0
+    pendingNum=0
+    for prop in user_proposals:
+        if prop.approved == "True":
+            approved.append(prop)
+            approvedNum += 1
+        elif prop.approved == "False":
+            rejected.append(prop)
+            rejectedNum += 1
+        else:
+            pending.append(prop)
+            pendingNum += 1
+    return render_template('auth/stats.html',title="Statistics",approved=approved,rejected=rejected,pending=pending,approvedNum=approvedNum,rejectedNum=rejectedNum,pendingNum=pendingNum)
+
+
+
+
+@auth.route("/createAdmin",methods=["GET","POST"])
+def createAdmin():
+    password = bcrypt.generate_password_hash("password").decode("utf-8")
+    user = User("admin",password, "ADMIN")
+    db.session.add(user)
+    db.session.commit()
+    flash("Admin made")
+    return redirect(url_for("auth.login"))

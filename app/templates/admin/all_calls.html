@@ -1,0 +1,54 @@
+{% extends "layout.html" %} 
+
+{% block body %}
+    <div class="row">
+        <div class="col s10 offset-s1">
+            <div class="card-panel large">
+            <h4>Currently Published Calls</h4>
+            <table>
+                <thead>
+                    <th>Date Published</th>
+                    <th>Admin</th>
+                    <th>Information</th>
+                    <th>Expected Start Date</th>
+                    <th></th>
+                </thead>
+
+                <tbody>
+                    {% for call in calls["PUBLISHED"] %}
+                    <tr>
+                        <td>{{ call.date_published.strftime("%Y-%m-%d") }}</td>
+                        <td>{{ call.admin.first_name }} {{ call.admin.last_name }}</td>
+                        <td style="width:33%;">{{ call.information|truncate(110) }}</td>
+                        <td>{{ call.expected_start_date|truncate(10, end="") }}</td>
+                        <td><a href="{{url_for('admin.proposals', call=call.id)}}">View Propoals</a></td>
+                    </tr>
+                    {% endfor%}
+                    
+                </tbody>
+            </table>
+
+            <h4>Finished Calls</h4>
+            <table>
+                <thead>
+                    <th>Date Published</th>
+                    <th>Admin</th>
+                    <th>Information</th>
+                    <th>Proposals Submitted</th>
+                    <th></th>
+                </thead>
+
+                <tbody>
+                    {% for call in calls["FINISHED"] %}
+                    <tr>
+                        <td>{{ call.date_published.strftime("%Y-%m-%d") }}</td>
+                        <td>{{ call.admin.first_name }} {{ call.admin.last_name }}</td>
+                        <td>{{ call.information }}</td>
+                        <td>{{ call.proposals|length }}</td>
+                        <td><a href="">View more info</a></td>
+                    </tr>
+                    {% endfor%}
+            </div>
+        </div>
+    </div>
+{% endblock %}

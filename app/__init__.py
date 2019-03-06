@@ -44,9 +44,23 @@ def create_app():
 
     # Navbar for logged in admins
     nav.Bar('admin', [
+        nav.Item('Home', 'admin.dashboard'),
+        nav.Item('Calls For Proposals', 'admin.allCalls'),
+        nav.Item('Make CFP', 'call_system.make_call'),
+        nav.Item('Logout', 'auth.logout')
+    ])
+
+    # Navbar for logged in reviewers
+    nav.Bar('reviewer', [
         nav.Item('Home', 'auth.home'),
         nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
-        nav.Item('Make CFP', 'call_system.make_call'),
+        #nav.Item('Proposal Submissions', 'call_system.view_proposal_submissions'),
+        nav.Item('Logout', 'auth.logout')
+    ])
+    nav.Bar('researcher', [
+        nav.Item('Home', 'auth.home'),
+        nav.Item('Calls For Proposals', 'call_system.view_all_calls'),
+        nav.Item('Proposal Submissions', 'call_system.researcher_view_initial_pending_submissions'),
         nav.Item('Logout', 'auth.logout')
     ])
 
@@ -56,15 +70,20 @@ def create_app():
     app.register_blueprint(profile, url_prefix="/profile/")
     from app.call_system import call_system
     app.register_blueprint(call_system, url_prefix="/calls/")
+    from app.admin import admin
+    app.register_blueprint(admin, url_prefix="/admin/")
+    from app.reviewer import reviewer
+    app.register_blueprint(reviewer, url_prefix="/review/")
 
     with app.app_context():
-       db.create_all()
+        db.create_all()
 
     configure_uploads(app, programme_docs)
 
     from app import commands
     app.cli.add_command(commands.db_cli)
     app.cli.add_command(commands.user_cli)
-    
+
+
 
     return app

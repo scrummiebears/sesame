@@ -1,53 +1,138 @@
 {% extends "layout.html" %}
+{% import "macros.html" as macros %}
+
+{% macro render_field(field, placeholder="") %}
+{% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+{{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+{% endmacro %}
+
+{% block head %}
+<style>
+    body {
+        font-family: sans-serif;
+    }
+
+
+
+    input[type='file'] {
+        display: none;
+    }
+
+    .file-info {
+        font-size: 0.9em;
+    }
+
+
+
+
+
+    @media (max-width: 300px) {
+        button {
+            width: 100%;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 0;
+        }
+
+        .file-info {
+            display: block;
+            margin: 10px 5px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+
 {% block body %}
-
-<section>
-<h1>Applying for call #{{ call.id }}</h1>
-<p>{{ call.information }}</p>
-<hr>
-</section>
-
-<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
-    <div class="card white darken-1">
-        <div class="card-content">
-            <span class="card-title center-align">Grant Application</span>
+<div class="row">
+    {{ macros.call_card(call, "col s5 offset-s1", "min-height: 107vh;") }}
+    <div class="col s5 ">
+        <div class="card-panel">
+            <h5 class="card-title center-align">Grant Application</h5>
             {% if error %}
             <p class=error><strong>Error:</strong> {{ error }}
                 {% endif %}
 
                 <form method="POST" id="proposal-form" role="form" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
-                    {% for field in form if field.widget.input_type != 'hidden'  %}
-                        <div class="input-field">
-                            {{ field.label }}{{ field }}
+
+                    <div class="input-field">
+                        {{ form.title }}{{ form.title.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.duration }}{{ form.duration.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.nrp }}{{ form.nrp.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.ethical_issues(class="materialize-textarea") }}{{ form.ethical_issues.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.location }}{{ form.location.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.co_applicants(class="materialize-textarea") }}{{ form.co_applicants.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.collaborators(class="materialize-textarea") }}{{ form.collaborators.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.scientific_abstract(class="materialize-textarea") }}{{ form.scientific_abstract.label }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.lay_abstract(class="materialize-textarea") }}{{ form.lay_abstract.label }}
+                    </div>
+                    <p>
+                        <div class="input-container">
+                            {{ form.programme_documents(id="real-input")}}
+                            <a class="browse-btn btn-floating btn-small waves-effect waves-light teal">
+                                <i class="material-icons">file_upload</i>
+                            </a>
+                            <span class="file-info">Upload Programme Documents</span>
                         </div>
-                    {% endfor %}
+                    </p>
+
+                    
+                    <p style="font-size:0.84em;">Submission of an application confirms acceptance of and agreement with the SFI Terms and
+                            Conditions of Research Grants; that the applicant meets eligibility requirements; that the project
+                            is in full agreement with all legal and regulatory matters governing research in Ireland; that no
+                            aspect of this project is already being funded from another source and that all details provided
+                            are correct.</p>
+                    
+
+                    <p>
+                        <label>
+                            {{ form.agree }}
+                            <span>I Agree</span>
+                        </label>
+                    </p>
+
+
 
                     <a class="waves-effect waves-light btn"
                         onclick="document.getElementById('proposal-form').submit();">Apply</a>
                 </form>
-
-                {% if form.errors %}
-                    <ul>
-                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-                        {% for error in field_errors %}
-                            <li>{{ form[field_name].label}}{{error}}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    </ul>
-                {% endif %}
         </div>
     </div>
 </div>
 
-{% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-            {% endwith %}
+<script>
+    const uploadButton = document.querySelector('.browse-btn');
+    const fileInfo = document.querySelector('.file-info');
+    const realInput = document.getElementById('real-input');
 
+    uploadButton.addEventListener('click', (e) => {
+        realInput.click();
+    });
+
+    realInput.addEventListener('change', () => {
+        const name = realInput.value.split(/\\|\//).pop();
+        const truncated = name.length > 20
+            ? name.substr(name.length - 20)
+            : name;
+
+        fileInfo.innerHTML = truncated;
+    });
+</script>
 {% endblock %}

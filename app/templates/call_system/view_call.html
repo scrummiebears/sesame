@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="col-sm-12 col-lg-8 col-lg-offset-2">
+
+    <h1 class="center-align teal-text">Calls for Proposals</h1>
+
+    <a href="{{url_for('call_system.view_all_calls')}}" class="teal-text valign-wrapper"><i class="material-icons">
+keyboard_backspace
+</i>Back</a>
+<br>
+
+    <div class="col-md-12 card white darken-1 hoverable">
+        <div class="card-content">
+            <span class="card-title teal-text center-align">Call For Proposal Title</span>
+            <hr>
+            <p class="teal-text">Deadline &#9472; {{call.deadline}}</p>
+            <p class="teal-text">Award &#9472; €40,000</p>
+            <p class="teal-text">Duration &#9472; 6 months</p><br>
+            <p>{{call.target_group}}</p><br>
+            <p>{{call.information}}</p><br>
+            <p>{{call.proposal_template}}</p>
+        </div>
+
+        {% if current_user.is_authenticated %}
+        <div class="card-action">
+            <a href="{{url_for('call_system.apply', call_id=call.id)}}" class="btn waves-effect waves-light white teal-text">Apply Now</a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+
+</div>
+
+{% endblock %}
