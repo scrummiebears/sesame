@@ -1,4 +1,5 @@
 from app.admin import admin
+from app.admin.models import Admin
 from flask import render_template, url_for, redirect, request, abort, flash
 from app.call_system.models import Call, Proposal
 from .forms import *
@@ -6,7 +7,7 @@ from flask_login import current_user, login_required
 from app.profile.models import Researcher
 from app.auth.models import User
 from app.reviewer.models import Reviewer
-from app import db
+from app import db, bcrypt
 import json
 
 @admin.route("dashboard")
@@ -27,7 +28,7 @@ def dashboard():
 def newAdmin():
     if current_user.role != "ADMIN":
         abort(403)
-    form = NewAdminForm
+    form = NewAdminForm()
     if request.method == "POST" and form.validate:
 
         password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
@@ -37,11 +38,11 @@ def newAdmin():
 
         user = User.query.filter_by(email=form.email.data).first()
 
-        new_admin = Admin(user_id=user.id, first_name=form.fisrt_name.data, last_name=form.last_name.data)
+        new_admin = Admin(user_id=user.id, first_name=form.first_name.data, last_name=form.last_name.data)
         db.session.add(new_admin)
         db.session.commit()
         flash("New admin created - %s %s" % (form.first_name.data, form.last_name.data))
-        return redirect(url_for(admin.newAdmin))
+        return redirect(url_for("admin.newAdmin"))
     admin = current_user.admin
     return render_template("admin/new_admin.html", user=admin, form=form)
 
