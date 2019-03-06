@@ -15,6 +15,7 @@ from app.call_system import call_system
 
 from app.profile.models import *
 from app.call_system.models import *
+from app.call_system.forms import CallForm
 
 
 
@@ -27,9 +28,15 @@ def load_user(user_id):
 def home():
     if current_user.is_authenticated:
         navs = ["Teams", "Query", "Log Out",]
+        pendingSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status.contains("PENDING")).all())
+        approvedSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="APPROVED").all())
+        editSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="EDIT").all())
+        rejectedSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="REJECTED").all())
+        return render_template("auth/home.html", navs=navs, pending=pendingSubmissionsNum, approved=approvedSubmissionsNum,
+        edit=editSubmissionsNum, rejected=rejectedSubmissionsNum)
     else:
         navs = ["Login", "Register"]
-    return render_template("auth/home.html", navs=navs)
+        return render_template("auth/home.html", navs=navs)
 
 
 @auth.route("/register", methods=["GET", "POST"])
@@ -107,28 +114,6 @@ def logout():
 def query():
     users = User.query.all()
     return str(len(users))
-
-
-@auth.route("/call-for-proposals", methods=['GET', 'POST'])
-def call_for_proposals():
-    form = CallForProposalsForm()
-    if form.validate_on_submit():
-        emails = db.session.query(User.email)
-        for email, in emails:
-            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-            msg.body = """<h3>Call for Proposal: %s</h3><br>
-            Dear Researcher,<br>
-            This is a notification of a new call for proposal issued by the SFI.<br>
-            <b>Information:</b><br>%s<br>
-            <b>Target Group:</b><br>%s<br>
-            <b>Proposal Template:</b><br>%s<br>
-            <b>Deadline:</b><br>%s<br>
-            <b>Eligibility Crteria:</b><br>%s<br>
-            """(form.proposal_name.data, form.information.data, form.target_group.data,
-            form.proposal_template.data, form.deadline.data, form.eligibility_criteria.data)
-            msg.html = msg.body
-            mail.send(msg)
-    return render_template("auth/proposals.html", title="Call For Proposals", form=form)
 
 @auth.route("/CreateNewAdmin")
 @login_required
