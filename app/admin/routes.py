@@ -27,7 +27,7 @@ def dashboard():
 def newAdmin():
     if current_user.role != "ADMIN":
         abort(403)
-    form = NewAdminForm
+    form = NewAdminForm()
     if request.method == "POST" and form.validate:
 
         password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
