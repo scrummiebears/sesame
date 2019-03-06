@@ -48,11 +48,19 @@ def make_call():
             db.session.commit()
 
             emails = db.session.query(User.email)
-
             for email, in emails:
-                msg = Message("Call for Proposal", recipients=[email])
-                msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + deadline.strftime('%m/%d/%Y')
-                #
+                msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
+                msg.body = """<h3>Call for Proposal: %s</h3><br>
+                Dear Researcher,<br>
+                This is a notification of a new call for proposal issued by the SFI.<br>
+                <b>Information:</b><br>%s<br>
+                <b>Target Group:</b><br>%s<br>
+                <b>Proposal Template:</b><br>%s<br>
+                <b>Deadline:</b><br>%s<br>
+                <b>Eligibility Crteria:</b><br>%s<br>
+                """(form.proposal_name.data, form.information.data, form.target_group.data,
+                form.proposal_template.data, form.deadline.data, form.eligibility_criteria.data)
+                msg.html = msg.body
                 # pdf = form.file.data
                 # filename = secure_filename(pdf.filename)
                 #
