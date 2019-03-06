@@ -27,9 +27,15 @@ def load_user(user_id):
 def home():
     if current_user.is_authenticated:
         navs = ["Teams", "Query", "Log Out",]
+        pendingSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status.contains("PENDING")).all())
+        approvedSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="APPROVED").all())
+        editSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="EDIT").all())
+        rejectedSubmissionsNum = len(Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="REJECTED").all())
+        return render_template("auth/home.html", navs=navs, pending=pendingSubmissionsNum, approved=approvedSubmissionsNum,
+        edit=editSubmissionsNum, rejected=rejectedSubmissionsNum)
     else:
         navs = ["Login", "Register"]
-    return render_template("auth/home.html", navs=navs)
+        return render_template("auth/home.html", navs=navs)
 
 
 @auth.route("/register", methods=["GET", "POST"])

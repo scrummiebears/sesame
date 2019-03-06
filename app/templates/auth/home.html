@@ -31,22 +31,47 @@
         <div class="col s12 m4 offset-m2">
             <div class="card #eeeeee grey lighten-3">
                 <div class="card-content ">
-                    <span class="card-title blue-text">PLACEHOLDER FOR NUM</span>
-                    <p>Applications Pending Action</p>
+                    <span class="card-title blue-text">{{pending}}</span>
+                    <p>Applications Pending Review</p>
                 </div>
                 <div class="card-action">
-                    <a href="" class="orange-text">View Applications</a>
+                    <a href="{{ url_for("call_system.viewSection" , section="pendingSubmissions") }}" class="orange-text">View Pending Applications</a>
                 </div>
             </div>
         </div>
         <div class="col s12 m4">
             <div class="card grey lighten-3">
                 <div class="card-content">
-                    <span class="card-title blue-text">PLACEHOLDER FOR NUM</span>
-                    <p>Scientific Reports Pending Action</p>
+                    <span class="card-title blue-text">{{approved}}</span>
+                    <p>Approved Applications</p>
                 </div>
                 <div class="card-action">
-                    <a href="#" class="orange-text">View Reports</a>
+                    <a href="{{ url_for("call_system.viewSection" , section="approvedSubmissions") }}" class="orange-text">View Accepted Applications</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row center-align">
+        <div class="col s12 m4 offset-m2">
+            <div class="card #eeeeee grey lighten-3">
+                <div class="card-content ">
+                    <span class="card-title blue-text">{{rejected}}</span>
+                    <p>Rejected Applications</p>
+                </div>
+                <div class="card-action">
+                    <a href="{{ url_for("call_system.viewSection" , section="rejectedSubmissions") }}" class="orange-text">View Rejected Applications</a>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card grey lighten-3">
+                <div class="card-content">
+                    <span class="card-title blue-text">{{edit}}</span>
+                    <p>Edit Applications</p>
+                </div>
+                <div class="card-action">
+                    <a href="{{ url_for("call_system.viewSection" , section="editSubmissions") }}" class="orange-text">View Edit Applications</a>
                 </div>
             </div>
         </div>

@@ -52,7 +52,7 @@ def make_call():
             for email, in emails:
                 msg = Message("Call for Proposal", recipients=[email])
                 msg.body = "Proposal Information:\n" + form.information.data + "\nDeadline: " + deadline.strftime('%m/%d/%Y')
-                # 
+                #
                 # pdf = form.file.data
                 # filename = secure_filename(pdf.filename)
                 #
@@ -113,12 +113,18 @@ def viewSection(section):
     approvedSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="APPROVED").all()
     editSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="EDIT").all()
     rejectedSubmissions = Proposal.query.filter_by(researcher_id=current_user.id).filter(Proposal.status=="REJECTED").all()
-    sections = {"pendingSubmissions":pendingSubmissions, "approvedSubmissions":approvedSubmissions, "rejectedSubmissions":rejectedSubmissions, "editSubmissions":editSubmissions}
+
+    sections = {"pendingSubmissions":pendingSubmissions, "approvedSubmissions":approvedSubmissions,
+    "rejectedSubmissions":rejectedSubmissions, "editSubmissions":editSubmissions}
+    headings = {"pendingSubmissions":"Pending Proposals", "approvedSubmissions":"Approved Proposals",
+    "rejectedSubmissions":"Rejected Proposals", "editSubmissions":"Edit Proposals"}
+
     if section not in sections:
         abort(404)
 
     data = sections[section]
-    return render_template("call_system/researcher_view_all_submissions.html", section=section, data=data)
+    heading = headings[section]
+    return render_template("call_system/researcher_view_all_submissions.html", section=section, data=data, heading=heading)
 
 @call_system.route("/researcher_view_initial_pending_submissions")
 def researcher_view_initial_pending_submissions():
