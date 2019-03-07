@@ -95,6 +95,8 @@ def exec(file):
 user_cli = AppGroup("user")
 @user_cli.command("init", help="Initiate an Admin account on the system with the specfied details")
 def user_init():
+    """Makes an initial admin account with specified details so the system can be used.
+    """
     if len(User.query.all()) != 0:
         print("FAILED: initial account already created")
         return
