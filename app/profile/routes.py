@@ -36,7 +36,7 @@ def addEmployment():
         db.session.add(employment)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.aview.htmlddEmployment"))
+        return redirect(url_for("profile.addEmployment"))
     return render_template("profile/add.html", form=form, title="Employment")
 
 @profile.route("add/membership", methods=["GET", "POST"])
