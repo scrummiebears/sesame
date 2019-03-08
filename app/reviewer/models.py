@@ -10,8 +10,9 @@ class Reviewer(db.Model):
     __tablename__ = "reviewers"
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String)
-    password = db.Column(db.String)
+    user = db.relationship("User", backref=db.backref("admin", uselist=False))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+
     proposal = db.relationship("Proposal", backref="reviews")
     proposal_id = db.Column(db.Integer, db.ForeignKey("proposals.id"))
     datetime_created = db.Column(db.DateTime, default=datetime.datetime.now())
