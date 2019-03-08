@@ -2,28 +2,27 @@
 
 {% block body %}
 <div class="container">
-  <a href="{{url_for('call_system.view_all_calls')}}" class="red-text text-darken-3 valign-wrapper"><i class="material-icons">
-  keyboard_backspace
-  </i>Back</a>
-  <br>
   <div class="row">
     <div class="col s10 offset-s1">
-        <div class="card medium white darken-1 hoverable">
+        <div class="card medium white darken-1 hoverable" style="height: auto;">
+            <a href="{{url_for('call_system.view_all_calls')}}" class="waves-effect waves-light btn"><i class="material-icons left">
+            keyboard_backspace
+            </i>Back</a>
             <div class="card-content">
-                <p class="teal-text"><b>ID</b> &#9472; {{call.id}}</p>
+                <p><b class="red-text">Deadline</b> &#9472; {{call.deadline}}</p><br>
+                <p><b class="teal-text">ID</b> &#9472; {{call.id}}</p>
                 <p class="teal-text"><b>Date Published</b> &#9472; {{call.date_published}}</p>
 
-                <p class="teal-text"><b>Information</b> &#9472; {{call.information}}</p>
-                <p class="teal-text"><b>Target Group</b> &#9472; {{call.target_group}}</p><br>
+                <p><b class="teal-text">Information</b> &#9472; {{call.information}}</p>
+                <p><b class="teal-text">Target Group</b> &#9472; {{call.target_group}}</p><br>
 
-                <p class="teal-text"><b>Proposal Template</b> &#9472; {{call.proposal_template}}</p><br>
-                <p class="teal-text"><b>Deadline</b> &#9472; {{call.deadline}}</p><br>
-                <p class="teal-text"><b>Eligibility Criteria</b> &#9472; {{call.eligibility_criteria}}</p><br>
+                <p><b class="teal-text">Proposal Template</b> &#9472; {{call.proposal_template}}</p><br>
+                <p><b class="teal-text">Eligibility Criteria</b> &#9472; {{call.eligibility_criteria}}</p><br>
 
-                <p class="teal-text"><b>Duration of Award</b> &#9472; {{call.duration_of_award}}</p><br>
-                <p class="teal-text"><b>Reporting Guidelines</b> &#9472; {{call.reporting_guidelines}}</p>
-                <p class="teal-text"><b>Expected Start Date</b> &#9472; {{call.expected_start_date}}</p>
-                <p class="teal-text"><b>Status</b> &#9472; {{call.status}}</p>
+                <p><b class="teal-text">Duration of Award</b> &#9472; {{call.duration_of_award}}</p><br>
+                <p><b class="teal-text">Reporting Guidelines</b> &#9472; {{call.reporting_guidelines}}</p>
+                <p><b class="teal-text">Expected Start Date</b> &#9472; {{call.expected_start_date}}</p>
+                <p><b class="teal-text">Status</b> &#9472; {{call.status}}</p>
             </div>
         </div>
         {% if error %}
