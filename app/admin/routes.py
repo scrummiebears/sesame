@@ -9,7 +9,8 @@ from app.auth.models import User
 from app.reviewer.models import Reviewer
 from app import db, bcrypt
 import json
-
+import string
+import random
 @admin.route("dashboard")
 @login_required
 def dashboard():
@@ -84,6 +85,9 @@ def rejectProposal(proposal_id):
     flash("Proposal has been rejected")
     return redirect(url_for("admin.dashboard"))
 
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
 @admin.route("proposal/<proposal_id>/assign_reviewers", methods=["GET", "POST"])
 @login_required
 def assignReviewers(proposal_id):
@@ -98,18 +102,15 @@ def assignReviewers(proposal_id):
         
         # create new reviewers
         for email in review_emails:
-            print("Email is "+ email)
-            user = User.query.filter(User.email == email).first()
-            print(str(user))
-            researcher = user.researcher
-            r = Reviewer(researcher_id=researcher.user_id, proposal_id=proposal_id)
+            password = bcrpyt.generate_password_hash()
+            r = Reviewer(email=email, password=password, proposal_id=proposal_id)
             db.session.add(r)
             db.session.commit()
         
         proposal.status = "PENDING REVIEWER"
         db.session.commit()
         flash("Proposal has been sent out for review")
-        return redirect(url_for("admin.dashboard")) 
+        return redirect(url_for("admin.dashboard"))
 
     researchers = Researcher.query.all()
     data = []
