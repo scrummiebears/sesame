@@ -13,20 +13,18 @@
                     <div class="card-content">
                         <span class="card-title center-align">Call For Proposal</span>
                         <hr>
-                        <!-- call.deadline.strftime('%d %h %Y at %H:%M' -->
-                        <p class="red-text text-darken-3">Deadline &#9472; {{call.deadline}}</p>
-                        <p class="red-text text-darken-3">Award &#9472; €40,000</p>
-                        <p class="red-text text-darken-3">Duration &#9472; 6 months</p><br>
-                        <p>{{call.target_group}}</p><br>
-                        <p>{{call.information}}</p><br>
-                        <!-- <p>{{call.proposal_template}}</p> -->
+                        <p><b class="red-text">Deadline</b> &#9472; {{call.deadline}}</p>
+                        <p><b class="teal-text">Date Published</b> &#9472; {{call.date_published}}</p>
+                        <p><b class="teal-text">Duration</b> &#9472; {{call.duration_of_award}}</p><br>
+                        <p><b class="teal-text">Target Group</b> &#9472; {{call.target_group}}</p><br>
+                        <p><b class="teal-text">Call Information</b> &#9472; {{call.information}}</p><br>
                     </div>
 
 
                     {% if current_user.role == 'RESEARCHER' %}
                     <div class="card-action">
-                      <a href="{{ url_for('call_system.view_call', call_id=call.id) }}" class="teal-text">Read more</a>
-                        <a href="{{ url_for('call_system.apply', call_id=call.id) }}" class="red-text text-darken-3">Apply Now</a>
+                      <a href="{{ url_for('call_system.view_call', call_id=call.id) }}" class="waves-effect waves-light btn">Read more</a>
+                        <a href="{{ url_for('call_system.apply', call_id=call.id) }}" class="waves-effect waves-light btn">Apply Now</a>
                     </div>
 
     {% if error %}
