@@ -105,6 +105,26 @@ def apply(call_id):
         db.session.add(proposal)
         db.session.commit()
         flash("Your proposal has been submitted")
+
+        user = current_user
+
+        email = user.email
+
+        msg = Message("Submission of Proposal ID " + proposal.id + " STEP 1 OF 3", recipients=[email])
+        msg.body = """Dear %s,<br>
+        This is a confirmation of your submission of your proposal entitled <i>%s</i> on SFI's <i>Sesame</i> portal.<br>
+        Here is a summary of the information of your submitted proposal:<br>
+        Title: <b>%s</b><br>
+        Duration: <b>%s</b><br>
+        National Research Priority: <b>%s</b><br>
+        Legal Remit: <b>%s</b><br>
+        Location: <b>%s</b><br>
+        Programme Docs Filename: <b>%s</b><br>
+        You will be notified of any change of status to your submission.""" % (user.first_name, proposal.title,
+        proposal.title, proposal.duration, proposal.nrp, proposal.legal_remit,
+        proposal.location, proposal.programme_docs_filename)
+        msg.html = msg.body
+        mail.send(msg)
         return redirect(url_for(".apply", call_id=call.id))
     return render_template("call_system/apply.html", form=form, call=call)
 

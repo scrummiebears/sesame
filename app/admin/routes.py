@@ -72,6 +72,10 @@ def reviewFinal(proposal_id):
         abort(403)
     admin = current_user.admin
     proposal = Proposal.query.get(proposal_id) or abort(404)
+
+    user = proposal.researcher.user
+    email = user.email
+
     return render_template("admin/review_final.html", proposal=proposal,user=admin)
 
 @admin.route("proposal/<proposal_id>/deny")
@@ -82,6 +86,16 @@ def rejectProposal(proposal_id):
     proposal = Proposal.query.get(proposal_id)
     proposal.query.update({"status": "REJECTED"})
     flash("Proposal has been rejected")
+
+    user = proposal.researcher.user
+    email = user.email
+
+    msg = Message("Proposal ID: " + proposal.id + " Stage 1 of 3 REJECTED", recipients=[email])
+    msg.body = """Dear %s,<br>
+    We regret to inform you that your proposal entitled <i>%s</i> has been rejected for funding by the SFI.<br>
+    """ % (user.first_name, proposal.title)
+    msg.html = msg.body
+    mail.send(msg)
     return redirect(url_for("admin.dashboard"))
 
 @admin.route("proposal/<proposal_id>/assign_reviewers", methods=["GET", "POST"])
@@ -95,7 +109,7 @@ def assignReviewers(proposal_id):
         emails = form.emails.data
         reviewer_emails = emails.replace(" ","")
         review_emails = emails.split(",")
-        
+
         # create new reviewers
         for email in review_emails:
             print("Email is "+ email)
@@ -105,11 +119,23 @@ def assignReviewers(proposal_id):
             r = Reviewer(researcher_id=researcher.user_id, proposal_id=proposal_id)
             db.session.add(r)
             db.session.commit()
-        
+
         proposal.status = "PENDING REVIEWER"
         db.session.commit()
         flash("Proposal has been sent out for review")
-        return redirect(url_for("admin.dashboard")) 
+
+        user = proposal.researcher.user
+        email = user.email
+
+        msg = Message("Proposal ID: " + proposal.id + " Stage 2 of 3 PENDING REVIEWER APPROVAL", recipients=[email])
+        msg.body = """Dear %s,<br>
+        This email is to inform you that your proposal entitled <i>%s</i>
+        has been passed onto a reviewer to adjudicate.<br>
+        If approved by this reviewer, it will be passed to the 3rd and final step of adjudication.
+        """ % (user.first_name, proposal.title)
+        msg.html = msg.body
+        mail.send(msg)
+        return redirect(url_for("admin.dashboard"))
 
     researchers = Researcher.query.all()
     data = []
@@ -127,6 +153,13 @@ def approveProposal(proposal_id):
     db.session.commit()
     admin = current_user.admin
     flash("Proposal has been approved")
+
+    msg = Message("Proposal ID: " + proposal.id + " Stage 3 of 3 APPROVED", recipients=[email])
+    msg.body = """Dear %s,<br>
+    Congratulations, your proposal entitled <i>%s</i> has been fully approved for funding by the SFI!<br>
+    """ % (user.first_name, proposal.title)
+    msg.html = msg.body
+    mail.send(msg)
     return redirect(url_for("admin.dashboard"))
 
 @admin.route("calls/all_calls")

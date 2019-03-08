@@ -187,32 +187,6 @@ def profile():
     return render_template('auth/account.html', title ="Profile",user=user,user_education=user_education,user_employment=user_employment,user_membership=user_membership,user_award=user_award,user_funding=user_funding,user_team=user_team,user_impact=user_impact,user_innovation=user_innovation,user_publication=user_publication,user_presentation=user_presentation,user_academicCollabaration=user_academicCollabaration,user_nonAcademicCollabaration=user_nonAcademicCollabaration,user_confrence=user_confrence,user_communicationOverview=user_communicationOverview,user_sfiFundingq=user_sfiFunding,user_educationAndPublicEngagement=user_educationAndPublicEngagement)
 
 
-@auth.route("/stats",methods=['GET'])
-@login_required
-def proposals():
-    #creates an array of all proposals from this reasearcher
-    user_proposals = Proposal.query.filter_by(researcher_id=current_user.id).all()
-    approved = []
-    rejected = []
-    pending = []
-    approvedNum=0
-    rejectedNum=0
-    pendingNum=0
-    for prop in user_proposals:
-        if prop.approved == "True":
-            approved.append(prop)
-            approvedNum += 1
-        elif prop.approved == "False":
-            rejected.append(prop)
-            rejectedNum += 1
-        else:
-            pending.append(prop)
-            pendingNum += 1
-    return render_template('auth/stats.html',title="Statistics",approved=approved,rejected=rejected,pending=pending,approvedNum=approvedNum,rejectedNum=rejectedNum,pendingNum=pendingNum)
-
-
-
-
 @auth.route("/createAdmin",methods=["GET","POST"])
 def createAdmin():
     password = bcrypt.generate_password_hash("password").decode("utf-8")
