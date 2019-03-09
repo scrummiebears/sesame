@@ -27,12 +27,16 @@
                         <a href="{{ url_for('call_system.apply', call_id=call.id) }}" class="waves-effect waves-light btn">Apply Now</a>
                     </div>
                     {% endif %}
-
-                    {% if error %}
-                        <p class=error><strong>Error:</strong> {{ error }}
-                    {% endif %}
+                </div>
+            </div>
         {% endfor %}
+    </div>
+
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
 
 </div>
 
 {% endblock %}
+
