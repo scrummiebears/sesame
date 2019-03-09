@@ -7,7 +7,7 @@ from app import db, login_manager, mail
 import app.call_system.forms
 from flask_login import current_user, login_required
 from flask_mail import Message
-from app import programme_docs
+from app import programme_docs, proposal_templates
 
 # Import call_system blueprint
 from app.call_system import call_system
@@ -30,10 +30,13 @@ def make_call():
     form = CallForm()
     if form.is_submitted():
         if form.validate():
+
+            filename = proposal_templates.save(request.files["propoasl_template"])
+            url = proposal_templates.url(filename)
             expected_start_date = datetime.strptime(form.deadline.data, "%Y-%m-%d")
             deadline = datetime.strptime(form.deadline.data, "%Y-%m-%d")
             call = Call(admin_id=current_user.id, information=form.information.data,
-                        target_group=form.target_group.data, proposal_template=form.proposal_template.data,
+                        target_group=form.target_group.data, proposal_template_filename=filename, proposal_template_url=url,
                         deadline=deadline, eligibility_criteria=form.eligibility_criteria.data, duration_of_award=form.duration_of_award.data, reporting_guidelines=form.reporting_guidelines.data, expected_start_date=expected_start_date, status="PUBLISHED")
             db.session.add(call)
             db.session.commit()

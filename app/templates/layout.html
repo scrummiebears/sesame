@@ -8,14 +8,15 @@
     <head>
         <title>Sesame</title>
         <meta charset="utf-8"/>
-        <script>function myFunction() {
-                    var x = document.getElementById("alert_box");
-                    if (x.style.display === "none") {
-                        x.style.display = "block";
-                    } else {
-                        x.style.display = "none";
-                    }
-                }
+        <script>
+          function myFunction() {
+            var x = document.getElementById("alert_box");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+          }
         </script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css')}}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}">
@@ -24,18 +25,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <script src="{{url_for('static', filename='js/custom.js')}}"></script>
-        <style>
 
-            body {background-color: #E2E2E2;
-                font-family: 'Roboto', sans-serif;}
-            nav ul a, nav .brand-logo{ color: #cfd8dc;}
-            .nav-wrapper{background-color: #284665}
+        <style>
             .white-darken-text *{
                 color: #cfd8dc;
             }
             .blue-light-custom{ background-color: #284665}
         </style>
+
         {% block head %} {% endblock %}
+
     </head>
 
     <body>
@@ -44,7 +43,7 @@
                 <div class="nav-wrapper">
                      <div class="container">
                             {% if current_user.role == "ADMIN" %}
-                              <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame - SFI Admin Portal</a>
+                              <a href="{{url_for('auth.home')}}" class="brand-logo"><img src="{{ url_for('static', filename='img/logo.png')}}"/></a>
                               <ul id="nav-mobile" class="right hide-on-med-and-down">
                                 {% for item in nav.admin %}
                         			  <li class="{{ 'active' if item.is_active else '' }}">
@@ -54,7 +53,7 @@
                               </ul>
 
                             {% elif current_user.role == "RESEARCHER" %}
-                              <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame - Researcher Portal</a>
+                              <a href="{{url_for('auth.home')}}" class="brand-logo"><img src="{{ url_for('static', filename='img/logo.png')}}"/></a>
                               <ul id="nav-mobile" class="right hide-on-med-and-down">
                                 {% for item in nav.researcher %}
                         			  <li class="{{ 'active' if item.is_active else '' }}">
@@ -64,7 +63,7 @@
                               </ul>
 
                             {% elif current_user.role == "REVIEWER" %}
-                                <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame - Reviewer Portal</a>
+                                <a href="{{url_for('auth.home')}}" class="brand-logo"><img src="{{ url_for('static', filename='img/logo.png')}}"/></a>
                                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                                 {% for item in nav.researcher %}
                                   <li class="{{ 'active' if item.is_active else '' }}">
@@ -74,7 +73,7 @@
                                 </ul>
 
                             {% else %}
-                              <a href="{{url_for('auth.home')}}" class="brand-logo">Sesame</a>
+                              <a href="{{url_for('auth.home')}}" class="brand-logo"><img src="{{ url_for('static', filename='img/logo.png')}}"/></a>
                               <ul id="nav-mobile" class="right hide-on-med-and-down">
                                   {% for item in nav.top %}
                                       <li class="{{ 'active' if item.is_active else '' }}">

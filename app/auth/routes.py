@@ -69,7 +69,8 @@ def register():
             Dear %s,<br>
             This is a confirmation of your registration on SFI's <i>Sesame</i> portal.<br>
             Here is the information you have registered with:<br>
-            First Name: <b>%s</b> Last Name: <b>%s</b><br>
+            First Name: <b>%s</b>
+            Last Name: <b>%s</b><br>
             Email: <b>%s</b><br>
             Job Title: <b>%s</b><br>
             Phone Ext.: <b>%s</b><br>

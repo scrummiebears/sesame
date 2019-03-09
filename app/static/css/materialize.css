@@ -2163,6 +2163,8 @@ html {
  */
 body {
   margin: 0;
+  background-color: #E2E2E2;
+  font-family: 'Roboto', sans-serif;
 }
 
 /**
@@ -4271,10 +4273,10 @@ table span.badge {
 
 nav {
   color: #fff;
-  background-color: #ee6e73;
+  background-color: #284665;
   width: 100%;
-  height: 56px;
-  line-height: 56px;
+  height: 105px;
+  line-height: 75px;
 }
 
 nav.nav-extended {
@@ -4393,6 +4395,7 @@ nav ul li {
 
 nav ul li.active {
   background-color: rgba(0, 0, 0, 0.1);
+  line-height: 105px;
 }
 
 nav ul a {
@@ -4463,7 +4466,7 @@ nav .input-field label.active i {
 
 .navbar-fixed {
   position: relative;
-  height: 56px;
+  height: 105px;
   z-index: 997;
 }
 
@@ -4476,11 +4479,11 @@ nav .input-field label.active i {
     min-height: 64px;
   }
   nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i {
-    height: 64px;
-    line-height: 64px;
+    height: 105px;
+    line-height: 105px;
   }
   .navbar-fixed {
-    height: 64px;
+    height: 105px;
   }
 }
 
@@ -7727,7 +7730,7 @@ input[type=range]::-ms-thumb {
 
 .sidenav .collapsible-body > ul:not(.collapsible) > li.active,
 .sidenav.sidenav-fixed .collapsible-body > ul:not(.collapsible) > li.active {
-  background-color: #ee6e73;
+  background-color: #284665;
 }
 
 .sidenav .collapsible-body > ul:not(.collapsible) > li.active a,
@@ -8504,7 +8507,7 @@ input[type=range]::-ms-thumb {
   position: absolute;
   font-size: 1rem;
   border-radius: 50%;
-  background-color: #ee6e73;
+  background-color: #284665;
   -webkit-box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.14), 0 10px 50px 0 rgba(0, 0, 0, 0.12), 0 30px 10px -20px rgba(0, 0, 0, 0.2);
           box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.14), 0 10px 50px 0 rgba(0, 0, 0, 0.12), 0 30px 10px -20px rgba(0, 0, 0, 0.2);
   width: 100%;
@@ -9081,4 +9084,12 @@ input[type=range]::-ms-thumb {
     text-align: center;
     margin-top: 1.2rem;
   }
+}
+
+.nav-wrapper {
+  margin-top: 0.2em;
+}
+
+nav ul a, nav {
+  color: #fff;
 }

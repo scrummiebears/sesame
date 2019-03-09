@@ -15,6 +15,7 @@ login_manager = LoginManager()
 mail = Mail()
 
 programme_docs = UploadSet("programmeDocs", ALL)
+proposal_templates = UploadSet("propoalTemplates", ALL)
 
 def create_app():
     app = Flask(__name__)
@@ -78,12 +79,15 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    configure_uploads(app, programme_docs)
+    configure_uploads(app, programme_docs)  
+    configure_uploads(app, proposal_templates)
 
     from app import commands
     app.cli.add_command(commands.db_cli)
     app.cli.add_command(commands.user_cli)
 
+    from app import jinja_filters
+    app.jinja_env.filters["whatInput"] = jinja_filters.whatInput
 
 
     return app
