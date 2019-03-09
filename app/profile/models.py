@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 
 from app import db
 from app.auth.models import User
@@ -67,7 +68,26 @@ class Membership(db.Model):
     @hybrid_property
     def status(self):
         today = date.today()
-        return (today > start_date) and (today < end_date)
+        return (today > self.start_date) and (today < self.end_date)
+
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("end_date")
+    def validate_end_date(self, key, end_date):
+        if type(end_date) == date:
+            return end_date
+        else:
+            end_date_input = end_date.split("-")
+            end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return end_date
+
 
 class Award(db.Model):
 
@@ -102,6 +122,25 @@ class FundingDiversification(db.Model):
         today = date.today()
         return (today > start_date) and (today < end_date)
 
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("end_date")
+    def validate_end_date(self, key, end_date):
+        if type(end_date) == date:
+            return end_date
+        else:
+            end_date_input = end_date.split("-")
+            end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return end_date
+
+
 class TeamMember(db.Model):
 
     __tablename__ = "team_member"
@@ -110,11 +149,30 @@ class TeamMember(db.Model):
     researcher = db.relationship("Researcher", backref="team_member")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
-    start_date = db.Column(db.DateTime)
-    departure_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    departure_date = db.Column(db.Date)
     name = db.Column(db.String)
     position = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("departure_date")
+    def validate_departure_date(self, key, departure_date):
+        if type(departure_date) == date:
+            return departure_date
+        else:
+            departure_date_input = end_date.split("-")
+            departure_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return departure_date
+
 
 class Impact(db.Model):
 
@@ -193,8 +251,8 @@ class AcademicCollaboration(db.Model):
     researcher = db.relationship("Researcher", backref="academic_collaboration")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     institution = db.Column(db.String)
     institution_dept = db.Column(db.String)
     location = db.Column(db.String)
@@ -202,6 +260,25 @@ class AcademicCollaboration(db.Model):
     primary_goal = db.Column(db.String)
     interaction_frequency = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("end_date")
+    def validate_end_date(self, key, end_date):
+        if type(end_date) == date:
+            return end_date
+        else:
+            end_date_input = end_date.split("-")
+            end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return end_date
+
 
 class NonAcademicCollaboration(db.Model):
 
@@ -211,8 +288,8 @@ class NonAcademicCollaboration(db.Model):
     researcher = db.relationship("Researcher", backref="non_academic_collaboration")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     institution = db.Column(db.String)
     institution_dept = db.Column(db.String)
     location = db.Column(db.String)
@@ -220,6 +297,25 @@ class NonAcademicCollaboration(db.Model):
     primary_goal = db.Column(db.String)
     interaction_frequency = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("end_date")
+    def validate_end_date(self, key, end_date):
+        if type(end_date) == date:
+            return end_date
+        else:
+            end_date_input = end_date.split("-")
+            end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return end_date
+
 
 class Conference(db.Model):
 
@@ -229,20 +325,39 @@ class Conference(db.Model):
     researcher = db.relationship("Researcher", backref="conference")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     title = db.Column(db.String)
     event_type = db.Column(db.String)
     role = db.Column(db.String)
     location = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
 
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("end_date")
+    def validate_end_date(self, key, end_date):
+        if type(end_date) == date:
+            return end_date
+        else:
+            end_date_input = end_date.split("-")
+            end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return end_date
+
+
 class CommunicationOverview(db.Model):
     
     __tablename__ = "communication_overview"
 
     id = db.Column(db.Integer, primary_key=True)
-    researcher = db.relationship("Researcher", backref="communications_overview")     
+    researcher = db.relationship("Researcher", backref="communication_overview")     
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     year = db.Column(db.Integer)
@@ -270,12 +385,31 @@ class EducationAndPublicEngagement(db.Model):
     researcher_id = db.Column(db.Integer, db.ForeignKey("researchers.user_id"))
 
     project_name = db.Column(db.String)
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     activity_type = db.Column(db.String)
     project_topic = db.Column(db.String)
     target_graphical_area = db.Column(db.String)
     primary_attribution = db.Column(db.Integer, db.ForeignKey("calls.id"))
+
+    @validates("start_date")
+    def validates_start_date(self, key, start_date):
+        if type(start_date) == date:
+            return start_date
+        else:
+            start_date_input = start_date.split("-")
+            start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
+            return start_date
+
+    @validates("end_date")
+    def validate_end_date(self, key, end_date):
+        if type(end_date) == date:
+            return end_date
+        else:
+            end_date_input = end_date.split("-")
+            end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
+            return end_date
+
 
 
 
@@ -290,8 +424,8 @@ class TeamMembers(db.Model):
     __tablename__ = 'team_members'
     
     member_id = db.Column(db.Integer, primary_key=True) #ID in team, not out of all members 
-    start_date= db.Column(db.DateTime,nullable=True)  ##When inserting, datetime.date i think, not .datetime
-    end_date = db.Column(db.DateTime,nullable=True)   ##
+    start_date= db.Column(db.Date,nullable=True)  ##When inserting, datetime.date i think, not .datetime
+    end_date = db.Column(db.Date,nullable=True)   ##
     name = db.Column(db.String(20),nullable=False)
     position = db.Column(db.String(80),nullable=False)
     primary_attribute = db.Column(db.String(12),nullable=True)

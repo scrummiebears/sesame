@@ -86,6 +86,8 @@ def create_app():
     app.cli.add_command(commands.db_cli)
     app.cli.add_command(commands.user_cli)
 
+    from app import jinja_filters
+    app.jinja_env.filters["whatInput"] = jinja_filters.whatInput
 
 
     return app

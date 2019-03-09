@@ -20,3 +20,6 @@
 ul.dropdown-content.select-dropdown li span {
     color: #000; /* no need for !important :) */
 }
+.padded-button{
+    padding-right: 20px;
+}

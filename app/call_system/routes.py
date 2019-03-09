@@ -73,13 +73,7 @@ def make_call():
     else:
         return render_template("call_system/make_call.html", form=form)
 
-@call_system.route("/view_call/<call_id>")
-@login_required
-def view_call(call_id):
-    """Views a specific proposal submission made by a researcher"""
 
-    call = Call.query.filter(Proposal.id).first()
-    return render_template("call_system/view_call.html", call=call)
 
 @call_system.route("/apply/<call_id>", methods=["GET", "POST"])
 @login_required
@@ -127,6 +121,12 @@ def apply(call_id):
         mail.send(msg)
         return redirect(url_for(".apply", call_id=call.id))
     return render_template("call_system/apply.html", form=form, call=call)
+
+@call_system.route("/<int:call_id>/view")
+def view_call(call_id):
+    call = Call.query.filter_by(id=call_id).first()
+    # flash("Reading more about call #" + str(call_id))
+    return render_template("call_system/view_call.html", call=call)
 
 from datetime import datetime
 @call_system.route("/all_cfp")
