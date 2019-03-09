@@ -20,7 +20,7 @@ def addEducation():
         db.session.add(education)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addEducation"))
+        return redirect(url_for("profile.viewSection", section="education"))
     return render_template("profile/add.html", form=form, title="Education")
 
 @profile.route("add/employment", methods=["GET", "POST"])
@@ -36,7 +36,7 @@ def addEmployment():
         db.session.add(employment)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addEmployment"))
+        return redirect(url_for("profile.viewSection", section="employment"))
     return render_template("profile/add.html", form=form, title="Employment")
 
 @profile.route("add/membership", methods=["GET", "POST"])
@@ -48,17 +48,19 @@ def addMembership():
         researcher = current_user.researcher
 
         start_date_input = form.start_date.data.split("-")
+        print("START DATE INPUT --- " + str(start_date_input))
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
-        end_date_input = form.end_date.data
+        end_date_input = form.end_date.data.split("-")
+        print("END_DATE " +str(end_date_input))
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-
+        print("END_DATE " +str(end_date_input))
         membership = Membership(researcher_id=researcher.user_id, start_date=start_date,
                                 end_date=end_date, society_name=form.society_name.data,
                                 membership_type=form.membership_type.data)
         db.session.add(membership)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addMembership"))
+        return redirect(url_for("profile.viewSection", section="membership"))
     return render_template("profile/add.html", form=form, title="Membership")
 
 @profile.route("add/award", methods=["GET", "POST"])
@@ -75,7 +77,7 @@ def addAward():
         db.session.add(award)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addAward"))
+        return redirect(url_for("profile.viewSection", section="award"))
     return render_template("profile/add.html", form=form, title="Award")
 
 @profile.route("add/funding_diversification")
@@ -88,7 +90,7 @@ def addFundingDiversification():
 
         start_date_input = form.start_date.data.split("-")
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
-        end_date_input = form.end_date.data
+        end_date_input = form.end_date.data.split("-")
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
 
         funding_diversification = FundingDiversification(researcher_id=researcher.user_id,
@@ -101,7 +103,7 @@ def addFundingDiversification():
         db.session.add(funding_diversification)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addFundingDiversification"))
+        return redirect(url_for("profile.viewSection", section="funding_diversification"))
     return render_template("profile/add.html", form=form, title="Funding Diversification")
 
 @profile.route("add/team_member", methods=["GET", "POST"])
@@ -123,7 +125,7 @@ def addTeamMember():
         db.session.add(team_member)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addTeamMember"))
+        return redirect(url_for("profile.viewSection", section="team_member"))
     return render_template("profile/add.html", form=form, title="Team Members")
 
 @profile.route("add/impact", methods=["GET", "POST"])
@@ -140,7 +142,7 @@ def addImpact():
         db.session.add(impact)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addImpact"))
+        return redirect(url_for("profile.viewSection", section="impact"))
     return render_template("profile/add.html", form=form, title="Impact")
 
 @profile.route("add/innovation", methods=["GET", "POST"])
@@ -157,7 +159,7 @@ def addInnovation():
         db.session.add(innovation)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addInnovation"))
+        return redirect(url_for("profile.viewSection", section="innovation"))
     return render_template("profile/add.html", form=form, title="Innovation")
 
 @profile.route("add/publication", methods=["GET", "POST"])
@@ -178,7 +180,7 @@ def addPublication():
         db.session.add(publication)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addPublication"))
+        return redirect(url_for("profile.viewSection", section="publication"))
     return render_template("profile/add.html", form=form, title="Publication")
 
 @profile.route("add/presentation", methods=["GET", "POST"])
@@ -199,7 +201,7 @@ def addPresentation():
         db.session.add(presentation)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addPresentation"))
+        return redirect(url_for("profile.viewSection", section="presentation"))
     return render_template("profile/add.html", form=form, title="Presentation")
 
 @profile.route("add/academic_collaboration", methods=["GET", "POST"])
@@ -214,12 +216,12 @@ def addAcademicCollaboration():
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-        academic_collaboration = AcademicCollaboration(researcher_id=researcher.id, start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
+        academic_collaboration = AcademicCollaboration(researcher_id=researcher.user_id, start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
                                                               primary_goal=form.primary_goal.data, interaction_frequency=form.interaction_frequency.data, primary_attribution=form.primary_attribution.data)
         db.session.add(academic_collaboration)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addAcademicCollaboration"))
+        return redirect(url_for("profile.viewSection", section="academic_collaboration"))
     return render_template("profile/add.html", form=form)
 
 @profile.route("add/non_academic_collaboration", methods=["GET", "POST"])
@@ -234,12 +236,12 @@ def addNonAcademicCollaboration():
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
         end_date_input = form.end_date.data
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-        non_academic_collaboration = NonAcademicCollaboration(researcher_id=researcher.id, start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
+        non_academic_collaboration = NonAcademicCollaboration(researcher_id=researcher.user_id, start_date=start_date, end_date=end_date, institution=form.institution.data, location=form.location.data, collaborator_name=form.collaborator.data,
                                                               primary_goal=form.primary_goal.data, interaction_frequency=form.interaction_frequency.data, primary_attribution=form.primary_attribution.data)
         db.session.add(non_academic_collaboration)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addNonAcademicCollaboration"))
+        return redirect(url_for("profile.viewSection", section="non_academic_collaboration"))
     return render_template("profile/add.html", form=form)
 
 @profile.route("add/conference", methods=["GET", "POST"])
@@ -252,14 +254,14 @@ def addConference():
 
         start_date_input = form.start_date.data.split("-")
         start_date = date(int(start_date_input[0]), int(start_date_input[1]), int(start_date_input[2]))
-        end_date_input = form.end_date.data
+        end_date_input = form.end_date.data.split("-")
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
-        conference = Conference(researcher_id=researcher.id, start_date=start_date, end_date=end_date, title=form.title.data, event_type=form.event_type.data,
+        conference = Conference(researcher_id=researcher.user_id, start_date=start_date, end_date=end_date, title=form.title.data, event_type=form.event_type.data,
                                 role=form.role.data, location=form.location.data, primary_attribution=form.primary_attribution.data)
         db.session.add(conference)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addConference"))
+        return redirect(url_for("profile.viewSection", section="conference"))
     return render_template("profile/add.html", form=form, title="Conference")
 
 @profile.route("add/communication_overview")
@@ -270,11 +272,11 @@ def addCommunicationOverview():
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
 
-        comm_overview = CommunicationOverview(researcher_id=researcher.id, year=form.year.data, num_of_public_lectures=form.num_of_public_lectures.data, num_of_visits=form)
+        comm_overview = CommunicationOverview(researcher_id=researcher.user_id, year=form.year.data, num_of_public_lectures=form.num_of_public_lectures.data, num_of_visits=form)
         db.session.add(conference)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addCommuicationOverview"))
+        return redirect(url_for("profile.viewSection", section="communication_overview"))
     return render_template("profile/add.html", form=form, title="Communication Overview")
 
 @profile.route("add/sfi_funding_ratio", methods=["GET", "POST"])
@@ -285,11 +287,11 @@ def addSFIFundingRatio():
     if request.method == "POST" and form.validate():
         researcher = current_user.researcher
 
-        fr = SFIFundingRatio(researcher_id=researcher.id, year=form.year.data, percentage_of_annual_spend=form.percentage_of_annual_spend.data)
+        fr = SFIFundingRatio(researcher_id=researcher.user_id, year=form.year.data, percentage_of_annual_spend=form.percentage_of_annual_spend.data)
         db.session.add(fr)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addSFIFundingRatio"))
+        return redirect(url_for("profile.viewSection", section="sfi_funding_ratio"))
     return render_template("profile/add.html", form=form, title="SFI Funding Ratio")
 
 @profile.route("add/educaiton_and_public_engagement", methods=["GET", "POST"])
@@ -305,12 +307,12 @@ def addEducationAndPublicEngagement():
         end_date_input = form.end_date.data
         end_date = date(int(end_date_input[0]), int(end_date_input[1]), int(end_date_input[2]))
 
-        epe = EducationAndPublicEngagement(researcher_id=researcher.id, project_name=form.project_name.data, start_date=start_date, end_date=end_date, activity_type=form.activity_type.data,
+        epe = EducationAndPublicEngagement(researcher_id=researcher.user_id, project_name=form.project_name.data, start_date=start_date, end_date=end_date, activity_type=form.activity_type.data,
                                            project_topic=form.project_topic.data, target_graphical_area=form.target_graphical_area.data, primary_attribution=form.primary_attribution.data)
         db.session.add(epe)
         db.session.commit()
         flash("Your profile has been updated")
-        return redirect(url_for("profile.addEducationAndPublicEngagement"))
+        return redirect(url_for("profile.viewSection", section="education_and_public_engagement"))
     return render_template("profile/add.html", form=form, title="Education and Public Engagement")
 
 
@@ -335,51 +337,28 @@ def viewSection(section):
             if c[0] not in ["researcher", "researcher_id"]:
                 data[-1][labels[c[0]]] = getattr(obj, c[0])  # data[the last dict in data][labels dict[column][name of column]] = the value of column in the section instance
 
-    models = {"education": "Education", "employment": "Employment", "membership": "Membership", "award": "Award", "funding_diversification": "FundingDiversification", "team_member": "TeamMember", "impact": "Impact", "innovation": "Innovation", "publication": "Publication", "presentation": "Presentation", "academic_collaboration": "AcademicCollaboration", "non_academic_collaboration": "NonAcademicCollaboration", "conference": "Conference", "communicaiton_overview": "CommunicationOverview", "sfi_funding_ratio": "SFIFundingRatio", "education_and_public_engagement": "EducationAndPublicEngagement"}
+    models = {"education": "Education", "employment": "Employment", "membership": "Membership", "award": "Award", "funding_diversification": "FundingDiversification", "team_member": "TeamMember", "impact": "Impact", "innovation": "Innovation", "publication": "Publication", "presentation": "Presentation", "academic_collaboration": "AcademicCollaboration", "non_academic_collaboration": "NonAcademicCollaboration", "conference": "Conference", "communication_overview": "CommunicationOverview", "sfi_funding_ratio": "SFIFundingRatio", "education_and_public_engagement": "EducationAndPublicEngagement"}
     return render_template("profile/view.html", section=section, data=data, models=models)
 
 @profile.route("edit/<section>/<id>", methods=["GET","POST"])
 def edit(section, id):
 
     models = {"education": Education, "employment": Employment, "membership": Membership, "award": Award, "funding_diversification": FundingDiversification, "team_member": TeamMember, "impact": Impact, "innovation": Innovation, "publication": Publication, "presentation": Presentation, "academic_collaboration": AcademicCollaboration, "non_academic_collaboration": NonAcademicCollaboration, "conference": Conference, "communicaiton_overview": CommunicationOverview, "sfi_funding_ratio": SFIFundingRatio, "education_and_public_engagement": EducationAndPublicEngagement}
-    columns = getColumnList(models[section])
 
     forms = {"education": EducationForm, "employment": EmploymentForm, "membership": MembershipForm, "award": AwardForm, "funding_diversification": FundingDiversificationForm, "team_member": TeamMemberForm, "impact": ImpactForm, "innovation": InnovationForm, "publication": PublicationForm, "presentation": PresentationForm, "academic_collaboration": AcademicCollaborationForm, "non_academic_collaboration": NonAcademicCollaborationForm, "conference": ConferenceForm, "communicaiton_overview": CommunicationOverviewForm, "sfi_funding_ratio": SFIFundingRatioForm, "education_and_public_engagement": EducationAndPublicEngagementForm}
 
     instance = models[section].query.get(id)
-    data = populateFormData(instance, columns)
-    form = forms[section].__call__(data=data)
+    form = forms[section].__call__(obj=instance)
 
     if request.method == "POST" and form.validate():
-        updates = {}
-        for column in columns:
-            if column not in ["researcher", "researcher_id", "user_id", "id"]:
-                updates[column] = getattr(form, column).data
-                flash(updates[column])
 
-        db.session.query(models[section]).filter_by(id=id).update(updates)
+        form.populate_obj(instance)
         db.session.commit()
-        flash("profile Updated")
+        flash("Profile Updated")
         return redirect(url_for("profile.viewSection", section=section))
+
     return render_template("profile/edit.html", form=form)
 
-
-def getColumnList(model):
-    mapper = inspect(model)
-    columns = []
-    raw_columns = mapper.attrs.items()
-    for c in raw_columns:
-        columns.append(c[0])
-
-    return columns
-
-def populateFormData( instance, columns):
-    data = {}
-    for c in columns:
-        if c not in ["researcher", "researcher_id", "user_id", "id"]:
-            data[str(c)] = getattr(instance, c)
-
-    return data
 
 @profile.route("view")
 def view():

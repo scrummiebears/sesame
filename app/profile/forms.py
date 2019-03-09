@@ -23,8 +23,8 @@ class EmploymentForm(FlaskForm):
 
 class MembershipForm(FlaskForm):
 
-    start_date = StringField("Start Date", widget=DateInput(), description={"placeholder":"Start date"})
-    end_date = StringField("End Date", widget=DateInput(), description={"placeholder":"End date"})
+    start_date = StringField("Start Date", description={"placeholder":"Start date"})
+    end_date = StringField("End Date", description={"placeholder":"End date"})
     society_name = StringField("Society Name", description={"placeholder":"Society name"})
     membership_type = StringField("Membership Type", description={"placeholder":"Membership type"})
 
@@ -37,8 +37,8 @@ class AwardForm(FlaskForm):
 
 class FundingDiversificationForm(FlaskForm):
 
-    start_date = StringField("Start Date", widget=DateInput(), description={"placeholder":"Start date"})
-    end_date = StringField("End Date", widget=DateInput(), description={"placeholder":"End date"})
+    start_date = StringField("Start Date", description={"placeholder":"Start date"})
+    end_date = StringField("End Date", description={"placeholder":"End date"})
     amount = IntegerField("Amount", widget=NumberInput(), description={"placeholder": "Amount"})
     funding_body = StringField("Funding Body", description={"placeholder": "Funding body"})
     funding_programme = StringField("Funding Programme", description={"placeholder": "Funding programme"})
@@ -46,8 +46,8 @@ class FundingDiversificationForm(FlaskForm):
 
 class TeamMemberForm(FlaskForm):
 
-    start_date = StringField("Start Date", widget=DateInput(), description={"placeholder":"Start date"})
-    departure_date = StringField("Departure Date", widget=DateInput(), description={"placeholder":"Departure date"})
+    start_date = StringField("Start Date", description={"placeholder":"Start date"})
+    departure_date = StringField("Departure Date", description={"placeholder":"Departure date"})
     name = StringField("Name", description={"placeholder": "Name"})
     position = StringField("Position", description={"placeholder": "Position"})
     primary_attribution = IntegerField("Primary Attribution", description={"placeholder": "Primary attribution"})
@@ -119,8 +119,8 @@ class NonAcademicCollaborationForm(FlaskForm):
 
 class ConferenceForm(FlaskForm):
 
-    start_date = StringField("Start Date", widget=DateInput())
-    end_date = StringField("Start Date", widget=DateInput())
+    start_date = StringField("Start Date")
+    end_date = StringField("Start Date")
     title = StringField("Title", description={"placeholder": "Title"})
     event_type = StringField("Event Type", description={"placeholder": "Event type"})
     role = StringField("Role", description={"placeholder": "Role"})

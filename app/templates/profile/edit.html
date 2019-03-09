@@ -14,7 +14,11 @@
                 {{ form.hidden_tag() }}
                 {% for field in form %}
                 {% if field.widget.input_type != "hidden" %}
-                    {% if field.widget.input_type != 'checkbox' %}
+                    {% if field|whatInput == "date" %}
+                    <div class="input-field">
+                        {{ field(class="datepicker", tabindex="-1") }} {{ field.label }}
+                    </div>
+                    {% elif field.widget.input_type != 'checkbox' %}
                         <div class="input-field">
                         {{ field.label }}{{ field }}
                         </div>
