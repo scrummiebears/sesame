@@ -17,10 +17,13 @@ import config
 
 @reviewer.route("review")
 def review():
+    pass
 
 @reviewer.route("accept")
 def accept():
+    pass
 
 @reviewer.route("reject")
 def reject():
+    pass
     

@@ -10,7 +10,7 @@ class Reviewer(db.Model):
     __tablename__ = "reviewers"
 
     id = db.Column(db.Integer, primary_key=True)
-    user = db.relationship("User", backref=db.backref("admin", uselist=False))
+    user = db.relationship("User", backref=db.backref("Admin", uselist=False))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
 
     proposal = db.relationship("Proposal", backref="reviews")
