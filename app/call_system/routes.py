@@ -31,7 +31,7 @@ def make_call():
     if form.is_submitted():
         if form.validate():
 
-            filename = proposal_templates.save(request.files["propoasl_template"])
+            filename = proposal_templates.save(request.files["proposal_template"])
             url = proposal_templates.url(filename)
             expected_start_date = datetime.strptime(form.deadline.data, "%Y-%m-%d")
             deadline = datetime.strptime(form.deadline.data, "%Y-%m-%d")
@@ -43,17 +43,16 @@ def make_call():
 
             emails = db.session.query(User.email)
             for email, in emails:
-                msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-                msg.body = """<h3>Call for Proposal: %s</h3><br>
+                msg = Message("Call for Proposal", recipients=[email])
+                msg.body = """<h3>Call for Proposal</h3><br>
                 Dear Researcher,<br>
                 This is a notification of a new call for proposal issued by the SFI.<br>
                 <b>Information:</b><br>%s<br>
                 <b>Target Group:</b><br>%s<br>
-                <b>Proposal Template:</b><br>%s<br>
                 <b>Deadline:</b><br>%s<br>
                 <b>Eligibility Crteria:</b><br>%s<br>
-                """(form.proposal_name.data, form.information.data, form.target_group.data,
-                form.proposal_template.data, form.deadline.data, form.eligibility_criteria.data)
+                """ % (form.information.data, form.target_group.data,
+                 form.deadline.data, form.eligibility_criteria.data)
                 msg.html = msg.body
                 # pdf = form.file.data
                 # filename = secure_filename(pdf.filename)
