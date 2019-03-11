@@ -19,7 +19,7 @@ import random
 def review(reviewer_id):
     # if there not a reviewer or already submitted a review, render an 403 unauthorised
     reviewer = Reviewer.query.get(reviewer_id) or  abort(404)
-    if reviewer.completed == False:
+    if reviewer.completed == True:
         return "Sorry this review has already been submitted"
     # Get the proposal they are reviewing
     proposal = reviewer.proposal
@@ -30,8 +30,12 @@ def review(reviewer_id):
         reviewer.comments = comments
         db.session.commit()
         if form.action.data == "Approve":
+            reviewer.completed = True
+            db.session.commit()
             return "Accepted, thanks for reviewing"
         elif form.action.data == "Reject":
+            reviewer.completed = True
+            db.session.commit()
             return "Rejectd, thanks for reviewing"
         elif form.action.data == "Save":
             return "Saved for later"

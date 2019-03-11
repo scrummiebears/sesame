@@ -130,7 +130,7 @@ def assignReviewers(proposal_id):
             try:
                 msg = Message("Proposal Review Request", recipients=[email])
                 msg.body = """You have been selected to review a proposal.<br>
-                Please follow this link to view it - %s""" % (request.url_root[0:-2] + url_for("reviewer.review", reviewer_id=r_id))
+                Please follow this link to view it - %s""" % (request.url_root[0:-1] + url_for("reviewer.review", reviewer_id=r_id))
                 msg.html = msg.body
                 mail.send(msg)
             except (SMTPAuthenticationError, SMTPRecipientsRefused):
