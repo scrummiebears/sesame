@@ -17,7 +17,7 @@ from app.profile.models import *
 from app.call_system.models import *
 from app.call_system.forms import CallForm
 
-from smtplib import SMTPAuthenticationError
+from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 
 
 
@@ -82,7 +82,7 @@ def register():
                 form.phone_ext.data, form.phone.data, form.orcid.data)
                 msg.html = msg.body
                 mail.send(msg)
-            except (SMTPAuthenticationError):
+            except (SMTPAuthenticationError, SMTPRecipientsRefused):
                 flash("There seems to be something wron with our mail services.")
             return redirect(url_for("auth.login"))
         else:
