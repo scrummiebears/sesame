@@ -127,6 +127,8 @@ def apply(call_id):
             mail.send(msg)
         except (SMTPAuthenticationError):
             flash("There seems to be an issue with our email services. No emails were sent.")
+        except (SMTPRecipientsRefused):
+            pass
         return redirect(url_for(".apply", call_id=call.id))
     return render_template("call_system/apply.html", form=form, call=call)
 

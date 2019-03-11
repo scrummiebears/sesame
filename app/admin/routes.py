@@ -11,7 +11,7 @@ from app import db, bcrypt, mail
 import json
 import string
 import random
-from smtplib import SMTPAuthenticationError
+from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 from flask_mail import Message
 
 @admin.route("dashboard")
@@ -133,7 +133,7 @@ def assignReviewers(proposal_id):
                 Please follow this link to view it - %s""" % (url_for("reviewer.review", reviewer_id=r_id))
                 msg.html = msg.body
                 mail.send(msg)
-            except (SMTPAuthenticationError):
+            except (SMTPAuthenticationError, SMTPRecipientsRefused):
                 flash("There seems to be an issue with our email services. No emails were sent.")
 
         proposal.status = "PENDING REVIEWER"
@@ -152,7 +152,9 @@ def assignReviewers(proposal_id):
             msg.html = msg.body
             mail.send(msg)
         except (SMTPAuthenticationError):
-            flash("There seems to be something wron with our mail services. Failed to notify researcher of proposal status.")
+            flash("There seems to be something wron with our mail services.")
+        except (SMTPRecipientsRefused):
+            pass
         return redirect(url_for("admin.dashboard"))
 
     researchers = Researcher.query.all()
@@ -180,7 +182,9 @@ def approveProposal(proposal_id):
         msg.html = msg.body
         mail.send(msg)
     except (SMTPAuthenticationError):
-        flash("There seems to be something wron with our mail services. Failed to notify researcher of proposal status.")
+        flash("There seems to be something wron with our mail services.")
+    except (SMTPRecipientsRefused):
+        pass
     return redirect(url_for("admin.dashboard"))
 
 @admin.route("calls/all_calls")
