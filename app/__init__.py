@@ -74,7 +74,7 @@ def create_app():
     from app.admin import admin
     app.register_blueprint(admin, url_prefix="/admin/")
     from app.reviewer import reviewer
-    app.register_blueprint(reviewer, url_prefix="/review/")
+    app.register_blueprint(reviewer, url_prefix="/reviewer/")
 
     with app.app_context():
         db.create_all()
