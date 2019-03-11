@@ -17,6 +17,8 @@ from app.profile.models import *
 from app.call_system.models import *
 from app.call_system.forms import CallForm
 
+from smtplib import SMTPAuthenticationError
+
 
 
 @login_manager.user_loader
@@ -63,23 +65,25 @@ def register():
 
             flash("Your account has been created. You can now login")
             email = form.email.data
-
-            msg = Message("Confirmation of Registration - " + form.first_name.data + " " + form.last_name.data, recipients=[email])
-            msg.body = """<h3>Confirmation of Registration: %s</h3><br>
-            Dear %s,<br>
-            This is a confirmation of your registration on SFI's <i>Sesame</i> portal.<br>
-            Here is the information you have registered with:<br>
-            First Name: <b>%s</b>
-            Last Name: <b>%s</b><br>
-            Email: <b>%s</b><br>
-            Job Title: <b>%s</b><br>
-            Phone Ext.: <b>%s</b><br>
-            Phone Number: <b>%s</b><br>
-            ORCID: <b>%s</b><br>""" % (form.first_name.data, form.first_name.data, form.first_name.data,
-            form.last_name.data, form.email.data, form.job_title.data,
-            form.phone_ext.data, form.phone.data, form.orcid.data)
-            msg.html = msg.body
-            mail.send(msg)
+            try:
+                msg = Message("Confirmation of Registration - " + form.first_name.data + " " + form.last_name.data, recipients=[email])
+                msg.body = """<h3>Confirmation of Registration: %s</h3><br>
+                Dear %s,<br>
+                This is a confirmation of your registration on SFI's <i>Sesame</i> portal.<br>
+                Here is the information you have registered with:<br>
+                First Name: <b>%s</b>
+                Last Name: <b>%s</b><br>
+                Email: <b>%s</b><br>
+                Job Title: <b>%s</b><br>
+                Phone Ext.: <b>%s</b><br>
+                Phone Number: <b>%s</b><br>
+                ORCID: <b>%s</b><br>""" % (form.first_name.data, form.first_name.data, form.first_name.data,
+                form.last_name.data, form.email.data, form.job_title.data,
+                form.phone_ext.data, form.phone.data, form.orcid.data)
+                msg.html = msg.body
+                mail.send(msg)
+            except (SMTPAuthenticationError):
+                flash("There seems to be something wron with our mail services.")
             return redirect(url_for("auth.login"))
         else:
             flash("An account already exists with this email address. Please login.")

@@ -7,10 +7,13 @@ from flask_login import current_user, login_required
 from app.profile.models import Researcher
 from app.auth.models import User
 from app.reviewer.models import Reviewer
-from app import db, bcrypt
+from app import db, bcrypt, mail
 import json
 import string
 import random
+from smtplib import SMTPAuthenticationError
+from flask_mail import Message
+
 @admin.route("dashboard")
 @login_required
 def dashboard():
@@ -90,13 +93,15 @@ def rejectProposal(proposal_id):
 
     user = proposal.researcher.user
     email = user.email
-
-    msg = Message("Proposal ID: " + proposal.id + " Stage 1 of 3 REJECTED", recipients=[email])
-    msg.body = """Dear %s,<br>
-    We regret to inform you that your proposal entitled <i>%s</i> has been rejected for funding by the SFI.<br>
-    """ % (user.first_name, proposal.title)
-    msg.html = msg.body
-    mail.send(msg)
+    try:
+        msg = Message("Proposal ID: " + proposal.id + " Stage 1 of 3 REJECTED", recipients=[email])
+        msg.body = """Dear %s,<br>
+        We regret to inform you that your proposal entitled <i>%s</i> has been rejected for funding by the SFI.<br>
+        """ % (user.first_name, proposal.title)
+        msg.html = msg.body
+        mail.send(msg)
+    except (SMTPAuthenticationError):
+        flash("There seems to be something wrong with our mail service right now")
     return redirect(url_for("admin.dashboard"))
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
@@ -116,10 +121,20 @@ def assignReviewers(proposal_id):
 
         # create new reviewers
         for email in review_emails:
-            password = bcrpyt.generate_password_hash()
-            r = Reviewer(email=email, password=password, proposal_id=proposal_id)
-            db.session.add(r)
+            reviewer = Reviewer(email=email, proposal_id=proposal_id)
+            db.session.add(reviewer)
             db.session.commit()
+
+            r_id = Reviewer.query.filter(Reviewer.email == email).first().id
+            print("**** " + url_for("reviewer.review", reviewer_id=r_id) +"*****")
+            try:
+                msg = Message("Proposal Review Request", recipients=[email])
+                msg.body = """You have been selected to review a proposal.<br>
+                Please follow this link to view it - %s""" % (url_for("reviewer.review", reviewer_id=r_id))
+                msg.html = msg.body
+                mail.send(msg)
+            except (SMTPAuthenticationError):
+                flash("There seems to be an issue with our email services. No emails were sent.")
 
         proposal.status = "PENDING REVIEWER"
         db.session.commit()
@@ -127,15 +142,17 @@ def assignReviewers(proposal_id):
 
         user = proposal.researcher.user
         email = user.email
-
-        msg = Message("Proposal ID: " + proposal.id + " Stage 2 of 3 PENDING REVIEWER APPROVAL", recipients=[email])
-        msg.body = """Dear %s,<br>
-        This email is to inform you that your proposal entitled <i>%s</i>
-        has been passed onto a reviewer to adjudicate.<br>
-        If approved by this reviewer, it will be passed to the 3rd and final step of adjudication.
-        """ % (user.first_name, proposal.title)
-        msg.html = msg.body
-        mail.send(msg)
+        try:
+            msg = Message("Proposal ID: " + str(proposal.id) + " Stage 2 of 3 PENDING REVIEWER APPROVAL", recipients=[email])
+            msg.body = """Dear %s,<br>
+            This email is to inform you that your proposal entitled <i>%s</i>
+            has been passed onto a reviewer to adjudicate.<br>
+            If approved by this reviewer, it will be passed to the 3rd and final step of adjudication.
+            """ % (user.researcher.first_name, proposal.title)
+            msg.html = msg.body
+            mail.send(msg)
+        except (SMTPAuthenticationError):
+            flash("There seems to be something wron with our mail services. Failed to notify researcher of proposal status.")
         return redirect(url_for("admin.dashboard"))
 
     researchers = Researcher.query.all()
@@ -155,12 +172,15 @@ def approveProposal(proposal_id):
     admin = current_user.admin
     flash("Proposal has been approved")
 
-    msg = Message("Proposal ID: " + proposal.id + " Stage 3 of 3 APPROVED", recipients=[email])
-    msg.body = """Dear %s,<br>
-    Congratulations, your proposal entitled <i>%s</i> has been fully approved for funding by the SFI!<br>
-    """ % (user.first_name, proposal.title)
-    msg.html = msg.body
-    mail.send(msg)
+    try:
+        msg = Message("Proposal ID: " + proposal.id + " Stage 3 of 3 APPROVED", recipients=[email])
+        msg.body = """Dear %s,<br>
+        Congratulations, your proposal entitled <i>%s</i> has been fully approved for funding by the SFI!<br>
+        """ % (user.first_name, proposal.title)
+        msg.html = msg.body
+        mail.send(msg)
+    except (SMTPAuthenticationError):
+        flash("There seems to be something wron with our mail services. Failed to notify researcher of proposal status.")
     return redirect(url_for("admin.dashboard"))
 
 @admin.route("calls/all_calls")

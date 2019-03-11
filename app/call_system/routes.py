@@ -21,6 +21,8 @@ from app.call_system.forms import CallForm, ProposalForm
 import datetime
 import config
 
+from smtplib import SMTPAuthenticationError
+
 @call_system.route("/make_call", methods=["GET", "POST"])
 @login_required
 def make_call():
@@ -42,26 +44,29 @@ def make_call():
             db.session.commit()
 
             emails = db.session.query(User.email)
-            for email, in emails:
-                msg = Message("Call for Proposal", recipients=[email])
-                msg.body = """<h3>Call for Proposal</h3><br>
-                Dear Researcher,<br>
-                This is a notification of a new call for proposal issued by the SFI.<br>
-                <b>Information:</b><br>%s<br>
-                <b>Target Group:</b><br>%s<br>
-                <b>Deadline:</b><br>%s<br>
-                <b>Eligibility Crteria:</b><br>%s<br>
-                """ % (form.information.data, form.target_group.data,
-                 form.deadline.data, form.eligibility_criteria.data)
-                msg.html = msg.body
-                # pdf = form.file.data
-                # filename = secure_filename(pdf.filename)
-                #
-                # pdf.save(os.path.join(
-                #     config.UPLOAD_FOLDER, filename))
-                #
-                # msg.attach(filename, 'application/pdf', pdf.read())
-                mail.send(msg)
+            try:
+                for email, in emails:
+                    msg = Message("Call for Proposal", recipients=[email])
+                    msg.body = """<h3>Call for Proposal</h3><br>
+                    Dear Researcher,<br>
+                    This is a notification of a new call for proposal issued by the SFI.<br>
+                    <b>Information:</b><br>%s<br>
+                    <b>Target Group:</b><br>%s<br>
+                    <b>Deadline:</b><br>%s<br>
+                    <b>Eligibility Crteria:</b><br>%s<br>
+                    """ % (form.information.data, form.target_group.data,
+                    form.deadline.data, form.eligibility_criteria.data)
+                    msg.html = msg.body
+                    # pdf = form.file.data
+                    # filename = secure_filename(pdf.filename)
+                    #
+                    # pdf.save(os.path.join(
+                    #     config.UPLOAD_FOLDER, filename))
+                    #
+                    # msg.attach(filename, 'application/pdf', pdf.read())
+                    mail.send(msg)
+            except (SMTPAuthenticationError):
+                flash("There seems to be something wron with our mail services.")
 
             flash("Call for funding has been published")
             return redirect(url_for("admin.allCalls"))
@@ -102,22 +107,24 @@ def apply(call_id):
         user = current_user
 
         email = user.email
-
-        msg = Message("Submission of Proposal ID " + proposal.id + " STEP 1 OF 3", recipients=[email])
-        msg.body = """Dear %s,<br>
-        This is a confirmation of your submission of your proposal entitled <i>%s</i> on SFI's <i>Sesame</i> portal.<br>
-        Here is a summary of the information of your submitted proposal:<br>
-        Title: <b>%s</b><br>
-        Duration: <b>%s</b><br>
-        National Research Priority: <b>%s</b><br>
-        Legal Remit: <b>%s</b><br>
-        Location: <b>%s</b><br>
-        Programme Docs Filename: <b>%s</b><br>
-        You will be notified of any change of status to your submission.""" % (user.first_name, proposal.title,
-        proposal.title, proposal.duration, proposal.nrp, proposal.legal_remit,
-        proposal.location, proposal.programme_docs_filename)
-        msg.html = msg.body
-        mail.send(msg)
+        try:
+            msg = Message("Submission of Proposal ID " + str(proposal.id) + " STEP 1 OF 3", recipients=[email])
+            msg.body = """Dear %s,<br>
+            This is a confirmation of your submission of your proposal entitled <i>%s</i> on SFI's <i>Sesame</i> portal.<br>
+            Here is a summary of the information of your submitted proposal:<br>
+            Title: <b>%s</b><br>
+            Duration: <b>%s</b><br>
+            National Research Priority: <b>%s</b><br>
+            Legal Remit: <b>%s</b><br>
+            Location: <b>%s</b><br>
+            Programme Docs Filename: <b>%s</b><br>
+            You will be notified of any change of status to your submission.""" % (user.researcher.first_name, proposal.title,
+            proposal.title, proposal.duration, proposal.nrp, proposal.legal_remit,
+            proposal.location, proposal.programme_docs_filename)
+            msg.html = msg.body
+            mail.send(msg)
+        except (SMTPAuthenticationError):
+            flash("There seems to be an issue with our email services. No emails were sent.")
         return redirect(url_for(".apply", call_id=call.id))
     return render_template("call_system/apply.html", form=form, call=call)
 
