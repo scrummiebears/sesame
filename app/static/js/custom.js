@@ -3,6 +3,8 @@ $(document).ready(function(){
     
     M.AutoInit();
 
+    $(".datepicker").attr("tabindex", "-1")
+
     var today = new Date();
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
@@ -20,7 +22,5 @@ $(document).ready(function(){
           data: autoComplete_data
       }, placeholder: "Reveiwers",
     secondaryPlaceholder: " "}
-      );
-
-    
+      ); 
 })
